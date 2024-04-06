@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog</class>
+ <widget class="QDialog" name="Dialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>460</width>
+    <height>432</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <widget class="QPushButton" name="ok_btn">
+   <property name="geometry">
+    <rect>
+     <x>300</x>
+     <y>376</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ok</string>
+   </property>
+  </widget>
+  <widget class="Line" name="line">
+   <property name="geometry">
+    <rect>
+     <x>-3</x>
+     <y>403</y>
+     <width>461</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Horizontal</enum>
+   </property>
+  </widget>
+  <widget class="QFrame" name="color_fr">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>461</width>
+     <height>411</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(106, 255, 98);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::StyledPanel</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Raised</enum>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="N_Clie_cmb">
+   <property name="geometry">
+    <rect>
+     <x>61</x>
+     <y>50</y>
+     <width>69</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>0</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="Ico">
+   <property name="geometry">
+    <rect>
+     <x>330</x>
+     <y>20</y>
+     <width>121</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(255, 123, 242);</string>
+   </property>
+   <property name="text">
+    <string>img_Ico</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignCenter</set>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="name_txt">
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>20</y>
+     <width>171</width>
+     <height>20</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="name_l">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>24</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Name</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="cod_clie_l">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>54</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cod_clie</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="obs_txt">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>190</y>
+     <width>361</width>
+     <height>181</height>
+    </rect>
+   </property>
+   <property name="placeholderText">
+    <string>Prefer cut, wosh</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Obs_l">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>168</y>
+     <width>81</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Observaciones:</string>
+   </property>
+  </widget>
+  <widget class="QFrame" name="Trabajos_fr">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>120</y>
+     <width>311</width>
+     <height>201</height>
+    </rect>
+   </property>
+   <property name="styleSheet">
+    <string notr="true">background-color: rgb(235, 235, 235);</string>
+   </property>
+   <property name="frameShape">
+    <enum>QFrame::Box</enum>
+   </property>
+   <property name="frameShadow">
+    <enum>QFrame::Sunken</enum>
+   </property>
+   <widget class="QListWidget" name="trab_listW">
+    <property name="geometry">
+     <rect>
+      <x>30</x>
+      <y>10</y>
+      <width>256</width>
+      <height>161</height>
+     </rect>
+    </property>
+    <item>
+     <property name="text">
+      <string>DEGRADE                                     $3000</string>
+     </property>
+     <property name="checkState">
+      <enum>Checked</enum>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Nuevo elemento                         $0</string>
+     </property>
+     <property name="checkState">
+      <enum>Unchecked</enum>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>PINTURA                                        $4000</string>
+     </property>
+     <property name="checkState">
+      <enum>Checked</enum>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>AFEITADO                                      $800</string>
+     </property>
+     <property name="checkState">
+      <enum>Checked</enum>
+     </property>
+    </item>
+    <item>
+     <property name="text">
+      <string>Corte_de_Pelo                              $3000</string>
+     </property>
+     <property name="checkState">
+      <enum>Checked</enum>
+     </property>
+    </item>
+   </widget>
+   <widget class="Line" name="line_2">
+    <property name="geometry">
+     <rect>
+      <x>5</x>
+      <y>164</y>
+      <width>281</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="lineWidth">
+     <number>2</number>
+    </property>
+    <property name="orientation">
+     <enum>Qt::Horizontal</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="precio_l">
+    <property name="geometry">
+     <rect>
+      <x>150</x>
+      <y>180</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Precio:</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="precio_txt">
+    <property name="geometry">
+     <rect>
+      <x>194</x>
+      <y>178</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>$ 0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="Trab_btn">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>120</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Trabajos</string>
+   </property>
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QLabel" name="fecha">
+   <property name="geometry">
+    <rect>
+     <x>9</x>
+     <y>94</y>
+     <width>47</width>
+     <height>13</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>fecha</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="reg_nro_l">
+   <property name="geometry">
+    <rect>
+     <x>160</x>
+     <y>50</y>
+     <width>71</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Registro nro:</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="reg_date">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>230</x>
+     <y>50</y>
+     <width>91</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="cancel_btn">
+   <property name="geometry">
+    <rect>
+     <x>382</x>
+     <y>376</y>
+     <width>75</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Cancel</string>
+   </property>
+  </widget>
+  <widget class="QDateEdit" name="work_date">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>60</x>
+     <y>90</y>
+     <width>91</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+   </property>
+   <property name="calendarPopup">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <zorder>color_fr</zorder>
+  <zorder>obs_txt</zorder>
+  <zorder>line</zorder>
+  <zorder>N_Clie_cmb</zorder>
+  <zorder>Ico</zorder>
+  <zorder>name_txt</zorder>
+  <zorder>name_l</zorder>
+  <zorder>cod_clie_l</zorder>
+  <zorder>Obs_l</zorder>
+  <zorder>ok_btn</zorder>
+  <zorder>Trabajos_fr</zorder>
+  <zorder>Trab_btn</zorder>
+  <zorder>fecha</zorder>
+  <zorder>reg_nro_l</zorder>
+  <zorder>reg_date</zorder>
+  <zorder>cancel_btn</zorder>
+  <zorder>work_date</zorder>
+ </widget>
+ <tabstops>
+  <tabstop>ok_btn</tabstop>
+  <tabstop>name_txt</tabstop>
+  <tabstop>N_Clie_cmb</tabstop>
+  <tabstop>reg_date</tabstop>
+  <tabstop>Trab_btn</tabstop>
+  <tabstop>trab_listW</tabstop>
+  <tabstop>precio_txt</tabstop>
+  <tabstop>obs_txt</tabstop>
+ </tabstops>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>N_Clie_cmb</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>reg_date</receiver>
+   <slot>show()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>108</x>
+     <y>62</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>239</x>
+     <y>63</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>cancel_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>reject()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>422</x>
+     <y>384</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>440</x>
+     <y>423</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>ok_btn</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog</receiver>
+   <slot>accept()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>336</x>
+     <y>387</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>370</x>
+     <y>427</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>Trab_btn</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>Trabajos_fr</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>66</x>
+     <y>124</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>158</x>
+     <y>127</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+</ui>
