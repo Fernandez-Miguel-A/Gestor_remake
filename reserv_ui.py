@@ -64,15 +64,15 @@ class Ui_Dialog(object):
         self.Trabajos_fr.setFrameShadow(QFrame.Sunken)
         self.trab_listW = QListWidget(self.Trabajos_fr)
         __qlistwidgetitem = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem.setCheckState(Qt.Checked);
+        __qlistwidgetitem.setCheckState(Qt.Unchecked);
         __qlistwidgetitem1 = QListWidgetItem(self.trab_listW)
         __qlistwidgetitem1.setCheckState(Qt.Unchecked);
         __qlistwidgetitem2 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem2.setCheckState(Qt.Checked);
+        __qlistwidgetitem2.setCheckState(Qt.Unchecked);
         __qlistwidgetitem3 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem3.setCheckState(Qt.Checked);
+        __qlistwidgetitem3.setCheckState(Qt.Unchecked);
         __qlistwidgetitem4 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem4.setCheckState(Qt.Checked);
+        __qlistwidgetitem4.setCheckState(Qt.Unchecked);
         self.trab_listW.setObjectName(u"trab_listW")
         self.trab_listW.setGeometry(QRect(30, 10, 256, 161))
         self.line_2 = QFrame(self.Trabajos_fr)

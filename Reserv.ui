@@ -186,7 +186,7 @@
       <string>DEGRADE                                     $3000</string>
      </property>
      <property name="checkState">
-      <enum>Checked</enum>
+      <enum>Unchecked</enum>
      </property>
     </item>
     <item>
@@ -202,7 +202,7 @@
       <string>PINTURA                                        $4000</string>
      </property>
      <property name="checkState">
-      <enum>Checked</enum>
+      <enum>Unchecked</enum>
      </property>
     </item>
     <item>
@@ -210,7 +210,7 @@
       <string>AFEITADO                                      $800</string>
      </property>
      <property name="checkState">
-      <enum>Checked</enum>
+      <enum>Unchecked</enum>
      </property>
     </item>
     <item>
@@ -218,7 +218,7 @@
       <string>Corte_de_Pelo                              $3000</string>
      </property>
      <property name="checkState">
-      <enum>Checked</enum>
+      <enum>Unchecked</enum>
      </property>
     </item>
    </widget>
