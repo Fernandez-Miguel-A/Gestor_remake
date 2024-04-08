@@ -6,8 +6,8 @@ from reserv_ui import Ui_Dialog
 
 
 
-from PySide2.QtWidgets import QDialog, QApplication
-from PySide2.QtCore import Qt
+from PySide2.QtWidgets import QDialog, QApplication, QDateTimeEdit
+from PySide2.QtCore import Qt, QDateTime
 
 
 # class ClassName(Ui_Dialog, QDialog):
@@ -21,11 +21,12 @@ from PySide2.QtCore import Qt
 
 class Reserv(QDialog):
     """docstring for Reserv"""
-    def __init__(self):
+    def __init__(self, data= None):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.arg = (None, "Maria", "3", "6/04/2024", "DEGRADE", "$3000", "")
+        self.arg =  data if data else (None, "Maria", "3", "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
+        #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = 0
 
         if self.arg2_tipe == 0:
@@ -33,13 +34,37 @@ class Reserv(QDialog):
         elif self.arg2_tipe == 1:
             self.ui.ok_btn.setText("Modif")#Modificar
         else:
-            self.ui.ok_btn.setText("Ok")#Eliminar
+            self.ui.ok_btn.setText("Borrar")#Eliminar
 
         ##self.ui.trab_listW.clicked.connect(lambda x: self.function("adsdas"))
         #self.ui.trab_listW.itemClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemDoubleClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemChanged.connect(self.Precios)#itemChanged, itemActivated
+
+        self.loadData()
         self.Precios()
+
+    def loadData(self):
+        self.ui.name_txt.setText(self.arg[1]+str(self.arg[0]))
+        self.ui.precio_txt.setText(self.arg[5])
+        self.ui.obs_txt.setText(self.arg[6])
+
+        for o in self.arg[4].split("|"):
+            trbs = self.ui.trab_listW.findItems(o, Qt.MatchExactly)
+            if trbs:
+                trb = trbs[0]
+                trb.setCheckState(Qt.Checked)
+
+
+        self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
+        self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
+
+
+        datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
+        self.ui.obs_txt.setText(str(datetime))
+        self.ui.work_date.setDateTime(datetime)
+
+
 
 
     def function(self, name_item):
