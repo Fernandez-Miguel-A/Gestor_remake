@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>750</width>
-    <height>294</height>
+    <width>817</width>
+    <height>310</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,7 +17,7 @@
    <property name="geometry">
     <rect>
      <x>70</x>
-     <y>260</y>
+     <y>280</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -30,7 +30,7 @@
    <property name="geometry">
     <rect>
      <x>150</x>
-     <y>260</y>
+     <y>280</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -43,7 +43,7 @@
    <property name="geometry">
     <rect>
      <x>230</x>
-     <y>260</y>
+     <y>280</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -52,79 +52,11 @@
     <string>Eliminar</string>
    </property>
   </widget>
-  <widget class="QTableWidget" name="tableWidget">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>20</y>
-     <width>751</width>
-     <height>211</height>
-    </rect>
-   </property>
-   <property name="alternatingRowColors">
-    <bool>true</bool>
-   </property>
-   <row>
-    <property name="text">
-     <string>Cliente1</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>Cliente2</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>Cliente3</string>
-    </property>
-   </row>
-   <row>
-    <property name="text">
-     <string>Cliente4</string>
-    </property>
-   </row>
-   <column>
-    <property name="text">
-     <string>ID</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Nombre</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Cod_clie</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>fecha</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Trabajos</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Precio</string>
-    </property>
-   </column>
-   <column>
-    <property name="text">
-     <string>Observaciones</string>
-    </property>
-   </column>
-  </widget>
   <widget class="QPushButton" name="busca_btn">
    <property name="geometry">
     <rect>
      <x>350</x>
-     <y>260</y>
+     <y>280</y>
      <width>75</width>
      <height>23</height>
     </rect>
@@ -137,11 +69,240 @@
    <property name="geometry">
     <rect>
      <x>450</x>
-     <y>260</y>
+     <y>280</y>
      <width>113</width>
      <height>20</height>
     </rect>
    </property>
+  </widget>
+  <widget class="QTabWidget" name="tabWidget">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>20</y>
+     <width>771</width>
+     <height>251</height>
+    </rect>
+   </property>
+   <property name="currentIndex">
+    <number>1</number>
+   </property>
+   <widget class="QWidget" name="tab">
+    <attribute name="title">
+     <string>Tab 1</string>
+    </attribute>
+    <widget class="QTableWidget" name="tableWidget">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>751</width>
+       <height>211</height>
+      </rect>
+     </property>
+     <property name="alternatingRowColors">
+      <bool>true</bool>
+     </property>
+     <row>
+      <property name="text">
+       <string>Cliente1</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Cliente2</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Cliente3</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>Cliente4</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Cod_clie</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>fecha</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Trabajos</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Precio</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Observaciones</string>
+      </property>
+     </column>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="tab_2">
+    <attribute name="title">
+     <string>Tab 2</string>
+    </attribute>
+    <widget class="QTableWidget" name="tableWidget_2">
+     <property name="geometry">
+      <rect>
+       <x>40</x>
+       <y>10</y>
+       <width>411</width>
+       <height>192</height>
+      </rect>
+     </property>
+     <column>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Codigo</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Modelo</string>
+      </property>
+     </column>
+    </widget>
+    <widget class="QPushButton" name="new_btn">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>70</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>New</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="modif_btn_2">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>100</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Modif</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="codigo_txt">
+     <property name="geometry">
+      <rect>
+       <x>640</x>
+       <y>10</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="nombre_txt">
+     <property name="geometry">
+      <rect>
+       <x>640</x>
+       <y>60</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="modelo_txt">
+     <property name="geometry">
+      <rect>
+       <x>640</x>
+       <y>120</y>
+       <width>113</width>
+       <height>20</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="codigo_l">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>20</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Codigo</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="nombre_l">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>60</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Nombre</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="modelo_l">
+     <property name="geometry">
+      <rect>
+       <x>580</x>
+       <y>120</y>
+       <width>47</width>
+       <height>13</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Modelo</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="elim_btn_2">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>130</y>
+       <width>75</width>
+       <height>23</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Eliminar</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
  </widget>
  <resources/>
