@@ -105,6 +105,9 @@ class Reserv(QDialog):
                 precio_final += int(precio)
         self.ui.precio_txt.setText("$"+str(precio_final))
 
+    def get_data(self):
+        return self.arg
+
 
 
 

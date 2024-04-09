@@ -48,10 +48,34 @@ class GUI(QWidget):
             datos = (id, codigo, nombre, modelo)
             self.NewRow_Table_Widget2(datos)
 
+
+        q = QSqlQuery()
+        q.exec_("select * from Reserv_Clientes")
+        while q.next():
+            datos = [q.value(i) for i in range(self.columnCount())]
+            self.NewRow_Table_Widget(datos)
+
         self.Obtener_ID()
+        self.Obtener_ID2()
         
         self.ui.new_btn.clicked.connect(self.Insertar)
 
+
+    def Obtener_ID(self):
+        q = QSqlQuery()
+        sql = "SELECT id FROM Reserv_Clientes ORDER BY id DESC"
+        q.exec_(sql)
+
+        if q.next():
+            self.ID = q.value(0)
+        else:
+            self.ID = 0
+
+        self.ui.lineEdit_txt.setText(str(self.ID))
+
+    def getNew_ID(self):
+        self.ID = str(int(self.ID)+1)
+        return self.ID
 
 
     def columnCount(self):
@@ -93,27 +117,50 @@ class GUI(QWidget):
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
             data.append(item.text() if item else "")
-            self.ui.lineEdit_txt.setText(str(data)+"Hello")
         return data
 
     def modif_reserv(self, row, col):
-        self.ui.lineEdit_txt.setText(str(27)+str(self.arg))
         # row = new.row()
         # col = new.column()
         # data = new.text()
         self.arg = self.datos_TableWidget(row, col)
+        self.ui.lineEdit_txt.setText(str(27)+str(self.arg))
         w = Reserv(self.arg)
         w.show()
-        w.exec_()
-        # if w.exec_() == Qt.Accepted:
-        #     #Modif Database
-        #     print("Modif Database")
+        if w.exec_() == Qt.Accepted:
+            #Modif Database
+            print("Modif Database")
+            #self.Update_data1(w.get_data())
         # else:
         #     pass
 
+
+    def Update_data1(self, datos):
+        self.ui.lineEdit_txt.setText(str(11)+str(datos))
+    #     global db
+    #     q = QSqlQuery()
+    #     sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
+    #     q.exec_(sql)
+    #     db.commit()
+    #     if not q.isActive():
+    #         self.ui.lineEdit_txt.setText("Fallo  Update_data()")
+
+
+
+    def insertar_servicio(self, datos):
+        sql = """INSERT INTO Reserv_Clientes (  NOMBRE, Cod_clie, fecha, Trabajos, precio , Observaciones)
+            VALUES(?, ?, ?, ?, ?, ?)"""
+        q = QSqlQuery()
+        if q.prepare(sql):
+            for i in range(1, self.columnCount()):
+                q.addBindValue(datos[i])
+            q.exec_()
+
+
     def nueva_reserv(self, new=None):
-        self.arg = (self.rowCount(), "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", "")
+        self.arg = (self.getNew_ID(), "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", "")
         self.NewRow_Table_Widget(self.arg)
+        self.insertar_servicio(self.arg)
         #self.ui.lineEdit_txt.setText("Hi")
         # w = Reserv()
         # w.show()
@@ -124,35 +171,28 @@ class GUI(QWidget):
         #     pass
 
 ##  Preparar Base de Datos
-    def Obtener_ID(self):
+    def Obtener_ID2(self):
         q = QSqlQuery()
         sql = "SELECT id FROM productos ORDER BY id DESC"
         q.exec_(sql)
 
         if q.next():
-            self.ID = q.value(0)
+            self.ID2 = q.value(0)
         else:
-            self.ID = 0
+            self.ID2 = 0
 
-        self.ui.lineEdit_txt.setText(str(self.ID))
+        self.ui.lineEdit_txt.setText(str(self.ID2))
 
-    def getNew_ID(self):
-        self.ID = str(int(self.ID)+1)
-        return self.ID
+    def getNew_ID2(self):
+        self.ID2 = str(int(self.ID2)+1)
+        return self.ID2
 
-
-
+#remix copado de 2hs
+#https://www.youtube.com/watch?v=khADqsOm-iU
     def Insertar(self):
-        self.arg = (self.getNew_ID(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
+        self.arg = (self.getNew_ID2(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
         self.NewRow_Table_Widget2(self.arg)
         self.insertar_producto(*self.arg[1:])
-
-    def Update_data(self, codigo, modelo,  nombre_producto):
-        global db
-        q = QSqlQuery()
-        sql = """UPDATE productos SET CODIGO = {},     MODELO = {}, NOMBRE = {}   WHERE NOMBRE = {}""".format(codigo, modelo, nombre_producto,  nombre_producto)
-        q.exec_(sql)
-        db.commit()
 
 
     def Erase_Base(self):
@@ -165,6 +205,17 @@ class GUI(QWidget):
             self.row_tmp = None
 
 
+    def Update_data(self, codigo, modelo,  nombre_producto, id):
+        global db
+        q = QSqlQuery()
+        sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
+        q.exec_(sql)
+        db.commit()
+        if not q.isActive():
+            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
+
+
+
     def Modifi_Base(self):
         if self.row_tmp is None:
             return
@@ -175,8 +226,7 @@ class GUI(QWidget):
             item.setText(str(datos[j]))
             self.ui.tableWidget_2.setItem(self.row_tmp, j, item)
 
-        self.Update_data(datos[1],   datos[3],    datos[2])
-        self.insertar_producto(datos[1],   datos[2],    datos[3])
+        self.Update_data(datos[1],   datos[3],    datos[2],    self.ui.tableWidget_2.item(self.row_tmp, 0).text())
         self.row_tmp = None
 
     def Modifi_rsv(self, row, col):#Falta codigo!
@@ -207,6 +257,8 @@ class GUI(QWidget):
             q.addBindValue(modelo)
             if q.exec_():
                 print("Campo agregado satisfactoriamente!")
+        # if not q.isActive():
+        #     self.ui.lineEdit_txt.setText("Fallo  insertar_producto()")
 
 
 
@@ -239,6 +291,10 @@ def prepareDataBase():
         if q.prepare("create table if not exists  productos (id integer primary key autoincrement not null, CODIGO text not null, NOMBRE text not null, MODELO text not null )"):
             if q.exec_():
                 print("TABLA  <productos>  creada satisfactoriamente!")
+        q = QSqlQuery()
+        if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie text, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
+            if q.exec_():
+                print("TABLA  <Reserv_Clientes>  creada satisfactoriamente!")
         db_create()
 
 def db_create():
