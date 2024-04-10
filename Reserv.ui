@@ -367,6 +367,19 @@
     <bool>true</bool>
    </property>
   </widget>
+  <widget class="QLabel" name="id_l">
+   <property name="geometry">
+    <rect>
+     <x>239</x>
+     <y>22</y>
+     <width>21</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>1</string>
+   </property>
+  </widget>
   <zorder>color_fr</zorder>
   <zorder>obs_txt</zorder>
   <zorder>line</zorder>
@@ -384,6 +397,7 @@
   <zorder>reg_date</zorder>
   <zorder>cancel_btn</zorder>
   <zorder>work_date</zorder>
+  <zorder>id_l</zorder>
  </widget>
  <tabstops>
   <tabstop>ok_btn</tabstop>

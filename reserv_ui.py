@@ -115,6 +115,9 @@ class Ui_Dialog(object):
         self.work_date.setGeometry(QRect(60, 90, 91, 20))
         self.work_date.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
         self.work_date.setCalendarPopup(True)
+        self.id_l = QLabel(Dialog)
+        self.id_l.setObjectName(u"id_l")
+        self.id_l.setGeometry(QRect(239, 22, 21, 16))
         self.color_fr.raise_()
         self.obs_txt.raise_()
         self.line.raise_()
@@ -132,6 +135,7 @@ class Ui_Dialog(object):
         self.reg_date.raise_()
         self.cancel_btn.raise_()
         self.work_date.raise_()
+        self.id_l.raise_()
         QWidget.setTabOrder(self.ok_btn, self.name_txt)
         QWidget.setTabOrder(self.name_txt, self.N_Clie_cmb)
         QWidget.setTabOrder(self.N_Clie_cmb, self.reg_date)
@@ -180,5 +184,6 @@ class Ui_Dialog(object):
         self.fecha.setText(QCoreApplication.translate("Dialog", u"fecha", None))
         self.reg_nro_l.setText(QCoreApplication.translate("Dialog", u"Registro nro:", None))
         self.cancel_btn.setText(QCoreApplication.translate("Dialog", u"Cancel", None))
+        self.id_l.setText(QCoreApplication.translate("Dialog", u"1", None))
     # retranslateUi
 

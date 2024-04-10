@@ -45,7 +45,9 @@ class Reserv(QDialog):
         self.Precios()
 
     def loadData(self):
-        self.ui.name_txt.setText(self.arg[1]+str(self.arg[0]))
+        ## id no lo 
+        self.ui.id_l.setText(": "+str(self.arg[0])+":")
+        self.ui.name_txt.setText(self.arg[1])## ok + str(self.arg[0])
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
 
@@ -56,18 +58,20 @@ class Reserv(QDialog):
                 trb.setCheckState(Qt.Checked)
 
 
-        self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
-        self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
-
+        if self.arg[2]:
+            self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
+            self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
+        else:
+            self.ui.N_Clie_cmb.setCurrentText("0")
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
-        self.ui.obs_txt.setText(str(datetime))
+        ##self.ui.obs_txt.setText(str(datetime))##mostrar el datetime cargado en crudo
         self.ui.work_date.setDateTime(datetime)
 
 
 
 
-    def function(self, name_item):
+    def function(self, name_item):#añade un nuevo ListWIdem
         print(name_item)
         self.ui.trab_listW.addItem(name_item)   #Nuevo ListWidgetItem
         #self.ui.name_txt.setText(name_item)
@@ -76,7 +80,7 @@ class Reserv(QDialog):
         trb.setCheckState(Qt.Unchecked)
 
     def trabajos_act(self, trb):
-        self.function("adsaasd")
+        ##self.function("adsaasd")
         #self.ui.name_txt.setText(trb.text())
         
         if trb.checkState() == Qt.Checked:
@@ -105,8 +109,22 @@ class Reserv(QDialog):
                 precio_final += int(precio)
         self.ui.precio_txt.setText("$"+str(precio_final))
 
+    def trabajos(self):
+        _trabajos = ""
+        for i in range(self.ui.trab_listW.count()):
+            trb = self.ui.trab_listW.item(i)
+            if trb.checkState() == Qt.Checked:
+                _trabajos += "|" + trb.text()
+        _trabajos = _trabajos[1:] if _trabajos else ""
+        return _trabajos
+
     def get_data(self):
-        return self.arg
+        datos = [self.arg[0], ## if datos[0] is "":;   datos[0] = self.getNew_ID()
+            self.ui.name_txt.text(), self.ui.N_Clie_cmb.currentText(), self.ui.work_date.date().toString("d/M/yyyy"),
+            self.trabajos(), self.ui.precio_txt.text(), self.ui.obs_txt.toPlainText()]#nombre_txt, falta trabajar en 'date()'
+
+        print("Los datos son: ", datos)
+        return datos
 
 
 

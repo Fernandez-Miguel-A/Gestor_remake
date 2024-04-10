@@ -116,7 +116,7 @@ class Ui_Form(object):
         self.retranslateUi(Form)
         self.tableWidget.cellDoubleClicked.connect(self.modif_btn.toggle)
 
-        self.tabWidget.setCurrentIndex(1)
+        self.tabWidget.setCurrentIndex(0)
 
 
         QMetaObject.connectSlotsByName(Form)
