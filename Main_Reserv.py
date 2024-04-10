@@ -109,8 +109,8 @@ class GUI(QWidget):
         for j in range(self.columnCount2()):
             item = QTableWidgetItem(str(datos[j]))
             self.ui.tableWidget_2.setItem(row, j, item)
-### OPT2
 
+### OPT2
 
     def datos_TableWidget(self, row, col):
         data = []
@@ -118,6 +118,17 @@ class GUI(QWidget):
             item = self.ui.tableWidget.item(row, j)
             data.append(item.text() if item else "")
         return data
+
+
+    def Modif_Table_Widget(self, row, datos):
+        for j in range(self.columnCount()):
+            item = self.ui.tableWidget.item(row, j)
+            print("row, j", row, j)
+            if item is None: #caso particular
+                item = QTableWidgetItem()
+            item.setText(datos[j])
+            self.ui.tableWidget.setItem(row, j, item)
+
 
     def modif_reserv(self, row, col):
         # row = new.row()
@@ -127,23 +138,28 @@ class GUI(QWidget):
         self.ui.lineEdit_txt.setText(str(27)+str(self.arg))
         w = Reserv(self.arg)
         w.show()
-        if w.exec_() == Qt.Accepted:
+        if w.exec_() == Reserv.Accepted:
             #Modif Database
             print("Modif Database")
-            #self.Update_data1(w.get_data())
+            datos = w.get_data()
+            if datos[0] is "":
+                datos[0] = self.getNew_ID()
+                self.insertar_servicio(datos)### fase de prueba. TWitem == None.
+            else:
+                self.Update_data1(datos)
+            self.Modif_Table_Widget(row, datos)
         # else:
         #     pass
 
 
     def Update_data1(self, datos):
         self.ui.lineEdit_txt.setText(str(11)+str(datos))
-    #     global db
-    #     q = QSqlQuery()
-    #     sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
-    #     q.exec_(sql)
-    #     db.commit()
-    #     if not q.isActive():
-    #         self.ui.lineEdit_txt.setText("Fallo  Update_data()")
+        print("datos[1:] ", datos[1:], len(datos), "\n\n")
+        q = QSqlQuery()
+        sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
+        q.exec_(sql)
+        if not q.isActive():
+            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
 
 
 
