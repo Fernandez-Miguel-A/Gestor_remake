@@ -23,6 +23,7 @@ class Ui_Dialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
+        Dialog.setModal(True)
         self.ok_btn = QPushButton(Dialog)
         self.ok_btn.setObjectName(u"ok_btn")
         self.ok_btn.setGeometry(QRect(300, 376, 75, 23))
