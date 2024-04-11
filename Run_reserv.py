@@ -61,11 +61,11 @@ class Reserv(QDialog):
 
 
         if self.arg[2]:
-            if self.arg[2] != "0":##Ico_l
-                self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
-                self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
+            if self.arg[2] != "0":
+                #self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
+                self.ui.N_Clie_cmb.setCurrentText(str(int(self.arg[2])))
 
-                self.load_Ico(self.arg[2])
+                self.load_Ico(self.arg[2])##Ico_l
                 self.ui.N_Clie_cmb.currentTextChanged.connect(self.load_Ico)
 
 
@@ -78,7 +78,7 @@ class Reserv(QDialog):
         print("load_Ico(cod_clie):", cod_clie)
         if cod_clie == "0":
             self.ui.Ico_l.setPixmap(None)
-            #self.ui.reg_date.setDateTime(None)
+            self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return
         q = QSqlQuery()
         sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.N_Clie_cmb.currentIndex()
@@ -90,12 +90,12 @@ class Reserv(QDialog):
             pix = QPixmap(path)
             self.ui.Ico_l.setPixmap(pix.scaled(120, 100))
 
-            # datetime = QDateTime.fromString(fecha, "d/M/yyyy")
-            # self.ui.reg_date.setDateTime(datetime)
+            datetime = QDateTime.fromString(fecha, "d/M/yyyy")
+            self.ui.reg_date.setDateTime(datetime)
 
         else:
             self.ui.Ico_l.setPixmap(None)
-            #self.ui.reg_date.setDateTime(None)
+            self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return
 
 
