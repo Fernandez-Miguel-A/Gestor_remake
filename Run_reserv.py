@@ -62,11 +62,11 @@ class Reserv(QDialog):
 
         if self.arg[2]:
             if self.arg[2] != "0":
-                #self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
-                self.ui.N_Clie_cmb.setCurrentText(str(int(self.arg[2])))
+                #self.ui.cod_Clie_cmb.insertItem(self.ui.cod_Clie_cmb.count(), self.arg[2])
+                self.ui.cod_Clie_cmb.setCurrentText(str(int(self.arg[2])))
 
                 self.load_Ico(self.arg[2])##Ico_l
-                self.ui.N_Clie_cmb.currentTextChanged.connect(self.load_Ico)
+                self.ui.cod_Clie_cmb.currentTextChanged.connect(self.load_Ico)
 
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
@@ -81,7 +81,7 @@ class Reserv(QDialog):
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return
         q = QSqlQuery()
-        sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.N_Clie_cmb.currentIndex()
+        sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.cod_Clie_cmb.currentIndex()
         q.exec_(sql)
         if q.next():
             path = q.value(0)
@@ -149,7 +149,7 @@ class Reserv(QDialog):
 
     def get_data(self):
         datos = [self.arg[0], ## if datos[0] is "":;   datos[0] = self.getNew_ID()
-            self.ui.name_txt.text(), self.ui.N_Clie_cmb.currentText(), self.ui.work_date.date().toString("d/M/yyyy"),
+            self.ui.name_txt.text(), self.ui.cod_Clie_cmb.currentText(), self.ui.work_date.date().toString("d/M/yyyy"),
             self.trabajos(), self.ui.precio_txt.text(), self.ui.obs_txt.toPlainText()]#nombre_txt, falta trabajar en 'date()'
 
         print("Los datos son: ", datos)

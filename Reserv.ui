@@ -67,7 +67,7 @@
     <enum>QFrame::Raised</enum>
    </property>
   </widget>
-  <widget class="QComboBox" name="N_Clie_cmb">
+  <widget class="QComboBox" name="cod_Clie_cmb">
    <property name="geometry">
     <rect>
      <x>61</x>
@@ -215,7 +215,7 @@
       <x>30</x>
       <y>10</y>
       <width>256</width>
-      <height>161</height>
+      <height>155</height>
      </rect>
     </property>
     <item>
@@ -420,7 +420,7 @@
   <zorder>color_fr</zorder>
   <zorder>obs_txt</zorder>
   <zorder>line</zorder>
-  <zorder>N_Clie_cmb</zorder>
+  <zorder>cod_Clie_cmb</zorder>
   <zorder>Ico_l</zorder>
   <zorder>name_txt</zorder>
   <zorder>name_l</zorder>
@@ -439,7 +439,7 @@
  <tabstops>
   <tabstop>ok_btn</tabstop>
   <tabstop>name_txt</tabstop>
-  <tabstop>N_Clie_cmb</tabstop>
+  <tabstop>cod_Clie_cmb</tabstop>
   <tabstop>reg_date</tabstop>
   <tabstop>Trab_btn</tabstop>
   <tabstop>trab_listW</tabstop>
@@ -448,22 +448,6 @@
  </tabstops>
  <resources/>
  <connections>
-  <connection>
-   <sender>N_Clie_cmb</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>reg_date</receiver>
-   <slot>show()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>108</x>
-     <y>62</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>239</x>
-     <y>63</y>
-    </hint>
-   </hints>
-  </connection>
   <connection>
    <sender>cancel_btn</sender>
    <signal>clicked()</signal>
