@@ -306,22 +306,5 @@
   </widget>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>tableWidget</sender>
-   <signal>cellDoubleClicked(int,int)</signal>
-   <receiver>modif_btn</receiver>
-   <slot>toggle()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>104</x>
-     <y>95</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>201</x>
-     <y>280</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

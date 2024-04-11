@@ -33,6 +33,8 @@ class GUI(QWidget):
         self.row_tmp = None
 
         self.ui.elim_btn.clicked.connect(self.Erase_ReservBase)
+        self.ui.modif_btn.clicked.connect(self.modif_row)
+
 
         self.ui.tableWidget_2.cellDoubleClicked.connect(self.Modifi_rsv)
         self.ui.modif_btn_2.clicked.connect(self.Modifi_Base)
@@ -130,6 +132,14 @@ class GUI(QWidget):
             item.setText(datos[j])
             self.ui.tableWidget.setItem(row, j, item)
 
+    def modif_row(self):
+        TwItems = self.ui.tableWidget.selectedItems()##selectedIndexes()
+        ###self.ui.lineEdit_txt.setText(str(23)+str(TwItems))
+        if TwItems:
+            row = TwItems[0].row()
+            col = TwItems[0].column()
+            self.modif_reserv(row, col)
+
 
     def modif_reserv(self, row, col):
         # row = new.row()
@@ -176,6 +186,7 @@ class GUI(QWidget):
 
     def Erase_ReservBase(self):
         if not self.ui.tableWidget.selectedItems():
+            print("Erase_ReservBase Not SelectedItems!")
             return
         TwItem = self.ui.tableWidget.selectedItems()[0]##selectedIndexes()
         if TwItem:

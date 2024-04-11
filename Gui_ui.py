@@ -114,7 +114,6 @@ class Ui_Form(object):
         self.tabWidget.addTab(self.tab_2, "")
 
         self.retranslateUi(Form)
-        self.tableWidget.cellDoubleClicked.connect(self.modif_btn.toggle)
 
         self.tabWidget.setCurrentIndex(0)
 
