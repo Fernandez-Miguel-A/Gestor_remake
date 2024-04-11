@@ -4,6 +4,7 @@ import re
 
 from Gui_ui import Ui_Form
 from Run_reserv import Reserv
+from Run_buscar import _Buscar
 
 
 
@@ -123,7 +124,7 @@ class GUI(QWidget):
         return data
 
 
-    def Modif_Table_Widget(self, row, datos):
+    def Modif_Table_Widget(self, row, datos):background-color: rgb(0, 255, 0);background-color: rgb(255, 0, 0);
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
             print("row, j", row, j)
@@ -216,6 +217,18 @@ class GUI(QWidget):
         # else:
         #     pass
 
+
+
+    def buscar_Reserv(self, row, datos):
+        ###background-color: rgb(0, 255, 0);background-color: rgb(255, 0, 0);
+        self.ui.lineEdit_txt.setText(str(99)+str(self.arg))
+        w = _Buscar()
+        w.show()
+        if w.exec_() == _Buscar.Accepted:
+            #_Buscar Database
+            print("_Buscar Database Cerrado")
+
+
 ##  Preparar Base de Datos
     def Obtener_ID2(self):
         q = QSqlQuery()
@@ -233,8 +246,6 @@ class GUI(QWidget):
         self.ID2 = str(int(self.ID2)+1)
         return self.ID2
 
-#remix copado de 2hs
-#https://www.youtube.com/watch?v=khADqsOm-iU
     def Insertar(self):
         self.arg = (self.getNew_ID2(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
         self.NewRow_Table_Widget2(self.arg)
