@@ -307,22 +307,32 @@ def prepareDataBase():
         if q.prepare("create table if not exists  productos (id integer primary key autoincrement not null, CODIGO text not null, NOMBRE text not null, MODELO text not null )"):
             if q.exec_():
                 print("TABLA  <productos>  creada satisfactoriamente!")
+
         q = QSqlQuery()
         if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie text, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
             if q.exec_():
                 print("TABLA  <Reserv_Clientes>  creada satisfactoriamente!")
         db_create()
+        q = QSqlQuery()
+        if q.prepare("create table if not exists  Reserv_data (id integer primary key autoincrement not null, Cod_clie text, fecha text not null, path text not null )"):
+            if q.exec_():
+                print("TABLA  <Reserv_data>  creada satisfactoriamente!")
+        Registro_db_create()
 
 def db_create():
     query = QSqlQuery()
-    # query.exec_("create table productos(id int primary key, "
-    #             "CODIGO varchar(20), NOMBRE varchar(20), MODELO varchar(20))")
-   
     ## prepareDataBase()
     query.exec_("insert into productos values(101, 'Cod13', 'viernes', '11')")
     query.exec_("insert into productos values(102, 'Cod13', 'viernes', '11')")
     query.exec_("insert into productos values(103, 'fir12', 'sara', '77')")
     query.exec_("insert into productos values(104, 'ir13', 'Sonia', '404')")
+
+
+def Registro_db_create():
+    query = QSqlQuery()
+    query.exec_("insert into Reserv_data values(111, '1', '5/04/2024' , 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_1.png')")
+    query.exec_("insert into Reserv_data values(112, '2', '10/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_2.png')")
+    query.exec_("insert into Reserv_data values(113, '3', '12/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_3.png')")
 
 
 ##

@@ -73,13 +73,13 @@
     </property>
    </item>
   </widget>
-  <widget class="QLabel" name="Ico">
+  <widget class="QLabel" name="Ico_l">
    <property name="geometry">
     <rect>
      <x>330</x>
      <y>20</y>
-     <width>121</width>
-     <height>101</height>
+     <width>120</width>
+     <height>100</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -384,7 +384,7 @@
   <zorder>obs_txt</zorder>
   <zorder>line</zorder>
   <zorder>N_Clie_cmb</zorder>
-  <zorder>Ico</zorder>
+  <zorder>Ico_l</zorder>
   <zorder>name_txt</zorder>
   <zorder>name_l</zorder>
   <zorder>cod_clie_l</zorder>

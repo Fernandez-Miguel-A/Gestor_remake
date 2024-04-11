@@ -7,7 +7,10 @@ from reserv_ui import Ui_Dialog
 
 
 from PySide2.QtWidgets import QDialog, QApplication, QDateTimeEdit
+from PySide2.QtGui import QPixmap
 from PySide2.QtCore import Qt, QDateTime
+
+from PySide2.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 
 # class ClassName(Ui_Dialog, QDialog):
@@ -45,8 +48,7 @@ class Reserv(QDialog):
         self.Precios()
 
     def loadData(self):
-        ## id no lo 
-        self.ui.id_l.setText(": "+str(self.arg[0])+":")
+        self.ui.id_l.setText(":"+str(self.arg[0])+":")# campo ID
         self.ui.name_txt.setText(self.arg[1])## ok + str(self.arg[0])
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
@@ -59,15 +61,42 @@ class Reserv(QDialog):
 
 
         if self.arg[2]:
-            self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
-            self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
-        else:
-            self.ui.N_Clie_cmb.setCurrentText("0")
+            if self.arg[2] != "0":##Ico_l
+                self.ui.N_Clie_cmb.insertItem(self.ui.N_Clie_cmb.count(), self.arg[2])
+                self.ui.N_Clie_cmb.setCurrentText(self.arg[2])
+
+                self.load_Ico(self.arg[2])
+                self.ui.N_Clie_cmb.currentTextChanged.connect(self.load_Ico)
+
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
         ##self.ui.obs_txt.setText(str(datetime))##mostrar el datetime cargado en crudo
         self.ui.work_date.setDateTime(datetime)
 
+    def load_Ico(self, cod_clie):
+        ##cod_clie == self.arg[2]
+        print("load_Ico(cod_clie):", cod_clie)
+        if cod_clie == "0":
+            self.ui.Ico_l.setPixmap(None)
+            #self.ui.reg_date.setDateTime(None)
+            return
+        q = QSqlQuery()
+        sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.N_Clie_cmb.currentIndex()
+        q.exec_(sql)
+        if q.next():
+            path = q.value(0)
+            fecha = q.value(1)
+
+            pix = QPixmap(path)
+            self.ui.Ico_l.setPixmap(pix.scaled(120, 100))
+
+            # datetime = QDateTime.fromString(fecha, "d/M/yyyy")
+            # self.ui.reg_date.setDateTime(datetime)
+
+        else:
+            self.ui.Ico_l.setPixmap(None)
+            #self.ui.reg_date.setDateTime(None)
+            return
 
 
 
