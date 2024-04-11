@@ -32,6 +32,7 @@ class GUI(QWidget):
         self.arg = None
         self.row_tmp = None
 
+        self.ui.elim_btn.clicked.connect(self.Erase_ReservBase)
 
         self.ui.tableWidget_2.cellDoubleClicked.connect(self.Modifi_rsv)
         self.ui.modif_btn_2.clicked.connect(self.Modifi_Base)
@@ -144,7 +145,7 @@ class GUI(QWidget):
             datos = w.get_data()
             if datos[0] is "":
                 datos[0] = self.getNew_ID()
-                self.insertar_servicio(datos)### fase de prueba. TWitem == None.
+                self.insertar_servicio(datos)### fase de prueba. TwItem == None.
             else:
                 self.Update_data1(datos)
             self.Modif_Table_Widget(row, datos)
@@ -171,6 +172,24 @@ class GUI(QWidget):
             for i in range(1, self.columnCount()):
                 q.addBindValue(datos[i])
             q.exec_()
+
+
+    def Erase_ReservBase(self):
+        if not self.ui.tableWidget.selectedItems():
+            return
+        TwItem = self.ui.tableWidget.selectedItems()[0]##selectedIndexes()
+        if TwItem:
+            row = TwItem.row()
+        else:
+            row = None
+        if row:
+            item = self.ui.tableWidget.item(row, 0)#ID
+            sql = "DELETE FROM Reserv_Clientes WHERE id = {}".format(item.text())
+            q = QSqlQuery()
+            q.exec_(sql)
+            self.ui.tableWidget.removeRow(row)
+            row = None
+
 
 
     def nueva_reserv(self, new=None):
