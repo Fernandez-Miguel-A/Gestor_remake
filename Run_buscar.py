@@ -23,9 +23,29 @@ class _Buscar(QDialog):
         super(_Buscar, self).__init__()
         self.ui = Ui_Buscar_widget()
         self.ui.setupUi(self)
-        self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
+        self.ui.tableWidget.cellDoubleClicked.connect(self.clickedTW)
+        #self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
 
         self.ui.buscar_btn.clicked.connect(self.buscar)
+
+    def clickedTW(self, row, col):
+        clickeditem = self.ui.tableWidget.item(row, 0)
+        # item.setText(datos[j])
+        # self.ui.tableWidget.setItem(row, col, item)
+        for i in range(self.gridparent.rowCount()):
+            id = self.gridparent.TableWidget().item(i, 0)
+            print("\n\n clickedTW", id.text() if id else id, clickeditem.text())
+            if id:
+                _id = id.text()
+                if clickeditem.text() == _id:
+                    self.gridparent.selectRow(id.row())#TableWidget()
+                    return
+            else:
+                pass
+
+    def setGridParent(self, gp):
+        self.gridparent = gp
+
 
     def buscar(self):
         print("\n\nbuscar: ", self.ui.tipodecelda_cmb.currentText(), self.ui.buscar_txt.text())

@@ -17,7 +17,7 @@
    <item row="0" column="2">
     <widget class="QLineEdit" name="buscar_txt">
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 71, 71);</string>
+      <string notr="true"/>
      </property>
     </widget>
    </item>
