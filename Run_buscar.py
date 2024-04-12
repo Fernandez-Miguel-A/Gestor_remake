@@ -53,7 +53,7 @@ class _Buscar(QDialog):
         query = QSqlQuery()
         sql = "select * FROM Reserv_Clientes WHERE Cod_clie = '{}'".format(self.ui.buscar_txt.text())
         sql1 = "select * FROM Reserv_Clientes WHERE {} = '{}'".format(self.ui.tipodecelda_cmb.currentText(), self.ui.buscar_txt.text())
-        sql2 = "select id, {} FROM Reserv_Clientes WHERE id > 0".format(self.ui.tipodecelda_cmb.currentText())
+        sql2 = "select id, {} FROM Reserv_Clientes".format(self.ui.tipodecelda_cmb.currentText())
         
         print("sql", sql2)
         query.exec_(sql2)
@@ -63,17 +63,17 @@ class _Buscar(QDialog):
 
         i = 0
         self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
-        if not self.ui.buscar_txt.text().upper():
+        if not self.ui.buscar_txt.text().upper().strip():
             return
         while query.next():
             id = query.value(0)
             campo_var = str(query.value(1))
             ##find = re.findall("(.*"+self.ui.buscar_txt.text()+".*)", campo_var)
-            reg_exp = re.compile("(.*"+self.ui.buscar_txt.text().upper()+".*)", re.IGNORECASE)
+            reg_exp = re.compile("(.*"+self.ui.buscar_txt.text().upper().strip()+".*)", re.IGNORECASE)
             find = reg_exp.findall(campo_var)
             print("\n\nCeldas", i)
             i += 1
-            print("find", find, reg_exp, self.ui.buscar_txt.text().upper())
+            print("find", find, reg_exp, self.ui.buscar_txt.text().upper().strip())
             print("id, campo_var", id, campo_var)
             if find:
                 q = QSqlQuery()
@@ -108,6 +108,7 @@ class _Buscar(QDialog):
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for col in range(self.columnCount()):
             item = QTableWidgetItem(str(datos[col]))
+            item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)
 
 

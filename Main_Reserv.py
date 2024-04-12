@@ -96,6 +96,7 @@ class GUI(QWidget):
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for col in range(self.columnCount()):
             item = QTableWidgetItem(str(datos[col]))
+            item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)
             self.ui.lineEdit_txt.setText(str(datos[0]))
 
@@ -120,6 +121,7 @@ class GUI(QWidget):
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for j in range(self.columnCount2()):
             item = QTableWidgetItem(str(datos[j]))
+            item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget_2.setItem(row, j, item)
 
 ### OPT2
