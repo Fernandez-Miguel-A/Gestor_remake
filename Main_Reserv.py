@@ -35,6 +35,7 @@ class GUI(QWidget):
 
         self.ui.elim_btn.clicked.connect(self.Erase_ReservBase)
         self.ui.modif_btn.clicked.connect(self.modif_row)
+        self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
 
 
         self.ui.tableWidget_2.cellDoubleClicked.connect(self.Modifi_rsv)
@@ -124,7 +125,7 @@ class GUI(QWidget):
         return data
 
 
-    def Modif_Table_Widget(self, row, datos):background-color: rgb(0, 255, 0);background-color: rgb(255, 0, 0);
+    def Modif_Table_Widget(self, row, datos):
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
             print("row, j", row, j)
@@ -219,9 +220,7 @@ class GUI(QWidget):
 
 
 
-    def buscar_Reserv(self, row, datos):
-        ###background-color: rgb(0, 255, 0);background-color: rgb(255, 0, 0);
-        self.ui.lineEdit_txt.setText(str(99)+str(self.arg))
+    def buscar_Reserv(self):
         w = _Buscar()
         w.show()
         if w.exec_() == _Buscar.Accepted:

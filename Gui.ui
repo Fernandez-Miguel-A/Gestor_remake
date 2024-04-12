@@ -52,7 +52,7 @@
     <string>Eliminar</string>
    </property>
   </widget>
-  <widget class="QPushButton" name="busca_btn">
+  <widget class="QPushButton" name="buscar_btn">
    <property name="geometry">
     <rect>
      <x>350</x>

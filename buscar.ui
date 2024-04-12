@@ -14,6 +14,13 @@
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="2">
+    <widget class="QLineEdit" name="buscar_txt">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 71, 71);</string>
+     </property>
+    </widget>
+   </item>
    <item row="0" column="0">
     <widget class="QPushButton" name="buscar_btn">
      <property name="text">
@@ -21,10 +28,7 @@
      </property>
     </widget>
    </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="buscar_txt"/>
-   </item>
-   <item row="1" column="0" colspan="2">
+   <item row="1" column="0" colspan="3">
     <widget class="QTableWidget" name="tableWidget">
      <property name="alternatingRowColors">
       <bool>true</bool>
@@ -64,6 +68,51 @@
        <string>Observaciones</string>
       </property>
      </column>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <widget class="QComboBox" name="tipodecelda_cmb">
+     <property name="minimumSize">
+      <size>
+       <width>200</width>
+       <height>0</height>
+      </size>
+     </property>
+     <item>
+      <property name="text">
+       <string>ID</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Nombre</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Cod_clie</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>fecha</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Trabajos</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Precio</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Observaciones</string>
+      </property>
+     </item>
     </widget>
    </item>
   </layout>

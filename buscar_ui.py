@@ -20,15 +20,16 @@ class Ui_Buscar_widget(object):
         Buscar_widget.resize(782, 312)
         self.gridLayout = QGridLayout(Buscar_widget)
         self.gridLayout.setObjectName(u"gridLayout")
+        self.buscar_txt = QLineEdit(Buscar_widget)
+        self.buscar_txt.setObjectName(u"buscar_txt")
+        self.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
+
+        self.gridLayout.addWidget(self.buscar_txt, 0, 2, 1, 1)
+
         self.buscar_btn = QPushButton(Buscar_widget)
         self.buscar_btn.setObjectName(u"buscar_btn")
 
         self.gridLayout.addWidget(self.buscar_btn, 0, 0, 1, 1)
-
-        self.buscar_txt = QLineEdit(Buscar_widget)
-        self.buscar_txt.setObjectName(u"buscar_txt")
-
-        self.gridLayout.addWidget(self.buscar_txt, 0, 1, 1, 1)
 
         self.tableWidget = QTableWidget(Buscar_widget)
         if (self.tableWidget.columnCount() < 7):
@@ -50,7 +51,20 @@ class Ui_Buscar_widget(object):
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setAlternatingRowColors(True)
 
-        self.gridLayout.addWidget(self.tableWidget, 1, 0, 1, 2)
+        self.gridLayout.addWidget(self.tableWidget, 1, 0, 1, 3)
+
+        self.tipodecelda_cmb = QComboBox(Buscar_widget)
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.addItem("")
+        self.tipodecelda_cmb.setObjectName(u"tipodecelda_cmb")
+        self.tipodecelda_cmb.setMinimumSize(QSize(200, 0))
+
+        self.gridLayout.addWidget(self.tipodecelda_cmb, 0, 1, 1, 1)
 
 
         self.retranslateUi(Buscar_widget)
@@ -75,5 +89,13 @@ class Ui_Buscar_widget(object):
         ___qtablewidgetitem5.setText(QCoreApplication.translate("Buscar_widget", u"Precio", None));
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
         ___qtablewidgetitem6.setText(QCoreApplication.translate("Buscar_widget", u"Observaciones", None));
+        self.tipodecelda_cmb.setItemText(0, QCoreApplication.translate("Buscar_widget", u"ID", None))
+        self.tipodecelda_cmb.setItemText(1, QCoreApplication.translate("Buscar_widget", u"Nombre", None))
+        self.tipodecelda_cmb.setItemText(2, QCoreApplication.translate("Buscar_widget", u"Cod_clie", None))
+        self.tipodecelda_cmb.setItemText(3, QCoreApplication.translate("Buscar_widget", u"fecha", None))
+        self.tipodecelda_cmb.setItemText(4, QCoreApplication.translate("Buscar_widget", u"Trabajos", None))
+        self.tipodecelda_cmb.setItemText(5, QCoreApplication.translate("Buscar_widget", u"Precio", None))
+        self.tipodecelda_cmb.setItemText(6, QCoreApplication.translate("Buscar_widget", u"Observaciones", None))
+
     # retranslateUi
 
