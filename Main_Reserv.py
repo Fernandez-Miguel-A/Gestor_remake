@@ -78,7 +78,7 @@ class GUI(QWidget):
         else:
             self.ID = 0
 
-        self.ui.lineEdit_txt.setText(str(self.ID))
+        self.ui.lineEdit_txt.setText("ID: "+str(self.ID))
 
     def getNew_ID(self):
         self.ID = str(int(self.ID)+1)
@@ -118,7 +118,7 @@ class GUI(QWidget):
 
 ### OPT2
 
-    def datos_TableWidget(self, row, col):
+    def datos_TableWidget(self, row):
         data = []
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
@@ -134,7 +134,7 @@ class GUI(QWidget):
             item = QTableWidgetItem(str(datos[col]))
             item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)
-            self.ui.lineEdit_txt.setText(str(datos[0]))## print New ID
+            self.ui.lineEdit_txt.setText("New ID: "+str(datos[0]))## print New ID
 
     def Modif_Table_Widget(self, row, datos):
         for j in range(self.columnCount()):
@@ -148,16 +148,17 @@ class GUI(QWidget):
 
 
     def nueva_reserv(self, new=None):
-        datos = (self.getNew_ID(), "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", "")
-        self.NewRow_Table_Widget(datos)
-        self.insertar_data(datos)
-        # w = Reserv()
-        # w.show()
-        # if w.exec_() == Qt.Accepted:
-        #     #Nuevo Elemento en la Database
-        #     print("Nuevo Elemento en la Database")
-        # else:
-        #     pass
+        datos = ["", "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
+        
+        w = Reserv(datos, 0)
+        w.show()
+        if w.exec_() == Reserv.Accepted:
+            print("Nuevo Elemento en la Database")
+
+            datos = w.get_data()
+            datos[0] = self.getNew_ID()
+            self.NewRow_Table_Widget(datos)
+            self.insertar_data(datos)
 
 
     def modif_row(self):
@@ -169,18 +170,19 @@ class GUI(QWidget):
 
 
     def modif_reserv(self, row, col):
-        datos = self.datos_TableWidget(row, col)
+        datos = self.datos_TableWidget(row)
         self.ui.lineEdit_txt.setText(str(27)+str(datos))
         w = Reserv(datos, 1)
         w.show()
         if w.exec_() == Reserv.Accepted:
             #Modif Database
-            print("Modif Database")
             datos = w.get_data()
             if datos[0] is "":
                 datos[0] = self.getNew_ID()
                 self.insertar_data(datos)### fase de prueba. TwItem == None.
+                print("Insertar Database")
             else:
+                print("Modif Database")
                 self.actualizar_data(datos)
             self.Modif_Table_Widget(row, datos)
 
@@ -190,11 +192,16 @@ class GUI(QWidget):
         if not TwItems:
             print("Eliminar_Reserv Not SelectedItems!")
             return
-        if TwItems:
-            row = TwItems[0].row()
-            item = self.ui.tableWidget.item(row, 0)#ID
-            self.remover_data(item)
-            self.ui.tableWidget.removeRow(row)
+        if TwItems:### w = Reserv(datos, 2)
+            datos = self.datos_TableWidget(TwItems[0].row())##row
+            w = Reserv(datos, 2)
+            w.show()
+            if w.exec_() == Reserv.Accepted:
+
+                row = TwItems[0].row()
+                item = self.ui.tableWidget.item(row, 0)#ID
+                self.remover_data(item)
+                self.ui.tableWidget.removeRow(row)
 
 
     def insertar_data(self, datos):
@@ -241,7 +248,7 @@ class GUI(QWidget):
         else:
             self.ID2 = 0
 
-        self.ui.lineEdit_txt.setText(str(self.ID2))
+        self.ui.lineEdit_txt.setText("ID2: "+str(self.ID2))
 
     def getNew_ID2(self):
         self.ID2 = str(int(self.ID2)+1)
@@ -307,7 +314,7 @@ class GUI(QWidget):
     def insertar_producto(self, codigo, nombre, modelo):
         sql = """INSERT INTO productos (CODIGO, NOMBRE, MODELO)
             VALUES(?, ?, ?)"""
-        #cur.execute(sql).format(codigo, nombre, modelo)
+
         q = QSqlQuery()
         if q.prepare(sql):
             q.addBindValue(codigo)
@@ -315,8 +322,6 @@ class GUI(QWidget):
             q.addBindValue(modelo)
             if q.exec_():
                 print("Campo agregado satisfactoriamente!")
-        # if not q.isActive():
-        #     self.ui.lineEdit_txt.setText("Fallo  insertar_producto()")
 
 
 
