@@ -24,13 +24,13 @@ from PySide2.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 class Reserv(QDialog):
     """docstring for Reserv"""
-    def __init__(self, data= None):
+    def __init__(self, data= None, tipo=0):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.arg =  data if data else (None, "Maria", "3", "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
-        self.arg2_tipe = 0
+        self.arg2_tipe = tipo
 
         if self.arg2_tipe == 0:
             self.ui.ok_btn.setText("Ok")#Nuevo

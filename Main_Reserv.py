@@ -28,21 +28,24 @@ class GUI(QWidget):
         super(GUI, self).__init__()
         self.ui = Ui_Form()
         self.ui.setupUi(self)
-        self.ui.tableWidget.cellDoubleClicked.connect(self.modif_reserv)
-        self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.arg = None
         self.row_tmp = None
-
-        self.ui.elim_btn.clicked.connect(self.Erase_ReservBase)
+        
+        self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
+        self.ui.tableWidget.cellDoubleClicked.connect(self.modif_reserv)
+        self.ui.elim_btn.clicked.connect(self.Eliminar_Reserv)
+
+
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
 
+        q = QSqlQuery()
+        q.exec_("select * from Reserv_Clientes")
+        while q.next():
+            datos = [q.value(i) for i in range(self.columnCount())]
+            self.NewRow_Table_Widget(datos)
 
-        self.ui.tableWidget_2.cellDoubleClicked.connect(self.Modifi_rsv)
-        self.ui.modif_btn_2.clicked.connect(self.Modifi_Base)
-
-        self.ui.elim_btn_2.clicked.connect(self.Erase_Base)
-
+## tableWidget_2
         q = QSqlQuery()
         q.exec_("select * from productos")
         while q.next():
@@ -52,18 +55,17 @@ class GUI(QWidget):
             modelo = q.value(3)#modelo
             datos = (id, codigo, nombre, modelo)
             self.NewRow_Table_Widget2(datos)
-
-
-        q = QSqlQuery()
-        q.exec_("select * from Reserv_Clientes")
-        while q.next():
-            datos = [q.value(i) for i in range(self.columnCount())]
-            self.NewRow_Table_Widget(datos)
+##
 
         self.Obtener_ID()
         self.Obtener_ID2()
         
         self.ui.new_btn.clicked.connect(self.Insertar)
+        self.ui.tableWidget_2.cellDoubleClicked.connect(self.Modifi_rsv)
+        self.ui.modif_btn_2.clicked.connect(self.Modifi_Base)
+
+        self.ui.elim_btn_2.clicked.connect(self.Erase_Base)
+
 
 
     def Obtener_ID(self):
@@ -82,6 +84,13 @@ class GUI(QWidget):
         self.ID = str(int(self.ID)+1)
         return self.ID
 
+    def TableWidget(self):
+        return self.ui.tableWidget
+
+    def selectRow(self, row):
+        print("selectRow", row)
+        return self.ui.tableWidget.selectRow(row)
+
 
     def columnCount(self):
         #self.ui.tableWidget.columnCount()
@@ -89,23 +98,6 @@ class GUI(QWidget):
 
     def rowCount(self):
         return self.ui.tableWidget.rowCount()
-
-    def NewRow_Table_Widget(self, datos):
-        row = self.rowCount()
-        self.ui.tableWidget.insertRow(row)
-        #self.ui.tableWidget.verticalHeader().setVisible(False)
-        for col in range(self.columnCount()):
-            item = QTableWidgetItem(str(datos[col]))
-            item.setFlags(item.flags()^Qt.ItemIsEditable)
-            self.ui.tableWidget.setItem(row, col, item)
-            self.ui.lineEdit_txt.setText(str(datos[0]))
-
-    def TableWidget(self):
-        return self.ui.tableWidget
-
-    def selectRow(self, row):
-        print("selectRow", row)
-        return self.ui.tableWidget.selectRow(row)
 
 ## OPT2
     def columnCount2(self):
@@ -134,6 +126,16 @@ class GUI(QWidget):
         return data
 
 
+    def NewRow_Table_Widget(self, datos):
+        row = self.rowCount()
+        self.ui.tableWidget.insertRow(row)
+        #self.ui.tableWidget.verticalHeader().setVisible(False)
+        for col in range(self.columnCount()):
+            item = QTableWidgetItem(str(datos[col]))
+            item.setFlags(item.flags()^Qt.ItemIsEditable)
+            self.ui.tableWidget.setItem(row, col, item)
+            self.ui.lineEdit_txt.setText(str(datos[0]))## print New ID
+
     def Modif_Table_Widget(self, row, datos):
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
@@ -141,84 +143,14 @@ class GUI(QWidget):
             if item is None: #caso particular
                 item = QTableWidgetItem()
             item.setText(datos[j])
-            self.ui.tableWidget.setItem(row, j, item)
-
-    def modif_row(self):
-        TwItems = self.ui.tableWidget.selectedItems()##selectedIndexes()
-        ###self.ui.lineEdit_txt.setText(str(23)+str(TwItems))
-        if TwItems:
-            row = TwItems[0].row()
-            col = TwItems[0].column()
-            self.modif_reserv(row, col)
-
-
-    def modif_reserv(self, row, col):
-        # row = new.row()
-        # col = new.column()
-        # data = new.text()
-        self.arg = self.datos_TableWidget(row, col)
-        self.ui.lineEdit_txt.setText(str(27)+str(self.arg))
-        w = Reserv(self.arg)
-        w.show()
-        if w.exec_() == Reserv.Accepted:
-            #Modif Database
-            print("Modif Database")
-            datos = w.get_data()
-            if datos[0] is "":
-                datos[0] = self.getNew_ID()
-                self.insertar_servicio(datos)### fase de prueba. TwItem == None.
-            else:
-                self.Update_data1(datos)
-            self.Modif_Table_Widget(row, datos)
-        # else:
-        #     pass
-
-
-    def Update_data1(self, datos):
-        self.ui.lineEdit_txt.setText(str(11)+str(datos))
-        print("datos[1:] ", datos[1:], len(datos), "\n\n")
-        q = QSqlQuery()
-        sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
-        q.exec_(sql)
-        if not q.isActive():
-            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
-
-
-
-    def insertar_servicio(self, datos):
-        sql = """INSERT INTO Reserv_Clientes (  NOMBRE, Cod_clie, fecha, Trabajos, precio , Observaciones)
-            VALUES(?, ?, ?, ?, ?, ?)"""
-        q = QSqlQuery()
-        if q.prepare(sql):
-            for i in range(1, self.columnCount()):
-                q.addBindValue(datos[i])
-            q.exec_()
-
-
-    def Erase_ReservBase(self):
-        if not self.ui.tableWidget.selectedItems():
-            print("Erase_ReservBase Not SelectedItems!")
-            return
-        TwItem = self.ui.tableWidget.selectedItems()[0]##selectedIndexes()
-        if TwItem:
-            row = TwItem.row()
-        else:
-            row = None
-        if row:
-            item = self.ui.tableWidget.item(row, 0)#ID
-            sql = "DELETE FROM Reserv_Clientes WHERE id = {}".format(item.text())
-            q = QSqlQuery()
-            q.exec_(sql)
-            self.ui.tableWidget.removeRow(row)
-            row = None
+            self.ui.tableWidget.setItem(row, j, item)##parece innecesario
 
 
 
     def nueva_reserv(self, new=None):
-        self.arg = (self.getNew_ID(), "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", "")
-        self.NewRow_Table_Widget(self.arg)
-        self.insertar_servicio(self.arg)
-        #self.ui.lineEdit_txt.setText("Hi")
+        datos = (self.getNew_ID(), "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", "")
+        self.NewRow_Table_Widget(datos)
+        self.insertar_data(datos)
         # w = Reserv()
         # w.show()
         # if w.exec_() == Qt.Accepted:
@@ -227,6 +159,66 @@ class GUI(QWidget):
         # else:
         #     pass
 
+
+    def modif_row(self):
+        TwItems = self.ui.tableWidget.selectedItems()
+        if TwItems:
+            row = TwItems[0].row()
+            col = TwItems[0].column()
+            self.modif_reserv(row, col)
+
+
+    def modif_reserv(self, row, col):
+        datos = self.datos_TableWidget(row, col)
+        self.ui.lineEdit_txt.setText(str(27)+str(datos))
+        w = Reserv(datos, 1)
+        w.show()
+        if w.exec_() == Reserv.Accepted:
+            #Modif Database
+            print("Modif Database")
+            datos = w.get_data()
+            if datos[0] is "":
+                datos[0] = self.getNew_ID()
+                self.insertar_data(datos)### fase de prueba. TwItem == None.
+            else:
+                self.actualizar_data(datos)
+            self.Modif_Table_Widget(row, datos)
+
+
+    def Eliminar_Reserv(self):
+        TwItems = self.ui.tableWidget.selectedItems()
+        if not TwItems:
+            print("Eliminar_Reserv Not SelectedItems!")
+            return
+        if TwItems:
+            row = TwItems[0].row()
+            item = self.ui.tableWidget.item(row, 0)#ID
+            self.remover_data(item)
+            self.ui.tableWidget.removeRow(row)
+
+
+    def insertar_data(self, datos):
+        sql = """INSERT INTO Reserv_Clientes (  NOMBRE, Cod_clie, fecha, Trabajos, precio , Observaciones)
+            VALUES(?, ?, ?, ?, ?, ?)"""
+        q = QSqlQuery()
+        if q.prepare(sql):
+            for i in range(1, self.columnCount()):
+                q.addBindValue(datos[i])
+            q.exec_()
+
+    def actualizar_data(self, datos):
+        self.ui.lineEdit_txt.setText(str(datos)+str(11))
+        print("datos[1:] ", datos[1:], len(datos), "\n\n")
+        q = QSqlQuery()
+        sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
+        q.exec_(sql)
+        if not q.isActive():
+            self.ui.lineEdit_txt.setText("Fallo  actualizar_data()")
+
+    def remover_data(self, item):
+        sql = "DELETE FROM Reserv_Clientes WHERE id = {}".format(item.text())
+        q = QSqlQuery()
+        q.exec_(sql)
 
 
     def buscar_Reserv(self):
@@ -256,9 +248,9 @@ class GUI(QWidget):
         return self.ID2
 
     def Insertar(self):
-        self.arg = (self.getNew_ID2(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
-        self.NewRow_Table_Widget2(self.arg)
-        self.insertar_producto(*self.arg[1:])
+        datos = (self.getNew_ID2(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
+        self.NewRow_Table_Widget2(datos)
+        self.insertar_producto(*datos[1:])
 
 
     def Erase_Base(self):
@@ -326,25 +318,6 @@ class GUI(QWidget):
         # if not q.isActive():
         #     self.ui.lineEdit_txt.setText("Fallo  insertar_producto()")
 
-
-
-    def buscar_productos(self):
-        sql = "SELECT * FROM productos"
-        cur.execute(sql)
-
-    def busca_producto(self, nombre):
-        sql = "SELECT * FROM productos WHERE NOMBRE = {}".format(nombre)
-        cur.execute(sql)
-
-    def elimina_producto(self, nombre):
-        sql = "DELETE FROM productos WHERE NOMBRE = {}".format(nombre)
-        cur.execute(sql)
-
-
-    def actualiza_productos(self, codigo, modelo, nombre_producto):#Via  Nombre
-        sql = """UPDATE productos SET CODIGO = {},     MODELO = {}
-            WHERE NOMBRE = {}""".format(codigo, modelo,  nombre_producto)
-        cur.execute(sql)
 
 
 def prepareDataBase():
