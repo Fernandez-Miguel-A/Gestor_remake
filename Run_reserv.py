@@ -36,7 +36,7 @@ class Reserv(QDialog):
             self.ui.ok_btn.setText("Ok")#Nuevo
         elif self.arg2_tipe == 1:
             self.ui.ok_btn.setText("Modif")#Modificar
-        else:
+        elif self.arg2_tipe == 2:
             self.ui.ok_btn.setText("Borrar")#Eliminar
 
         ##self.ui.trab_listW.clicked.connect(lambda x: self.function("adsdas"))
@@ -53,12 +53,19 @@ class Reserv(QDialog):
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
 
+        if self.arg2_tipe == 2:
+            self.ui.name_txt.setEnabled(False)#1
+            self.ui.precio_txt.setEnabled(False)#5
+            self.ui.obs_txt.setEnabled(False)#6
+
         for o in self.arg[4].split("|"):
             trbs = self.ui.trab_listW.findItems(o, Qt.MatchExactly)
             if trbs:
                 trb = trbs[0]
                 trb.setCheckState(Qt.Checked)
 
+        if self.arg2_tipe == 2:
+            self.ui.trab_listW.setEnabled(False)#4
 
         if self.arg[2]:
             if self.arg[2] != "0":
@@ -72,6 +79,11 @@ class Reserv(QDialog):
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
         ##self.ui.obs_txt.setText(str(datetime))##mostrar el datetime cargado en crudo
         self.ui.work_date.setDateTime(datetime)
+
+
+        if self.arg2_tipe == 2:
+            self.ui.cod_Clie_cmb.setEnabled(False)#2
+            self.ui.work_date.setEnabled(False)#3
 
     def load_Ico(self, cod_clie):
         ##cod_clie == self.arg[2]
@@ -99,7 +111,6 @@ class Reserv(QDialog):
             return
 
 
-
     def function(self, name_item):#añade un nuevo ListWIdem
         print(name_item)
         self.ui.trab_listW.addItem(name_item)   #Nuevo ListWidgetItem
@@ -121,12 +132,8 @@ class Reserv(QDialog):
 
     def Precios(self, item=None):
         precio_final = 0
-        #self.ui.obs_txt.setText("$"+str(precio_final))
-        #elf.ui.name_txt.setText(self.ui.trab_listW.item(0).text())
         for i in range(self.ui.trab_listW.count()):
             trb = self.ui.trab_listW.item(i)
-            #self.ui.name_txt.setText(trb.text())
-            #self.ui.name_txt.setText(str(i))
 
             if trb.checkState() == Qt.Checked:
                 #self.ui.obs_txt.setText(str(precio_final))
@@ -146,6 +153,7 @@ class Reserv(QDialog):
                 _trabajos += "|" + trb.text()
         _trabajos = _trabajos[1:] if _trabajos else ""
         return _trabajos
+
 
     def get_data(self):
         datos = [self.arg[0], ## if datos[0] is "":;   datos[0] = self.getNew_ID()
