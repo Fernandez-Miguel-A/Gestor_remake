@@ -99,24 +99,6 @@ class GUI(QWidget):
     def rowCount(self):
         return self.ui.tableWidget.rowCount()
 
-## OPT2
-    def columnCount2(self):
-        #self.ui.tableWidget_2.columnCount()
-        return self.ui.tableWidget_2.columnCount()
-
-    def rowCount2(self):
-        return self.ui.tableWidget_2.rowCount()
-
-    def NewRow_Table_Widget2(self, datos):
-        row = self.rowCount2()
-        self.ui.tableWidget_2.insertRow(row)
-        #self.ui.tableWidget.verticalHeader().setVisible(False)
-        for j in range(self.columnCount2()):
-            item = QTableWidgetItem(str(datos[j]))
-            item.setFlags(item.flags()^Qt.ItemIsEditable)
-            self.ui.tableWidget_2.setItem(row, j, item)
-
-### OPT2
 
     def datos_TableWidget(self, row):
         data = []
@@ -254,31 +236,44 @@ class GUI(QWidget):
         self.ID2 = str(int(self.ID2)+1)
         return self.ID2
 
+## OPT2
+    def columnCount2(self):
+        #self.ui.tableWidget_2.columnCount()
+        return self.ui.tableWidget_2.columnCount()
+
+    def rowCount2(self):
+        return self.ui.tableWidget_2.rowCount()
+
+    def NewRow_Table_Widget2(self, datos):
+        row = self.rowCount2()
+        self.ui.tableWidget_2.insertRow(row)
+        #self.ui.tableWidget.verticalHeader().setVisible(False)
+        for j in range(self.columnCount2()):
+            item = QTableWidgetItem(str(datos[j]))
+            item.setFlags(item.flags()^Qt.ItemIsEditable)
+            self.ui.tableWidget_2.setItem(row, j, item)
+
+### OPT2
+
     def Insertar(self):
         datos = (self.getNew_ID2(), self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
         self.NewRow_Table_Widget2(datos)
         self.insertar_producto(*datos[1:])
 
 
-    def Erase_Base(self):
-        if self.row_tmp:
-            item = self.ui.tableWidget_2.item(self.row_tmp, 0)#ID
-            sql = "DELETE FROM productos WHERE id = {}".format(item.text())
-            q = QSqlQuery()
-            q.exec_(sql)
-            self.ui.tableWidget_2.removeRow(self.row_tmp)
-            self.row_tmp = None
+    def Modifi_rsv(self, row, col):
+        self.row_tmp = row# Extraer Nro de fila
+        datos = []
+        for j in range(self.columnCount2()):
+            item = self.ui.tableWidget_2.item(row, j)
+            datos.append(item.text() if item else "")# Extraer datos
+        
+        (print("ID:", datos[0]), 
+            self.ui.codigo_txt.setText(datos[1]),# Reasignar datos
+            self.ui.nombre_txt.setText(datos[2]), 
+            self.ui.modelo_txt.setText(datos[3]))
 
-
-    def Update_data(self, codigo, modelo,  nombre_producto, id):
-        global db
-        q = QSqlQuery()
-        sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
-        q.exec_(sql)
-        db.commit()
-        if not q.isActive():
-            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
-
+        #self.actualiza_productos()
 
 
     def Modifi_Base(self):
@@ -294,21 +289,15 @@ class GUI(QWidget):
         self.Update_data(datos[1],   datos[3],    datos[2],    self.ui.tableWidget_2.item(self.row_tmp, 0).text())
         self.row_tmp = None
 
-    def Modifi_rsv(self, row, col):#Falta codigo!
-        #Elem select -> row, col==1.   codigo, nombre, modelo, sqlquery()
-        #item = self.ui.tableWidget_2.item(row, 1)# Nombre
-        self.row_tmp = row
-        datos = []
-        for j in range(self.columnCount2()):
-            item = self.ui.tableWidget_2.item(row, j)
-            datos.append(item.text() if item else "")
-        
-        (print("ID:", datos[0]), 
-            self.ui.codigo_txt.setText(datos[1]),
-            self.ui.nombre_txt.setText(datos[2]), 
-            self.ui.modelo_txt.setText(datos[3]))
 
-        #self.actualiza_productos()
+    def Erase_Base(self):
+        if self.row_tmp:
+            item = self.ui.tableWidget_2.item(self.row_tmp, 0)#ID
+            sql = "DELETE FROM productos WHERE id = {}".format(item.text())
+            q = QSqlQuery()
+            q.exec_(sql)
+            self.ui.tableWidget_2.removeRow(self.row_tmp)
+            self.row_tmp = None
 
 
     def insertar_producto(self, codigo, nombre, modelo):
@@ -322,6 +311,16 @@ class GUI(QWidget):
             q.addBindValue(modelo)
             if q.exec_():
                 print("Campo agregado satisfactoriamente!")
+
+
+    def Update_data(self, codigo, modelo,  nombre_producto, id):
+        global db
+        q = QSqlQuery()
+        sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
+        q.exec_(sql)
+        db.commit()
+        if not q.isActive():
+            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
 
 
 
