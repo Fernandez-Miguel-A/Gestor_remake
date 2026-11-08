@@ -49,7 +49,7 @@ class Reserv(QDialog):
         #self.ui.trab_listW.itemClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemDoubleClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemChanged.connect(self.Precios)#itemChanged, itemActivated
-        self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
+        #self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
 
         self.loadData()
         self.Precios()
@@ -95,7 +95,7 @@ class Reserv(QDialog):
             self.ui.cod_Clie_cmb.setEnabled(False)#2
             self.ui.work_date.setEnabled(False)#3
 
-    def load_Ico(self, cod_clie):
+    def load_Ico(self, cod_clie: int) -> None:
         ##cod_clie == self.arg[2]
         print("load_Ico(cod_clie):", cod_clie)
         if cod_clie == 0:
