@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-from PySide6.QtCore import QPoint, QPointF, Qt
+from PySide6.QtCore import QPoint, QPointF, Qt, Signal
 from PySide6.QtGui import QColor, QLinearGradient, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsScene,
@@ -18,6 +18,7 @@ IMAGE_DIRECTORY = Path(__file__).resolve().parent / "../images"
 
 
 class View(QGraphicsView):
+    GItemPressed = Signal(ImageItem)
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.database = None
@@ -52,6 +53,9 @@ class View(QGraphicsView):
         x = (index % 4) * image_offset + left_margin + column_offset
         y = (index // 4) * image_offset #+ top_margin
         return QPointF(x, y)
+
+#    def getGPOS(self):
+#        self.getPosGItem(index)
 
     def add_items(self) -> None:
         rows = self.database.execute(
@@ -127,7 +131,7 @@ class View(QGraphicsView):
                 i.set_model(datos)
                 return
 
-    def removeGItem(self, datos):
+    def removeGItem(self, datos) -> None:
         r = datos[0]
         index2 = None
         for item in self.scene.items():
@@ -166,7 +170,10 @@ class View(QGraphicsView):
         item = self.itemAt(event.position().toPoint())
         print("\n\n\n mouseReleaseEvent: ", item)
         if isinstance(item, ImageItem):
-            if item.model() is not None:
+            model = item.model()
+            if model is not None:
+                self.GItemPressed.emit(item)
+                super().mouseReleaseEvent(event)
                 return ## GItem creados con addGItem()
             self.show_information(item)
         super().mouseReleaseEvent(event)

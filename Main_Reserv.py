@@ -38,7 +38,7 @@ class GUI(QWidget):
         
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
-        self.ui.tableWidget.cellDoubleClicked.connect(self.modif_reserv)
+        self.ui.tableWidget.cellDoubleClicked.connect(self.modif_TWreserv)
         self.ui.elim_btn.clicked.connect(self.Eliminar_Reserv)
 
 
@@ -46,13 +46,13 @@ class GUI(QWidget):
         
         self.ui.graphicsView.hide()
         self.ui.View_Table.toggled.connect(lambda x,this=self.ui: (this.graphicsView.setVisible(x), this.tabWidget.setVisible(not x)))
+        self.ui.graphicsView.GItemPressed.connect(self.modifGItem)
 
         q = QSqlQuery()
         q.exec("select * from Reserv_Clientes")
         while q.next():
-            datos = [q.value(i) for i in range(self.columnCount())]
-            self.NewRow_Table_Widget(datos)
-            self.ui.graphicsView.addGItem(datos)
+            datos = [q.value(i) for i in range(self.columnCountTW())]
+            self.MakeReservClie(datos)
 
 ## tableWidget_2
         q = QSqlQuery()
@@ -101,17 +101,31 @@ class GUI(QWidget):
         return self.ui.tableWidget.selectRow(row)
 
 
-    def columnCount(self):
+    def columnCountTW(self):
         #self.ui.tableWidget.columnCount()
         return self.ui.tableWidget.columnCount()
 
-    def rowCount(self):
+    def rowCountTW(self):
         return self.ui.tableWidget.rowCount()
+
+
+    def MakeReservClie(self, datos):
+        print("MakeReservClie::", datos)
+        self.NewRow_Table_Widget(datos)
+        self.ui.graphicsView.addGItem(datos)
+
+    def UpdateReservClie(self, row, datos):
+        self.Modif_Table_Widget(row, datos)
+        self.ui.graphicsView.UpdateGItem(datos)
+
+    def RemoveReservClie(self, row, datos):
+        self.ui.tableWidget.removeRow(row)
+        self.ui.graphicsView.removeGItem(datos)
 
 
     def datos_TableWidget(self, row):
         data = []
-        for j in range(self.columnCount()):
+        for j in range(self.columnCountTW()):
             item = self.ui.tableWidget.item(row, j)
             data.append(item.text() if item else "")
 
@@ -121,10 +135,10 @@ class GUI(QWidget):
 
 
     def NewRow_Table_Widget(self, datos):
-        row = self.rowCount()
+        row = self.rowCountTW()
         self.ui.tableWidget.insertRow(row)
         #self.ui.tableWidget.verticalHeader().setVisible(False)
-        for col in range(self.columnCount()):
+        for col in range(self.columnCountTW()):
             item = QTableWidgetItem(str(datos[col])) ## 'id' y 'cod_clie' son 'int'
             item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)
@@ -132,7 +146,7 @@ class GUI(QWidget):
 
     def Modif_Table_Widget(self, row, datos): ## FIX-ED: "QTableWidget: ..
         new = False
-        for j in range(self.columnCount()):
+        for j in range(self.columnCountTW()):
             item = self.ui.tableWidget.item(row, j)
             print("row, j", row, j, item)
             if item is None: #caso particular
@@ -141,6 +155,13 @@ class GUI(QWidget):
             item.setText(str(datos[j])) ## 'id' y 'cod_clie' son 'int'
             if new: ## FIX-ED: "QTableWidget: ..
                 self.ui.tableWidget.setItem(row, j, item)
+
+    def getRowfromID(self, id : int) -> int:
+        for row in range(self.rowCountTW()):
+            item = self.ui.tableWidget.item(row, 0)
+            if item == str(id):
+                return row
+        return -1
 
 
 
@@ -155,9 +176,8 @@ class GUI(QWidget):
 
             datos = w.get_data()
             datos[0] = self.getNew_ID()
-            self.NewRow_Table_Widget(datos)
+            self.MakeReservClie(datos)
             self.insertar_data(datos)
-            self.ui.graphicsView.addGItem(datos)
 
 
     def modif_row(self):
@@ -165,11 +185,10 @@ class GUI(QWidget):
         if TwItems:
             row = TwItems[0].row()
             col = TwItems[0].column()
-            self.modif_reserv(row, col)
+            self.modif_TWreserv(row, col)
 
 
-    def modif_reserv(self, row, col):
-        datos = self.datos_TableWidget(row)
+    def modif_reserv(self, row, datos):
         self.ui.lineEdit_txt.setText(str(27)+str(datos))
         w = Reserv(self.ui.graphicsView, datos, Reserv.MODIF)
         w.show()
@@ -183,8 +202,18 @@ class GUI(QWidget):
             else:
                 print("Modif Database")
                 self.actualizar_data(datos)
-            self.Modif_Table_Widget(row, datos)
-            self.ui.graphicsView.UpdateGItem(datos)
+            self.UpdateReservClie(row, datos)
+
+    def modif_TWreserv(self, row, col):
+        datos = self.datos_TableWidget(row)
+        self.modif_reserv(row, datos)
+
+    def modifGItem(self, item):
+        datos = item.model()
+        idx = item.getGIndex()
+        row = self.getRowfromID(idx)
+        self.modif_reserv(row, datos)
+        
 
 
     def Eliminar_Reserv(self):
@@ -201,8 +230,7 @@ class GUI(QWidget):
                 row = TwItems[0].row()
                 id = self.ui.tableWidget.item(row, 0)#ID
                 self.remover_data(id)
-                self.ui.tableWidget.removeRow(row)
-                self.ui.graphicsView.removeGItem(datos)
+                self.RemoveReservClie(row, datos)
 
 
     def insertar_data(self, datos):
@@ -210,7 +238,7 @@ class GUI(QWidget):
             VALUES(?, ?, ?, ?, ?, ?)"""
         q = QSqlQuery()
         if q.prepare(sql):
-            for i in range(1, self.columnCount()):
+            for i in range(1, self.columnCountTW()):
                 q.addBindValue(datos[i])
             q.exec()
 

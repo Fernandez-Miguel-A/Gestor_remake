@@ -57,7 +57,7 @@ class _Buscar(QDialog):
         print("sql", sql2)
         query.exec_(sql2)
         # while q.next():
-        #     datos = [q.value(i) for i in range(self.columnCount())]
+        #     datos = [q.value(i) for i in range(self.column_CountTW())]
         #     self.NewRow_Table_Widget(datos)
 
         i = 0
@@ -79,7 +79,7 @@ class _Buscar(QDialog):
                 sql = "select * FROM Reserv_Clientes WHERE id = {}".format(id)
                 q.exec_(sql)
                 while q.next():
-                    datos = [q.value(i) for i in range(self.columnCount())]
+                    datos = [q.value(i) for i in range(self.column_CountTW())]
                     self.NewRow_Table_Widget(datos)
 
                 self.ui.buscar_txt.setStyleSheet(VERDE)
@@ -94,7 +94,7 @@ class _Buscar(QDialog):
 
 
 
-    def columnCount(self):
+    def column_CountTW(self):
         #self.ui.tableWidget.columnCount()
         return self.ui.tableWidget.columnCount()
 
@@ -105,7 +105,7 @@ class _Buscar(QDialog):
         row = self.rowCount()
         self.ui.tableWidget.insertRow(row)
         #self.ui.tableWidget.verticalHeader().setVisible(False)
-        for col in range(self.columnCount()):
+        for col in range(self.column_CountTW()):
             item = QTableWidgetItem(str(datos[col]))
             item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)

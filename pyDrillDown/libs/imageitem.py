@@ -28,6 +28,12 @@ class ImageItem(QGraphicsPixmapItem):
     def model(self):
         return self.m
 
+    def getGIndex(self) -> int:
+        return self.data(1)
+
+#    def getGPos(self) -> QPointF:
+#        return QPointF(self.data(1)//4, self.data(1)%4)
+
     def set_text(self, data): ## nuevo texto
         if self.text_item:
             print("self.text_item: ", self.text_item)
