@@ -195,6 +195,7 @@ class GUI(QWidget):
                 item = self.ui.tableWidget.item(row, 0)#ID
                 self.remover_data(item)
                 self.ui.tableWidget.removeRow(row)
+                self.ui.graphicsView.removeGItem(datos)
 
 
     def insertar_data(self, datos):

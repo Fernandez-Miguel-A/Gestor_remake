@@ -64,6 +64,7 @@ class View(QGraphicsView):
             pixmap = self.load_image(filename)
             image = ImageItem(record_id, pixmap)
             image.setData(0, index)
+            image.setData(1, index)
             image.setPos(QPointF(x, y))
             image.set_model(None)
             self.scene.addItem(image)
@@ -109,6 +110,7 @@ class View(QGraphicsView):
         pixmap = self.load_image(filename)
         image = ImageItem(record_id, pixmap)
         image.setData(0, data[0])
+        image.setData(1, self._index)
         image.setPos(QPointF(x, y))
         image.set_model(data)
         self.scene.addItem(image)
@@ -124,6 +126,38 @@ class View(QGraphicsView):
             if i.data(0) == r:
                 i.set_model(datos)
                 return
+
+    def removeGItem(self, datos):
+        r = datos[0]
+        index2 = None
+        print("removeGItem:: ", len(self.scene.items()))
+        for item in self.scene.items():
+            print("\n\n intro", item.data(1))
+            if item.data(0) == r:
+                index2 = item.data(1)
+                self.scene.removeItem(item.text_item)
+                self.scene.removeItem(item)
+                self._index -= 1
+                break  
+
+        #print("removeGItem2:: ", len(self.scene.items()))
+        for item in self.scene.items():
+            #print("item.data: ", item.data(0), item.data(1), self._index, index2, item)
+            if item.data(1) and index2 and item.data(1) > index2: ## el item puede ser un 'QGraphicsTextItem'
+                #print("\n\n Entre")
+                new_index = item.data(1) - 1
+
+                image_offset = 150
+                left_margin = 70
+                top_margin = 40
+
+                column_offset = (new_index % 4) * 37
+                x = (new_index % 4) * image_offset + left_margin + column_offset
+                y = (new_index // 4) * image_offset #+ top_margin
+
+                item.setPos(x, y)
+                item.setData(1, new_index)
+
 
     def load_image(self, filename: str) -> QPixmap:
         if filename == "":
