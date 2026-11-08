@@ -1,17 +1,18 @@
-from PySide6.QtCore import QObject, QTimeLine
-from PySide6.QtWidgets import QGraphicsPixmapItem
+from PySide6.QtCore import QObject, QTimeLine, QPointF, Property
+from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsTextItem
 
 
-class ImageItem(QObject, QGraphicsPixmapItem):
+class ImageItem(QGraphicsPixmapItem):
     def __init__(self, record_id: int, pixmap) -> None:
-        QObject.__init__(self)
-        QGraphicsPixmapItem.__init__(self, pixmap)
+        super().__init__(pixmap)
+        self.m = None
+        #self.pixmap_item = QGraphicsPixmapItem(pixmap)#, parent=self
         self.record_id = record_id
         self.z = 0.0
         self.setAcceptHoverEvents(True)
         self.setTransformOriginPoint(self.boundingRect().center())
 
-        self.time_line = QTimeLine(150, self)
+        self.time_line = QTimeLine(150)
         self.time_line.setFrameRange(0, 150)
         self.time_line.frameChanged.connect(self.set_frame)
         self.time_line.finished.connect(self.update_item_position)
