@@ -1,4 +1,5 @@
 from PySide6.QtCore import QObject, QTimeLine, QPointF, Property
+from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsTextItem
 
 
@@ -40,6 +41,7 @@ class ImageItem(QGraphicsPixmapItem):
             self.scene().removeItem(self.text_item)
         text = data[1] + "\n" + data[3]
         self.text_item = QGraphicsTextItem(str(text), self)
+        self.text_item.setDefaultTextColor(QColor("#d7d6d5"))
         #self.text_item.setPos(self.boundingRect().center() - self.text_item.boundingRect().center())
         print("set_text: ", self.boundingRect().topLeft())
         self.text_item.setPos(self.boundingRect().topLeft()+
