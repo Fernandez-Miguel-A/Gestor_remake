@@ -6,11 +6,11 @@ from reserv_ui import Ui_Dialog
 
 
 
-from PySide2.QtWidgets import QDialog, QApplication, QDateTimeEdit
-from PySide2.QtGui import QPixmap
-from PySide2.QtCore import Qt, QDateTime
+from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Qt, QDateTime
 
-from PySide2.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
+from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 
 # class ClassName(Ui_Dialog, QDialog):

@@ -6,11 +6,11 @@ from buscar_ui import Ui_Buscar_widget
 
 
 
-from PySide2.QtWidgets import QDialog, QApplication, QDateTimeEdit, QWidget, QTableWidgetItem
-from PySide2.QtGui import QPixmap
-from PySide2.QtCore import Qt, QDateTime
+from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit, QWidget, QTableWidgetItem
+from PySide6.QtGui import QPixmap
+from PySide6.QtCore import Qt, QDateTime
 
-from PySide2.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
+from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 #remix copado   puro clasicos
 #https://www.youtube.com/watch?v=WRGySfs4Pqc

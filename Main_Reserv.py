@@ -8,10 +8,10 @@ from Run_buscar import _Buscar
 
 
 
-from PySide2.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
-from PySide2.QtCore import Qt
+from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
+from PySide6.QtCore import Qt
 
-from PySide2.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
+from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 # class ClassName(Ui_Dialog, QDialog):
 #     """docstring for ClassName"""
@@ -40,14 +40,14 @@ class GUI(QWidget):
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
 
         q = QSqlQuery()
-        q.exec_("select * from Reserv_Clientes")
+        q.exec("select * from Reserv_Clientes")
         while q.next():
             datos = [q.value(i) for i in range(self.columnCount())]
             self.NewRow_Table_Widget(datos)
 
 ## tableWidget_2
         q = QSqlQuery()
-        q.exec_("select * from productos")
+        q.exec("select * from productos")
         while q.next():
             id = q.value(0)#id
             codigo = q.value(1)#codigo
@@ -71,7 +71,7 @@ class GUI(QWidget):
     def Obtener_ID(self):
         q = QSqlQuery()
         sql = "SELECT id FROM Reserv_Clientes ORDER BY id DESC"
-        q.exec_(sql)
+        q.exec(sql)
 
         if q.next():
             self.ID = q.value(0)
@@ -134,7 +134,7 @@ class GUI(QWidget):
         
         w = Reserv(datos, 0)
         w.show()
-        if w.exec_() == Reserv.Accepted:
+        if w.exec() == Reserv.Accepted:
             print("Nuevo Elemento en la Database")
 
             datos = w.get_data()
@@ -156,10 +156,10 @@ class GUI(QWidget):
         self.ui.lineEdit_txt.setText(str(27)+str(datos))
         w = Reserv(datos, 1)
         w.show()
-        if w.exec_() == Reserv.Accepted:
+        if w.exec() == Reserv.Accepted:
             #Modif Database
             datos = w.get_data()
-            if datos[0] is "":
+            if datos[0] == "":
                 datos[0] = self.getNew_ID()
                 self.insertar_data(datos)### fase de prueba. TwItem == None.
                 print("Insertar Database")
@@ -178,7 +178,7 @@ class GUI(QWidget):
             datos = self.datos_TableWidget(TwItems[0].row())##row
             w = Reserv(datos, 2)
             w.show()
-            if w.exec_() == Reserv.Accepted:
+            if w.exec() == Reserv.Accepted:
 
                 row = TwItems[0].row()
                 item = self.ui.tableWidget.item(row, 0)#ID
@@ -193,28 +193,28 @@ class GUI(QWidget):
         if q.prepare(sql):
             for i in range(1, self.columnCount()):
                 q.addBindValue(datos[i])
-            q.exec_()
+            q.exec()
 
     def actualizar_data(self, datos):
         self.ui.lineEdit_txt.setText(str(datos)+str(11))
         print("datos[1:] ", datos[1:], len(datos), "\n\n")
         q = QSqlQuery()
         sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
-        q.exec_(sql)
+        q.exec(sql)
         if not q.isActive():
             self.ui.lineEdit_txt.setText("Fallo  actualizar_data()")
 
     def remover_data(self, item):
         sql = "DELETE FROM Reserv_Clientes WHERE id = {}".format(item.text())
         q = QSqlQuery()
-        q.exec_(sql)
+        q.exec(sql)
 
 
     def buscar_Reserv(self):
         w = _Buscar()
         w.setGridParent(self)
         w.show()
-        if w.exec_() == _Buscar.Accepted:
+        if w.exec() == _Buscar.Accepted:
             #_Buscar Database
             print("_Buscar Database Cerrado")
 
@@ -223,7 +223,7 @@ class GUI(QWidget):
     def Obtener_ID2(self):
         q = QSqlQuery()
         sql = "SELECT id FROM productos ORDER BY id DESC"
-        q.exec_(sql)
+        q.exec(sql)
 
         if q.next():
             self.ID2 = q.value(0)
@@ -295,7 +295,7 @@ class GUI(QWidget):
             item = self.ui.tableWidget_2.item(self.row_tmp, 0)#ID
             sql = "DELETE FROM productos WHERE id = {}".format(item.text())
             q = QSqlQuery()
-            q.exec_(sql)
+            q.exec(sql)
             self.ui.tableWidget_2.removeRow(self.row_tmp)
             self.row_tmp = None
 
@@ -309,7 +309,7 @@ class GUI(QWidget):
             q.addBindValue(codigo)
             q.addBindValue(nombre)
             q.addBindValue(modelo)
-            if q.exec_():
+            if q.exec():
                 print("Campo agregado satisfactoriamente!")
 
 
@@ -317,7 +317,7 @@ class GUI(QWidget):
         global db
         q = QSqlQuery()
         sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
-        q.exec_(sql)
+        q.exec(sql)
         db.commit()
         if not q.isActive():
             self.ui.lineEdit_txt.setText("Fallo  Update_data()")
@@ -332,34 +332,34 @@ def prepareDataBase():
     if db.open():
         q = QSqlQuery()
         if q.prepare("create table if not exists  productos (id integer primary key autoincrement not null, CODIGO text not null, NOMBRE text not null, MODELO text not null )"):
-            if q.exec_():
+            if q.exec():
                 print("TABLA  <productos>  creada satisfactoriamente!")
 
         q = QSqlQuery()
         if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie text, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
-            if q.exec_():
+            if q.exec():
                 print("TABLA  <Reserv_Clientes>  creada satisfactoriamente!")
         db_create()
         q = QSqlQuery()
         if q.prepare("create table if not exists  Reserv_data (id integer primary key autoincrement not null, Cod_clie text, fecha text not null, path text not null )"):
-            if q.exec_():
+            if q.exec():
                 print("TABLA  <Reserv_data>  creada satisfactoriamente!")
         Registro_db_create()
 
 def db_create():
     query = QSqlQuery()
     ## prepareDataBase()
-    query.exec_("insert into productos values(101, 'Cod13', 'viernes', '11')")
-    query.exec_("insert into productos values(102, 'Cod13', 'viernes', '11')")
-    query.exec_("insert into productos values(103, 'fir12', 'sara', '77')")
-    query.exec_("insert into productos values(104, 'ir13', 'Sonia', '404')")
+    query.exec("insert into productos values(101, 'Cod13', 'viernes', '11')")
+    query.exec("insert into productos values(102, 'Cod13', 'viernes', '11')")
+    query.exec("insert into productos values(103, 'fir12', 'sara', '77')")
+    query.exec("insert into productos values(104, 'ir13', 'Sonia', '404')")
 
 
 def Registro_db_create():
     query = QSqlQuery()
-    query.exec_("insert into Reserv_data values(111, '1', '5/04/2024' , 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_1.png')")
-    query.exec_("insert into Reserv_data values(112, '2', '10/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_2.png')")
-    query.exec_("insert into Reserv_data values(113, '3', '12/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_3.png')")
+    query.exec("insert into Reserv_data values(111, '1', '5/04/2024' , 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_1.png')")
+    query.exec("insert into Reserv_data values(112, '2', '10/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_2.png')")
+    query.exec("insert into Reserv_data values(113, '3', '12/04/2024', 'C:/Users/FernandezMiguelA/Downloads/Gestor_remake/Imagenes/img_3.png')")
 
 
 ##
@@ -372,4 +372,4 @@ if __name__ == "__main__":
     prepareDataBase()
     w = GUI()
     w.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
