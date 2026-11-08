@@ -37,6 +37,9 @@ class View(QGraphicsView):
     def set_database(self, database: sqlite3.Connection) -> None:
         self.database = database
 
+    def find_Image(self, sql: str):
+        return self.database.execute(sql).fetchone()
+
     def add_items(self) -> None:
         rows = self.database.execute(
             """
