@@ -179,6 +179,9 @@ class View(QGraphicsView):
             Qt.AspectRatioMode.IgnoreAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
+    def resizeEvent(self, event):
+        self.scene.setSceneRect(0, 0, event.size().width(), event.size().height()*3)
+        super().resizeEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
         item = self.itemAt(event.position().toPoint())
