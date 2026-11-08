@@ -7,6 +7,7 @@ class ImageItem(QGraphicsPixmapItem):
         super().__init__(pixmap)
         self.m = None
         #self.pixmap_item = QGraphicsPixmapItem(pixmap)#, parent=self
+        self.text_item = None
         self.record_id = record_id
         self.z = 0.0
         self.setAcceptHoverEvents(True)
@@ -23,6 +24,9 @@ class ImageItem(QGraphicsPixmapItem):
         self.m = data
         self.set_text(data)
 
+    def model(self):
+        return self.m
+
     def setData__(self, i, index: int) -> None:
         if self.m:
             self.m[0] = index
@@ -30,7 +34,10 @@ class ImageItem(QGraphicsPixmapItem):
             self.m = [index]
         super().setData(0, index)
 
-    def set_text(self, data):  
+    def set_text(self, data): ## nuevo texto
+        if self.text_item:
+            print("self.text_item: ", self.text_item)
+            self.scene().removeItem(self.text_item)
         text = data[1] + "\n" + data[3]
         self.text_item = QGraphicsTextItem(str(text), self)
         #self.text_item.setPos(self.boundingRect().center() - self.text_item.boundingRect().center())

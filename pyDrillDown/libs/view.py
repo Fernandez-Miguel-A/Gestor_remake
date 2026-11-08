@@ -89,20 +89,25 @@ class View(QGraphicsView):
             """
         ).fetchone()
         print("_addGItem", row)
+        #if not row: ## cod_clie: (5) o otro
+        #    return
 
-        record_id, filename = row
+        if not row:
+            record_id, filename = data[0], "" ## 'id', 'pixmap vacio'
+        else:
+            record_id, filename = data[0], row[1]
         image_offset = 150
         left_margin = 70
         top_margin = 40
 
         #for index, (record_id, filename, item_type) in enumerate(rows):
-        print(f"__addGItem() {record_id} index: {self._index}")
+        print(f"__addGItem() {record_id}, {filename} index: {self._index}")
         column_offset = (self._index % 4) * 37
         x = (self._index % 4) * image_offset + left_margin + column_offset
         y = (self._index // 4) * image_offset #+ top_margin
         pixmap = self.load_image(filename)
         image = ImageItem(record_id, pixmap)
-        image.setData(0, self._index)
+        image.setData(0, data[0])
         image.setPos(QPointF(x, y))
         image.set_model(data)
         self.scene.addItem(image)
@@ -110,6 +115,8 @@ class View(QGraphicsView):
 
 
     def load_image(self, filename: str) -> QPixmap:
+        if filename == "":
+            return QPixmap()
         image_path = IMAGE_DIRECTORY / filename
         pixmap = QPixmap(str(image_path))
         if pixmap.isNull():
@@ -123,7 +130,10 @@ class View(QGraphicsView):
 
     def mouseReleaseEvent(self, event) -> None:
         item = self.itemAt(event.position().toPoint())
+        print("\n\n\n mouseReleaseEvent: ", item)
         if isinstance(item, ImageItem):
+            if item.model() is not None:
+                return ## GItem creados con addGItem()
             self.show_information(item)
         super().mouseReleaseEvent(event)
 
