@@ -204,6 +204,7 @@ class GUI(QWidget):
                 self.actualizar_data(datos)
             self.UpdateReservClie(row, datos)
 
+
     def modif_TWreserv(self, row, col):
         datos = self.datos_TableWidget(row)
         self.modif_reserv(row, datos)
@@ -384,7 +385,7 @@ def prepareDataBase():
         db_create()
 
         q = QSqlQuery()
-        if q.prepare("create table if not exists  Reserv_data (id integer primary key autoincrement not null, Cod_clie text, fecha text not null, path text not null )"):
+        if q.prepare("create table if not exists  Reserv_data (id integer primary key autoincrement not null, Cod_clie integer, fecha text not null, path text not null )"):
             if q.exec():
                 print("TABLA  <Reserv_data>  creada satisfactoriamente!")
 
