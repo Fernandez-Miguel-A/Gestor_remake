@@ -25,13 +25,14 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 class Reserv(QDialog):
     """docstring for Reserv"""
     NEW, MODIF, DEL = range(3)
-    def __init__(self, data= None, tipo=NEW):
+    def __init__(self, view, data= None, tipo=NEW):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.arg =  data if data else (None, "Maria", "3", "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = tipo
+        self.view = view
 
         if self.arg2_tipe == self.NEW:
             self.ui.ok_btn.setText("Ok")#Nuevo
@@ -44,6 +45,7 @@ class Reserv(QDialog):
         #self.ui.trab_listW.itemClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemDoubleClicked.connect(self.trabajos_act)
         self.ui.trab_listW.itemChanged.connect(self.Precios)#itemChanged, itemActivated
+        self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
 
         self.loadData()
         self.Precios()
@@ -73,8 +75,8 @@ class Reserv(QDialog):
                 #self.ui.cod_Clie_cmb.insertItem(self.ui.cod_Clie_cmb.count(), self.arg[2])
                 self.ui.cod_Clie_cmb.setCurrentText(str(int(self.arg[2])))
 
-                self.load_Ico(self.arg[2])##Ico_l
-                self.ui.cod_Clie_cmb.currentTextChanged.connect(self.load_Ico)
+                self.load_Ico(int(self.arg[2]))##Ico_l
+                self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
 
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
@@ -87,27 +89,32 @@ class Reserv(QDialog):
             self.ui.work_date.setEnabled(False)#3
 
     def load_Ico(self, cod_clie):
+        #cod_clie -= 1
+        fixme = True
         ##cod_clie == self.arg[2]
         print("load_Ico(cod_clie):", cod_clie)
-        if cod_clie == "0":
-            self.ui.Ico_l.setPixmap(None)
+        if cod_clie == 0 and not fixme:
+            self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return
-        q = QSqlQuery()
-        sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.cod_Clie_cmb.currentIndex()
-        q.exec_(sql)
-        if q.next():
-            path = q.value(0)
-            fecha = q.value(1)
+        ##q = QSqlQuery()
+        ##sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.cod_Clie_cmb.currentIndex()
+        ##_sql = "SELECT imagefile FROM items WHERE imagefile = ?"
+        sql = f"SELECT file FROM images WHERE itemid = {cod_clie}"
+        p = self.view.find_Image(sql)
+        ##q.exec_(sql)
+        if p:
+            path = p
+            fecha = "1/01/2000"#q.value(1)
 
-            pix = QPixmap(path)
+            pix = self.view.load_image(path[0])
             self.ui.Ico_l.setPixmap(pix.scaled(120, 100))
 
             datetime = QDateTime.fromString(fecha, "d/M/yyyy")
             self.ui.reg_date.setDateTime(datetime)
 
         else:
-            self.ui.Ico_l.setPixmap(None)
+            self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return
 

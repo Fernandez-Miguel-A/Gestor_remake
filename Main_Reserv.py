@@ -140,7 +140,8 @@ class GUI(QWidget):
     def nueva_reserv(self, new=None):
         datos = ["", "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
         
-        w = Reserv()
+        w = Reserv(self.ui.graphicsView)
+        ##w.setView()
         w.show()
         if w.exec() == Reserv.Accepted:
             print("Nuevo Elemento en la Database")
@@ -162,7 +163,7 @@ class GUI(QWidget):
     def modif_reserv(self, row, col):
         datos = self.datos_TableWidget(row)
         self.ui.lineEdit_txt.setText(str(27)+str(datos))
-        w = Reserv(datos, Reserv.MODIF)
+        w = Reserv(self.ui.graphicsView, datos, Reserv.MODIF)
         w.show()
         if w.exec() == Reserv.Accepted:
             #Modif Database
@@ -184,7 +185,7 @@ class GUI(QWidget):
             return
         if TwItems:### w = Reserv(datos, Reserv.DEL)
             datos = self.datos_TableWidget(TwItems[0].row())##row
-            w = Reserv(datos, Reserv.DEL)
+            w = Reserv(self.ui.graphicsView, datos, Reserv.DEL)
             w.show()
             if w.exec() == Reserv.Accepted:
 
