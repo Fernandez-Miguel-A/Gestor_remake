@@ -167,7 +167,7 @@ class Reserv(QDialog):
 
     def get_data(self):
         datos = [self.arg[0], ## if datos[0] is "":;   datos[0] = self.getNew_ID()
-            self.ui.name_txt.text(), self.ui.cod_Clie_cmb.currentText(), self.ui.work_date.date().toString("d/M/yyyy"),
+            self.ui.name_txt.text(), int(self.ui.cod_Clie_cmb.currentText()), self.ui.work_date.date().toString("d/M/yyyy"),
             self.trabajos(), self.ui.precio_txt.text(), self.ui.obs_txt.toPlainText()]#nombre_txt, falta trabajar en 'date()'
 
         print("Los datos son: ", datos)

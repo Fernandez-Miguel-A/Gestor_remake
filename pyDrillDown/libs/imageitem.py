@@ -28,13 +28,6 @@ class ImageItem(QGraphicsPixmapItem):
     def model(self):
         return self.m
 
-    def setData__(self, i, index: int) -> None:
-        if self.m:
-            self.m[0] = index
-        else:
-            self.m = [index]
-        super().setData(0, index)
-
     def set_text(self, data): ## nuevo texto
         if self.text_item:
             print("self.text_item: ", self.text_item)

@@ -119,10 +119,10 @@ class View(QGraphicsView):
         self._index += 1
 
     def UpdateGItem(self, datos) -> None:
-        print("UpdateGItem:", self.scene.items(), datos)
+        print("UpdateGItem:", len(self.scene.items()), datos)
         r = datos[0]
         for i in self.scene.items():
-            print("\n\nGItem:", i, i.data(0), r)
+            #print("\n\nGItem:", i, i.data(0), r)
             if i.data(0) == r:
                 i.set_model(datos)
                 return

@@ -113,6 +113,9 @@ class GUI(QWidget):
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
             data.append(item.text() if item else "")
+
+        data[0] = int(data[0]) ## 'id'
+        data[2] = int(data[2]) ## 'cod_clie'
         return data
 
 
@@ -121,24 +124,27 @@ class GUI(QWidget):
         self.ui.tableWidget.insertRow(row)
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for col in range(self.columnCount()):
-            item = QTableWidgetItem(str(datos[col]))
+            item = QTableWidgetItem(str(datos[col])) ## 'id' y 'cod_clie' son 'int'
             item.setFlags(item.flags()^Qt.ItemIsEditable)
             self.ui.tableWidget.setItem(row, col, item)
             self.ui.lineEdit_txt.setText("New ID: "+str(datos[0]))## print New ID
 
-    def Modif_Table_Widget(self, row, datos): ## FIX: "QTableWidget: cannot insert an item that is already owned by another QTableWidget"
+    def Modif_Table_Widget(self, row, datos): ## FIX-ED: "QTableWidget: ..
+        new = False
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
-            print("row, j", row, j)
+            print("row, j", row, j, item)
             if item is None: #caso particular
                 item = QTableWidgetItem()
-            item.setText(datos[j])
-            self.ui.tableWidget.setItem(row, j, item)
+                new = True
+            item.setText(str(datos[j])) ## 'id' y 'cod_clie' son 'int'
+            if new: ## FIX-ED: "QTableWidget: ..
+                self.ui.tableWidget.setItem(row, j, item)
 
 
 
     def nueva_reserv(self, new=None):
-        datos = ["", "Maria", 3, "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
+        datos = [None, "Maria", 3, "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
         
         w = Reserv(self.ui.graphicsView, datos)
         ##w.setView()
@@ -192,8 +198,8 @@ class GUI(QWidget):
             if w.exec() == Reserv.Accepted:
 
                 row = TwItems[0].row()
-                item = self.ui.tableWidget.item(row, 0)#ID
-                self.remover_data(item)
+                id = self.ui.tableWidget.item(row, 0)#ID
+                self.remover_data(id)
                 self.ui.tableWidget.removeRow(row)
                 self.ui.graphicsView.removeGItem(datos)
 
@@ -292,10 +298,10 @@ class GUI(QWidget):
         if self.row_tmp is None:
             return
 
-        datos = ("xxx", self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
+        datos = (None, self.ui.codigo_txt.text(), self.ui.nombre_txt.text(), self.ui.modelo_txt.text())
         for j in range(1, self.columnCount2()):
             item = self.ui.tableWidget_2.item(self.row_tmp, j)
-            item.setText(str(datos[j]))
+            item.setText(str(datos[j])) ## 'id' y 'cod_clie' son 'int'
             self.ui.tableWidget_2.setItem(self.row_tmp, j, item)
 
         self.Update_data(datos[1],   datos[3],    datos[2],    self.ui.tableWidget_2.item(self.row_tmp, 0).text())
@@ -343,19 +349,21 @@ def prepareDataBase():
 
     if db.open():
         q = QSqlQuery()
-        if q.prepare("create table if not exists  productos (id integer primary key autoincrement not null, CODIGO text not null, NOMBRE text not null, MODELO text not null )"):
-            if q.exec():
-                print("TABLA  <productos>  creada satisfactoriamente!")
-
-        q = QSqlQuery()
-        if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie text, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
+        if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie integer, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
             if q.exec():
                 print("TABLA  <Reserv_Clientes>  creada satisfactoriamente!")
         db_create()
+
         q = QSqlQuery()
         if q.prepare("create table if not exists  Reserv_data (id integer primary key autoincrement not null, Cod_clie text, fecha text not null, path text not null )"):
             if q.exec():
                 print("TABLA  <Reserv_data>  creada satisfactoriamente!")
+
+        q = QSqlQuery()
+        if q.prepare("create table if not exists  productos (id integer primary key autoincrement not null, CODIGO text not null, NOMBRE text not null, MODELO text not null )"):
+            if q.exec():
+                print("TABLA  <productos>  creada satisfactoriamente!")
+
         Registro_db_create()
 
 def db_create():
