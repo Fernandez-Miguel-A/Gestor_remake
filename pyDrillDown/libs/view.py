@@ -1,7 +1,7 @@
 import sqlite3
 from pathlib import Path
 
-from PySide6.QtCore import QPoint, QPointF, Qt, Signal
+from PySide6.QtCore import QPoint, QPointF, Qt, Signal, QSizeF
 from PySide6.QtGui import QColor, QLinearGradient, QPixmap
 from PySide6.QtWidgets import (
     QGraphicsScene,
@@ -39,10 +39,15 @@ class View(QGraphicsView):
     def set_database(self, database: sqlite3.Connection) -> None:
         self.database = database
 
-    def find_Image(self, sql: str):
+    def find_Image_fromCode(self, cod_clie: int):
+        sql = f"SELECT file FROM images WHERE itemid = {cod_clie}"
         data = self.database.execute(sql)
-        print(f"data: {data}")
-        return data.fetchone()
+        print(f"\n\n data: {data}")
+        one = data.fetchone()
+        if not one:
+            d = self.database.execute("SELECT file FROM images WHERE itemid = 0")
+            one = d.fetchone()
+        return one
 
     def getPosGItem(self, index) -> QPointF:
         image_offset = 150
@@ -104,7 +109,16 @@ class View(QGraphicsView):
         #    return
 
         if not row:
-            record_id, filename = data[0], "" ## 'id', 'pixmap vacio'
+            defaultImage = self.database.execute(
+                """
+                SELECT items.id, images.file
+                FROM items
+                JOIN images ON images.itemid = items.imagefile
+                WHERE items.imagefile == 0
+                ORDER BY items.id
+                """
+            ).fetchone() ## cargo la Imagen por defecto, la imagen 'Qt-def'
+            record_id, filename = data[0], defaultImage[1] ## 'id', 'pixmap vacio'
         else:
             record_id, filename = data[0], row[1]
 

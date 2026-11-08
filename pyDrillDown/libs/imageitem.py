@@ -1,4 +1,4 @@
-from PySide6.QtCore import QObject, QTimeLine, QPointF, Property
+from PySide6.QtCore import QObject, QTimeLine, QPointF, Property, QSizeF
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsTextItem
 

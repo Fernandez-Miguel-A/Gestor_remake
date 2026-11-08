@@ -21,7 +21,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 #         self.arg = None
 
 class obj_tmp:
-    def find_Image(self, x):
+    def find_Image_fromCode(self, x):
         return None
 
 
@@ -105,14 +105,14 @@ class Reserv(QDialog):
         ##q = QSqlQuery()
         ##sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.cod_Clie_cmb.currentIndex()
         ##_sql = "SELECT imagefile FROM items WHERE imagefile = ?"
-        sql = f"SELECT file FROM images WHERE itemid = {cod_clie}"
-        p = self.view.find_Image(sql)
+        p = self.view.find_Image_fromCode(cod_clie)
         ##q.exec_(sql)
         if p:
-            path = p
+            print("\n\n p", p)
+            path = p[0]
             fecha = "1/01/2000"#q.value(1)
 
-            pix = self.view.load_image(path[0])
+            pix = self.view.load_image(path)
             self.ui.Ico_l.setPixmap(pix.scaled(120, 100))
 
             datetime = QDateTime.fromString(fecha, "d/M/yyyy")
