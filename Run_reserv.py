@@ -30,7 +30,7 @@ class Reserv(QDialog):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.arg =  data if data else (None, "Maria", "3", "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
+        self.arg =  data if data else (None, "Maria", 3, "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = tipo
         self.view = view
@@ -74,12 +74,12 @@ class Reserv(QDialog):
         if self.arg2_tipe == self.DEL:
             self.ui.trab_listW.setEnabled(False)#4
 
-        if self.arg[2]:
-            if self.arg[2] != "0":
+        if self.arg[2] != None:
+            if self.arg[2] != 0:
                 #self.ui.cod_Clie_cmb.insertItem(self.ui.cod_Clie_cmb.count(), self.arg[2])
-                self.ui.cod_Clie_cmb.setCurrentText(str(int(self.arg[2])))
+                self.ui.cod_Clie_cmb.setCurrentText(str(self.arg[2]))
 
-                self.load_Ico(int(self.arg[2]))##Ico_l
+                self.load_Ico(self.arg[2])##Ico_l
                 self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
 
 
@@ -93,11 +93,9 @@ class Reserv(QDialog):
             self.ui.work_date.setEnabled(False)#3
 
     def load_Ico(self, cod_clie):
-        #cod_clie -= 1
-        fixme = True
         ##cod_clie == self.arg[2]
         print("load_Ico(cod_clie):", cod_clie)
-        if cod_clie == 0 and not fixme:
+        if cod_clie == 0:
             self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             return

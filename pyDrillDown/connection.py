@@ -48,9 +48,10 @@ def create_connection() -> sqlite3.Connection | None:
             );
             INSERT INTO images VALUES
                 (0, 'qt-logo.png'),
-                (1, 'qt-quick.png'),
-                (2, 'qt-creator.png'),
-                (3, 'qt-project.png');
+                (1, 'qt-logo.png'),
+                (2, 'qt-quick.png'),
+                (3, 'qt-creator.png'),
+                (4, 'qt-project.png');
             """
         )
         return database
