@@ -138,9 +138,9 @@ class GUI(QWidget):
 
 
     def nueva_reserv(self, new=None):
-        datos = ["", "Maria", "3", "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
+        datos = ["", "Maria", 3, "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
         
-        w = Reserv(self.ui.graphicsView)
+        w = Reserv(self.ui.graphicsView, datos)
         ##w.setView()
         w.show()
         if w.exec() == Reserv.Accepted:
@@ -150,6 +150,7 @@ class GUI(QWidget):
             datos[0] = self.getNew_ID()
             self.NewRow_Table_Widget(datos)
             self.insertar_data(datos)
+            self.ui.graphicsView.addGItem(datos)
 
 
     def modif_row(self):

@@ -16,6 +16,28 @@ class ImageItem(QGraphicsPixmapItem):
         self.time_line.setFrameRange(0, 150)
         self.time_line.frameChanged.connect(self.set_frame)
         self.time_line.finished.connect(self.update_item_position)
+        
+    def set_model(self, data):
+        if data is None:
+            return
+        self.m = data
+        self.set_text(data)
+
+    def setData__(self, i, index: int) -> None:
+        if self.m:
+            self.m[0] = index
+        else:
+            self.m = [index]
+        super().setData(0, index)
+
+    def set_text(self, data):  
+        text = data[1] + "\n" + data[3]
+        self.text_item = QGraphicsTextItem(str(text), self)
+        #self.text_item.setPos(self.boundingRect().center() - self.text_item.boundingRect().center())
+        print("set_text: ", self.boundingRect().topLeft())
+        self.text_item.setPos(self.boundingRect().topLeft()+
+                         QPointF((120 - self.text_item.boundingRect().width()) / 2, 120.0))
+
 
     def hoverEnterEvent(self, event) -> None:
         self.time_line.setDirection(QTimeLine.Direction.Forward)

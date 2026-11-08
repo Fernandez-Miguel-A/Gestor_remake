@@ -38,7 +38,9 @@ class View(QGraphicsView):
         self.database = database
 
     def find_Image(self, sql: str):
-        return self.database.execute(sql).fetchone()
+        data = self.database.execute(sql)
+        print(f"data: {data}")
+        return data.fetchone()
 
     def add_items(self) -> None:
         rows = self.database.execute(
@@ -61,7 +63,8 @@ class View(QGraphicsView):
             pixmap = self.load_image(filename)
             image = ImageItem(record_id, pixmap)
             image.setData(0, index)
-            image.setPos(x, y)
+            image.setPos(QPointF(x, y))
+            image.set_model(None)
             self.scene.addItem(image)
             self.image_items[record_id] = image
 
@@ -72,6 +75,39 @@ class View(QGraphicsView):
                 + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
             )
             self.scene.addItem(label)
+        self._index = index + 1
+
+    def addGItem(self, data) -> None:
+        print("addGItem:", data, data[2])
+        row = self.database.execute(
+            f"""
+            SELECT items.id, images.file
+            FROM items
+            JOIN images ON images.itemid = items.imagefile
+            WHERE items.imagefile == {data[2]}
+            ORDER BY items.id
+            """
+        ).fetchone()
+        print("_addGItem", row)
+
+        record_id, filename = row
+        image_offset = 150
+        left_margin = 70
+        top_margin = 40
+
+        #for index, (record_id, filename, item_type) in enumerate(rows):
+        print(f"__addGItem() {record_id} index: {self._index}")
+        column_offset = (self._index % 4) * 37
+        x = (self._index % 4) * image_offset + left_margin + column_offset
+        y = (self._index // 4) * image_offset #+ top_margin
+        pixmap = self.load_image(filename)
+        image = ImageItem(record_id, pixmap)
+        image.setData(0, self._index)
+        image.setPos(QPointF(x, y))
+        image.set_model(data)
+        self.scene.addItem(image)
+        self.image_items[record_id] = image
+
 
     def load_image(self, filename: str) -> QPixmap:
         image_path = IMAGE_DIRECTORY / filename
