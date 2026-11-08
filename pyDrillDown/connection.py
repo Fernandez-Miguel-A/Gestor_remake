@@ -32,14 +32,15 @@ def create_connection() -> sqlite3.Connection | None:
                 description VARCHAR(100)
             );
             INSERT INTO items VALUES
-                (0, 0, 'Qt', 'Qt is a full development framework with tools designed to streamline the creation of stunning applications and amazing user interfaces for desktop, embedded and mobile platforms.'),
-                (1, 1, 'Qt Quick', 'Qt Quick is a collection of techniques designed to help developers create intuitive, modern-looking, and fluid user interfaces using a CSS & JavaScript like language.'),
-                (2, 2, 'Qt Creator', 'Qt Creator is a powerful cross-platform integrated development environment (IDE), including UI design tools and on-device debugging.'),
-                (3, 3, 'Qt Project', 'The Qt Project governs the open source development of Qt, allowing anyone wanting to contribute to join the effort through a meritocratic structure of approvers and maintainers.'),
-                (4, 0, 'Qt', 'Qt is a full development framework with tools designed to streamline the creation of stunning applications and amazing user interfaces for desktop, embedded and mobile platforms.'),
-                (5, 1, 'Qt Quick', 'Qt Quick is a collection of techniques designed to help developers create intuitive, modern-looking, and fluid user interfaces using a CSS & JavaScript like language.'),
-                (6, 2, 'Qt Creator', 'Qt Creator is a powerful cross-platform integrated development environment (IDE), including UI design tools and on-device debugging.'),
-                (7, 3, 'Qt Project', 'The Qt Project governs the open source development of Qt, allowing anyone wanting to contribute to join the effort through a meritocratic structure of approvers and maintainers.');
+                (0, 0, 'Qt-def', 'Default description for Qt'),
+                (1, 1, 'Qt', 'Qt is a full development framework with tools designed to streamline the creation of stunning applications and amazing user interfaces for desktop, embedded and mobile platforms.'),
+                (2, 2, 'Qt Quick', 'Qt Quick is a collection of techniques designed to help developers create intuitive, modern-looking, and fluid user interfaces using a CSS & JavaScript like language.'),
+                (3, 3, 'Qt Creator', 'Qt Creator is a powerful cross-platform integrated development environment (IDE), including UI design tools and on-device debugging.'),
+                (4, 4, 'Qt Project', 'The Qt Project governs the open source development of Qt, allowing anyone wanting to contribute to join the effort through a meritocratic structure of approvers and maintainers.'),
+                (5, 1, 'Qt', 'Qt is a full development framework with tools designed to streamline the creation of stunning applications and amazing user interfaces for desktop, embedded and mobile platforms.'),
+                (6, 2, 'Qt Quick', 'Qt Quick is a collection of techniques designed to help developers create intuitive, modern-looking, and fluid user interfaces using a CSS & JavaScript like language.'),
+                (7, 3, 'Qt Creator', 'Qt Creator is a powerful cross-platform integrated development environment (IDE), including UI design tools and on-device debugging.'),
+                (8, 4, 'Qt Project', 'The Qt Project governs the open source development of Qt, allowing anyone wanting to contribute to join the effort through a meritocratic structure of approvers and maintainers.');
 ;
 
             CREATE TABLE images (
