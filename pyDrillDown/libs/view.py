@@ -113,6 +113,14 @@ class View(QGraphicsView):
         self.scene.addItem(image)
         self.image_items[record_id] = image
 
+    def UpdateGItem(self, datos) -> None:
+        print("UpdateGItem:", self.scene.items(), datos)
+        r = datos[0]
+        for i in self.scene.items():
+            print("\n\nGItem:", i, i.data(0), r)
+            if i.data(0) == r:
+                i.set_model(datos)
+                return
 
     def load_image(self, filename: str) -> QPixmap:
         if filename == "":

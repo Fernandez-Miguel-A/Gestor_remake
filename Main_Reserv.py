@@ -126,14 +126,14 @@ class GUI(QWidget):
             self.ui.tableWidget.setItem(row, col, item)
             self.ui.lineEdit_txt.setText("New ID: "+str(datos[0]))## print New ID
 
-    def Modif_Table_Widget(self, row, datos):
+    def Modif_Table_Widget(self, row, datos): ## FIX: "QTableWidget: cannot insert an item that is already owned by another QTableWidget"
         for j in range(self.columnCount()):
             item = self.ui.tableWidget.item(row, j)
             print("row, j", row, j)
             if item is None: #caso particular
                 item = QTableWidgetItem()
             item.setText(datos[j])
-            self.ui.tableWidget.setItem(row, j, item)##parece innecesario
+            self.ui.tableWidget.setItem(row, j, item)
 
 
 
@@ -177,6 +177,7 @@ class GUI(QWidget):
                 print("Modif Database")
                 self.actualizar_data(datos)
             self.Modif_Table_Widget(row, datos)
+            self.ui.graphicsView.UpdateGItem(datos)
 
 
     def Eliminar_Reserv(self):
