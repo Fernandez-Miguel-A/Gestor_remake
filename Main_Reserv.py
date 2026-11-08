@@ -52,6 +52,7 @@ class GUI(QWidget):
         while q.next():
             datos = [q.value(i) for i in range(self.columnCount())]
             self.NewRow_Table_Widget(datos)
+            self.ui.graphicsView.addGItem(datos)
 
 ## tableWidget_2
         q = QSqlQuery()
