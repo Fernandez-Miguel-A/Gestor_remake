@@ -3,15 +3,21 @@
 ################################################################################
 ## Form generated from reading UI file 'buscar.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHeaderView,
+    QLineEdit, QPushButton, QSizePolicy, QTableWidget,
+    QTableWidgetItem, QWidget)
 
 class Ui_Buscar_widget(object):
     def setupUi(self, Buscar_widget):
@@ -22,7 +28,7 @@ class Ui_Buscar_widget(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.buscar_txt = QLineEdit(Buscar_widget)
         self.buscar_txt.setObjectName(u"buscar_txt")
-        self.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
+        self.buscar_txt.setStyleSheet(u"")
 
         self.gridLayout.addWidget(self.buscar_txt, 0, 2, 1, 1)
 
@@ -76,19 +82,19 @@ class Ui_Buscar_widget(object):
         Buscar_widget.setWindowTitle(QCoreApplication.translate("Buscar_widget", u"Form", None))
         self.buscar_btn.setText(QCoreApplication.translate("Buscar_widget", u"buscar", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("Buscar_widget", u"ID", None));
+        ___qtablewidgetitem.setText(QCoreApplication.translate("Buscar_widget", u"ID", None))
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("Buscar_widget", u"Nombre", None));
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("Buscar_widget", u"Nombre", None))
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("Buscar_widget", u"Cod_clie", None));
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("Buscar_widget", u"Cod_clie", None))
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("Buscar_widget", u"fecha", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("Buscar_widget", u"fecha", None))
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("Buscar_widget", u"Trabajos", None));
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("Buscar_widget", u"Trabajos", None))
         ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("Buscar_widget", u"Precio", None));
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("Buscar_widget", u"Precio", None))
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("Buscar_widget", u"Observaciones", None));
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("Buscar_widget", u"Observaciones", None))
         self.tipodecelda_cmb.setItemText(0, QCoreApplication.translate("Buscar_widget", u"ID", None))
         self.tipodecelda_cmb.setItemText(1, QCoreApplication.translate("Buscar_widget", u"Nombre", None))
         self.tipodecelda_cmb.setItemText(2, QCoreApplication.translate("Buscar_widget", u"Cod_clie", None))

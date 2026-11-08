@@ -12,11 +12,10 @@ from PySide6.QtCore import Qt, QDateTime
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
-#remix copado   puro clasicos
-#https://www.youtube.com/watch?v=WRGySfs4Pqc
+ROJO = u"background-color: rgb(255, 71, 71);"
+VERDE = u"background-color: rgb(71, 255, 71);"
 
 
-###background-color: rgb(71, 255, 71);background-color: rgb(255, 71, 71);
 class _Buscar(QDialog):
     """docstring for _Buscar"""
     def __init__(self):
@@ -24,7 +23,7 @@ class _Buscar(QDialog):
         self.ui = Ui_Buscar_widget()
         self.ui.setupUi(self)
         self.ui.tableWidget.cellDoubleClicked.connect(self.clickedTW)
-        #self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
+        self.ui.buscar_txt.setStyleSheet(ROJO)
 
         self.ui.buscar_btn.clicked.connect(self.buscar)
 
@@ -62,7 +61,7 @@ class _Buscar(QDialog):
         #     self.NewRow_Table_Widget(datos)
 
         i = 0
-        self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
+        self.ui.buscar_txt.setStyleSheet(ROJO)## Rojo por defecto
         if not self.ui.buscar_txt.text().upper().strip():
             return
         while query.next():
@@ -83,7 +82,7 @@ class _Buscar(QDialog):
                     datos = [q.value(i) for i in range(self.columnCount())]
                     self.NewRow_Table_Widget(datos)
 
-                self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(71, 255, 71);")
+                self.ui.buscar_txt.setStyleSheet(VERDE)
             # else:
             #     self.ui.buscar_txt.setStyleSheet(u"background-color: rgb(255, 71, 71);")
         

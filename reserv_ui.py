@@ -3,22 +3,29 @@
 ################################################################################
 ## Form generated from reading UI file 'Reserv.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
-
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QComboBox, QDateEdit, QDialog,
+    QFrame, QLabel, QLineEdit, QListWidget,
+    QListWidgetItem, QPushButton, QSizePolicy, QTextEdit,
+    QWidget)
 
 class Ui_Dialog(object):
     def setupUi(self, Dialog):
         if not Dialog.objectName():
             Dialog.setObjectName(u"Dialog")
         Dialog.resize(460, 432)
-        sizePolicy = QSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Fixed, QSizePolicy.Policy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
@@ -30,14 +37,14 @@ class Ui_Dialog(object):
         self.line = QFrame(Dialog)
         self.line.setObjectName(u"line")
         self.line.setGeometry(QRect(-3, 403, 461, 16))
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
         self.color_fr = QFrame(Dialog)
         self.color_fr.setObjectName(u"color_fr")
         self.color_fr.setGeometry(QRect(0, 0, 461, 411))
         self.color_fr.setStyleSheet(u"background-color: rgb(106, 255, 98);")
-        self.color_fr.setFrameShape(QFrame.StyledPanel)
-        self.color_fr.setFrameShadow(QFrame.Raised)
+        self.color_fr.setFrameShape(QFrame.Shape.StyledPanel)
+        self.color_fr.setFrameShadow(QFrame.Shadow.Raised)
         self.cod_Clie_cmb = QComboBox(Dialog)
         self.cod_Clie_cmb.addItem("")
         self.cod_Clie_cmb.addItem("")
@@ -52,7 +59,7 @@ class Ui_Dialog(object):
         self.Ico_l.setObjectName(u"Ico_l")
         self.Ico_l.setGeometry(QRect(330, 20, 120, 100))
         self.Ico_l.setStyleSheet(u"background-color: rgb(255, 123, 242);")
-        self.Ico_l.setAlignment(Qt.AlignCenter)
+        self.Ico_l.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.name_txt = QLineEdit(Dialog)
         self.name_txt.setObjectName(u"name_txt")
         self.name_txt.setGeometry(QRect(60, 20, 171, 20))
@@ -72,34 +79,34 @@ class Ui_Dialog(object):
         self.Trabajos_fr.setObjectName(u"Trabajos_fr")
         self.Trabajos_fr.setGeometry(QRect(140, 120, 311, 201))
         self.Trabajos_fr.setStyleSheet(u"background-color: rgb(235, 235, 235);")
-        self.Trabajos_fr.setFrameShape(QFrame.Box)
-        self.Trabajos_fr.setFrameShadow(QFrame.Sunken)
+        self.Trabajos_fr.setFrameShape(QFrame.Shape.Box)
+        self.Trabajos_fr.setFrameShadow(QFrame.Shadow.Sunken)
         self.trab_listW = QListWidget(self.Trabajos_fr)
         __qlistwidgetitem = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem.setCheckState(Qt.Unchecked);
+        __qlistwidgetitem.setCheckState(Qt.Unchecked)
         __qlistwidgetitem1 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem1.setCheckState(Qt.Unchecked);
+        __qlistwidgetitem1.setCheckState(Qt.Unchecked)
         __qlistwidgetitem2 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem2.setCheckState(Qt.Unchecked);
+        __qlistwidgetitem2.setCheckState(Qt.Unchecked)
         __qlistwidgetitem3 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem3.setCheckState(Qt.Unchecked);
+        __qlistwidgetitem3.setCheckState(Qt.Unchecked)
         __qlistwidgetitem4 = QListWidgetItem(self.trab_listW)
-        __qlistwidgetitem4.setCheckState(Qt.Unchecked);
+        __qlistwidgetitem4.setCheckState(Qt.Unchecked)
         self.trab_listW.setObjectName(u"trab_listW")
         self.trab_listW.setGeometry(QRect(30, 10, 256, 155))
         self.line_2 = QFrame(self.Trabajos_fr)
         self.line_2.setObjectName(u"line_2")
         self.line_2.setGeometry(QRect(5, 164, 281, 16))
         self.line_2.setLineWidth(2)
-        self.line_2.setFrameShape(QFrame.HLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
+        self.line_2.setFrameShape(QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
         self.precio_l = QLabel(self.Trabajos_fr)
         self.precio_l.setObjectName(u"precio_l")
         self.precio_l.setGeometry(QRect(150, 180, 47, 13))
         self.precio_txt = QLineEdit(self.Trabajos_fr)
         self.precio_txt.setObjectName(u"precio_txt")
         self.precio_txt.setGeometry(QRect(194, 178, 91, 20))
-        self.precio_txt.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.precio_txt.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.precio_txt.setReadOnly(True)
         self.Trab_btn = QPushButton(Dialog)
         self.Trab_btn.setObjectName(u"Trab_btn")
@@ -116,7 +123,7 @@ class Ui_Dialog(object):
         self.reg_date.setObjectName(u"reg_date")
         self.reg_date.setEnabled(False)
         self.reg_date.setGeometry(QRect(230, 50, 91, 20))
-        self.reg_date.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.reg_date.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.reg_date.setCalendarPopup(True)
         self.cancel_btn = QPushButton(Dialog)
         self.cancel_btn.setObjectName(u"cancel_btn")
@@ -125,7 +132,7 @@ class Ui_Dialog(object):
         self.work_date.setObjectName(u"work_date")
         self.work_date.setEnabled(True)
         self.work_date.setGeometry(QRect(60, 90, 91, 20))
-        self.work_date.setAlignment(Qt.AlignRight|Qt.AlignTrailing|Qt.AlignVCenter)
+        self.work_date.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
         self.work_date.setCalendarPopup(True)
         self.id_l = QLabel(Dialog)
         self.id_l.setObjectName(u"id_l")
@@ -183,15 +190,15 @@ class Ui_Dialog(object):
         __sortingEnabled = self.trab_listW.isSortingEnabled()
         self.trab_listW.setSortingEnabled(False)
         ___qlistwidgetitem = self.trab_listW.item(0)
-        ___qlistwidgetitem.setText(QCoreApplication.translate("Dialog", u"DEGRADE                                     $3000", None));
+        ___qlistwidgetitem.setText(QCoreApplication.translate("Dialog", u"DEGRADE                                     $3000", None))
         ___qlistwidgetitem1 = self.trab_listW.item(1)
-        ___qlistwidgetitem1.setText(QCoreApplication.translate("Dialog", u"Nuevo elemento                         $0", None));
+        ___qlistwidgetitem1.setText(QCoreApplication.translate("Dialog", u"Nuevo elemento                         $0", None))
         ___qlistwidgetitem2 = self.trab_listW.item(2)
-        ___qlistwidgetitem2.setText(QCoreApplication.translate("Dialog", u"PINTURA                                        $4000", None));
+        ___qlistwidgetitem2.setText(QCoreApplication.translate("Dialog", u"PINTURA                                        $4000", None))
         ___qlistwidgetitem3 = self.trab_listW.item(3)
-        ___qlistwidgetitem3.setText(QCoreApplication.translate("Dialog", u"AFEITADO                                      $800", None));
+        ___qlistwidgetitem3.setText(QCoreApplication.translate("Dialog", u"AFEITADO                                      $800", None))
         ___qlistwidgetitem4 = self.trab_listW.item(4)
-        ___qlistwidgetitem4.setText(QCoreApplication.translate("Dialog", u"Corte_de_Pelo                              $3000", None));
+        ___qlistwidgetitem4.setText(QCoreApplication.translate("Dialog", u"Corte_de_Pelo                              $3000", None))
         self.trab_listW.setSortingEnabled(__sortingEnabled)
 
         self.precio_l.setText(QCoreApplication.translate("Dialog", u"Precio:", None))

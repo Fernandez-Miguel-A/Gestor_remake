@@ -45,7 +45,7 @@ class GUI(QWidget):
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
         
         self.ui.graphicsView.hide()
-        self.ui.View_Table.toggled.connect(self.ui.graphicsView.setVisible)
+        self.ui.View_Table.toggled.connect(lambda x,this=self.ui: (this.graphicsView.setVisible(x), this.tabWidget.setVisible(not x)))
 
         q = QSqlQuery()
         q.exec("select * from Reserv_Clientes")
