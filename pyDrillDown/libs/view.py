@@ -43,6 +43,16 @@ class View(QGraphicsView):
         print(f"data: {data}")
         return data.fetchone()
 
+    def getPosGItem(self, index) -> QPointF:
+        image_offset = 150
+        left_margin = 70
+        top_margin = 40
+
+        column_offset = (index % 4) * 37
+        x = (index % 4) * image_offset + left_margin + column_offset
+        y = (index // 4) * image_offset #+ top_margin
+        return QPointF(x, y)
+
     def add_items(self) -> None:
         rows = self.database.execute(
             """
@@ -52,20 +62,15 @@ class View(QGraphicsView):
             ORDER BY items.id
             """
         ).fetchall()
-        image_offset = 150
-        left_margin = 70
-        top_margin = 40
 
         for index, (record_id, filename, item_type) in enumerate(rows):
             print(f"Adding item {record_id}: {filename} ({item_type}), index: {index}")
-            column_offset = (index % 4) * 37
-            x = (index % 4) * image_offset + left_margin + column_offset
-            y = (index // 4) * image_offset #+ top_margin
+            p = self.getPosGItem(index)
             pixmap = self.load_image(filename)
             image = ImageItem(record_id, pixmap)
             image.setData(0, index)
             image.setData(1, index)
-            image.setPos(QPointF(x, y))
+            image.setPos(p)
             image.set_model(None)
             self.scene.addItem(image)
             self.image_items[record_id] = image
@@ -73,7 +78,7 @@ class View(QGraphicsView):
             label = QGraphicsTextItem(item_type)
             label.setDefaultTextColor(QColor("#d7d6d5"))
             label.setPos(
-                QPointF(x, y)
+                p
                 + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
             )
             self.scene.addItem(label)
@@ -98,20 +103,15 @@ class View(QGraphicsView):
             record_id, filename = data[0], "" ## 'id', 'pixmap vacio'
         else:
             record_id, filename = data[0], row[1]
-        image_offset = 150
-        left_margin = 70
-        top_margin = 40
 
         #for index, (record_id, filename, item_type) in enumerate(rows):
         print(f"__addGItem() {record_id}, {filename} index: {self._index}")
-        column_offset = (self._index % 4) * 37
-        x = (self._index % 4) * image_offset + left_margin + column_offset
-        y = (self._index // 4) * image_offset #+ top_margin
+        p = self.getPosGItem(self._index)
         pixmap = self.load_image(filename)
         image = ImageItem(record_id, pixmap)
         image.setData(0, data[0])
         image.setData(1, self._index)
-        image.setPos(QPointF(x, y))
+        image.setPos(p)
         image.set_model(data)
         self.scene.addItem(image)
         self.image_items[record_id] = image
@@ -130,9 +130,7 @@ class View(QGraphicsView):
     def removeGItem(self, datos):
         r = datos[0]
         index2 = None
-        print("removeGItem:: ", len(self.scene.items()))
         for item in self.scene.items():
-            print("\n\n intro", item.data(1))
             if item.data(0) == r:
                 index2 = item.data(1)
                 self.scene.removeItem(item.text_item)
@@ -140,22 +138,13 @@ class View(QGraphicsView):
                 self._index -= 1
                 break  
 
-        #print("removeGItem2:: ", len(self.scene.items()))
         for item in self.scene.items():
             #print("item.data: ", item.data(0), item.data(1), self._index, index2, item)
             if item.data(1) and index2 and item.data(1) > index2: ## el item puede ser un 'QGraphicsTextItem'
-                #print("\n\n Entre")
                 new_index = item.data(1) - 1
+                p = self.getPosGItem(new_index)
 
-                image_offset = 150
-                left_margin = 70
-                top_margin = 40
-
-                column_offset = (new_index % 4) * 37
-                x = (new_index % 4) * image_offset + left_margin + column_offset
-                y = (new_index // 4) * image_offset #+ top_margin
-
-                item.setPos(x, y)
+                item.setPos(p)
                 item.setData(1, new_index)
 
 
