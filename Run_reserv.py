@@ -24,7 +24,8 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
 class Reserv(QDialog):
     """docstring for Reserv"""
-    def __init__(self, data= None, tipo=0):
+    NEW, MODIF, DEL = range(3)
+    def __init__(self, data= None, tipo=NEW):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
@@ -32,11 +33,11 @@ class Reserv(QDialog):
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = tipo
 
-        if self.arg2_tipe == 0:
+        if self.arg2_tipe == self.NEW:
             self.ui.ok_btn.setText("Ok")#Nuevo
-        elif self.arg2_tipe == 1:
+        elif self.arg2_tipe == self.MODIF:
             self.ui.ok_btn.setText("Modif")#Modificar
-        elif self.arg2_tipe == 2:
+        elif self.arg2_tipe == self.DEL:
             self.ui.ok_btn.setText("Borrar")#Eliminar
 
         ##self.ui.trab_listW.clicked.connect(lambda x: self.function("adsdas"))
@@ -53,7 +54,7 @@ class Reserv(QDialog):
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
 
-        if self.arg2_tipe == 2:
+        if self.arg2_tipe == self.DEL:
             self.ui.name_txt.setEnabled(False)#1
             self.ui.precio_txt.setEnabled(False)#5
             self.ui.obs_txt.setEnabled(False)#6
@@ -64,7 +65,7 @@ class Reserv(QDialog):
                 trb = trbs[0]
                 trb.setCheckState(Qt.Checked)
 
-        if self.arg2_tipe == 2:
+        if self.arg2_tipe == self.DEL:
             self.ui.trab_listW.setEnabled(False)#4
 
         if self.arg[2]:
@@ -81,7 +82,7 @@ class Reserv(QDialog):
         self.ui.work_date.setDateTime(datetime)
 
 
-        if self.arg2_tipe == 2:
+        if self.arg2_tipe == self.DEL:
             self.ui.cod_Clie_cmb.setEnabled(False)#2
             self.ui.work_date.setEnabled(False)#3
 
