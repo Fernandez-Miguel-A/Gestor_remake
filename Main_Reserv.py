@@ -6,6 +6,7 @@ from Gui_ui import Ui_Form
 from Run_reserv import Reserv
 from Run_buscar import _Buscar
 
+from pyDrillDown.connection import create_connection
 
 
 from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
@@ -30,6 +31,10 @@ class GUI(QWidget):
         self.ui.setupUi(self)
         self.arg = None
         self.row_tmp = None
+
+        database = create_connection()
+        self.ui.graphicsView.set_database(database)
+        self.ui.graphicsView.add_items()
         
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
@@ -38,6 +43,9 @@ class GUI(QWidget):
 
 
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
+        
+        self.ui.graphicsView.hide()
+        self.ui.View_Table.toggled.connect(self.ui.graphicsView.setVisible)
 
         q = QSqlQuery()
         q.exec("select * from Reserv_Clientes")
