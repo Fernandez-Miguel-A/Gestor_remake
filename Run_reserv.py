@@ -8,7 +8,7 @@ from reserv_ui import Ui_Dialog
 
 from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit
 from PySide6.QtGui import QPixmap
-from PySide6.QtCore import Qt, QDateTime
+from PySide6.QtCore import Qt, QDateTime, Signal
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
@@ -25,6 +25,7 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 class Reserv(QDialog):
     """docstring for Reserv"""
     NEW, MODIF, DEL = range(3)
+    imageChanged = Signal(int, str)
     def __init__(self, view, data= None, tipo=NEW):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
@@ -49,6 +50,9 @@ class Reserv(QDialog):
 
         self.loadData()
         self.Precios()
+
+    def setView(self, w):
+        self.view = w
 
     def loadData(self):
         self.ui.id_l.setText(":"+str(self.arg[0])+":")# campo ID
