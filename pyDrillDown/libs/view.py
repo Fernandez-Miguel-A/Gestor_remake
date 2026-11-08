@@ -21,6 +21,7 @@ class View(QGraphicsView):
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.database = None
+        self._index = 0
         self.scene = QGraphicsScene(self)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
         self.setScene(self.scene)
@@ -112,6 +113,8 @@ class View(QGraphicsView):
         image.set_model(data)
         self.scene.addItem(image)
         self.image_items[record_id] = image
+
+        self._index += 1
 
     def UpdateGItem(self, datos) -> None:
         print("UpdateGItem:", self.scene.items(), datos)
