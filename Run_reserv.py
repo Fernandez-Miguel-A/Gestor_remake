@@ -20,20 +20,23 @@ from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 #         super(ClassName, self).setupUi(self)
 #         self.arg = None
 
+class obj_tmp:
+    def find_Image(self, x):
+        return None
 
 
 class Reserv(QDialog):
     """docstring for Reserv"""
     NEW, MODIF, DEL = range(3)
     imageChanged = Signal(int, str)
-    def __init__(self, view, data= None, tipo=NEW):
+    def __init__(self, view=None, data= None, tipo=NEW):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
         self.arg =  data if data else (None, "Maria", 3, "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = tipo
-        self.view = view
+        self.view = view if view else obj_tmp()
 
         if self.arg2_tipe == self.NEW:
             self.ui.ok_btn.setText("Ok")#Nuevo
@@ -183,4 +186,4 @@ if __name__ == "__main__":
 
     w = Reserv()
     w.show()
-    sys.exit(app.exec_())
+    sys.exit(app.exec())
