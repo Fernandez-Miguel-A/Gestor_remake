@@ -38,7 +38,7 @@ class ImageItem(QGraphicsPixmapItem):
         if self.text_item:
             print("self.text_item: ", self.text_item)
             self.scene().removeItem(self.text_item)
-        text = data[1] + "\n" + data[3]
+        text = f":{data[0]}: {data[1]}\n{data[3]}"
         self.text_item = QGraphicsTextItem(str(text), self)
         self.text_item.setDefaultTextColor(QColor("#d7d6d5"))
         #self.text_item.setPos(self.boundingRect().center() - self.text_item.boundingRect().center())

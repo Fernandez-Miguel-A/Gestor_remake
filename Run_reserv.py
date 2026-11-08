@@ -58,7 +58,7 @@ class Reserv(QDialog):
         self.view = w
 
     def loadData(self):
-        self.ui.id_l.setText(":"+str(self.arg[0])+":")# campo ID
+        self.ui.id_l.setText(f":{self.arg[0]}:")# campo ID
         self.ui.name_txt.setText(self.arg[1])## ok + str(self.arg[0])
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
