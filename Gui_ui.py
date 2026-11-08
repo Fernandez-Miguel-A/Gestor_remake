@@ -1,41 +1,37 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'Gui.ui'
+## Form generated from reading UI file 'GuiruEFuP.ui'
 ##
-## Created by: Qt User Interface Compiler version 5.15.2
+## Created by: Qt User Interface Compiler version 6.11.1
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
 
-from PySide6.QtCore import *
-from PySide6.QtGui import *
-from PySide6.QtWidgets import *
+from PySide6.QtCore import (QCoreApplication, QDate, QDateTime, QLocale,
+    QMetaObject, QObject, QPoint, QRect,
+    QSize, QTime, QUrl, Qt)
+from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
+    QFont, QFontDatabase, QGradient, QIcon,
+    QImage, QKeySequence, QLinearGradient, QPainter,
+    QPalette, QPixmap, QRadialGradient, QTransform)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QHBoxLayout,
+    QHeaderView, QLabel, QLineEdit, QPushButton,
+    QSizePolicy, QSpacerItem, QTabWidget, QTableWidget,
+    QTableWidgetItem, QWidget)
 
+from pyDrillDown.libs.view import View
 
 class Ui_Form(object):
     def setupUi(self, Form):
         if not Form.objectName():
             Form.setObjectName(u"Form")
-        Form.resize(817, 310)
-        self.nuevo_btn = QPushButton(Form)
-        self.nuevo_btn.setObjectName(u"nuevo_btn")
-        self.nuevo_btn.setGeometry(QRect(70, 280, 75, 23))
-        self.modif_btn = QPushButton(Form)
-        self.modif_btn.setObjectName(u"modif_btn")
-        self.modif_btn.setGeometry(QRect(150, 280, 75, 23))
-        self.elim_btn = QPushButton(Form)
-        self.elim_btn.setObjectName(u"elim_btn")
-        self.elim_btn.setGeometry(QRect(230, 280, 75, 23))
-        self.buscar_btn = QPushButton(Form)
-        self.buscar_btn.setObjectName(u"buscar_btn")
-        self.buscar_btn.setGeometry(QRect(350, 280, 75, 23))
-        self.lineEdit_txt = QLineEdit(Form)
-        self.lineEdit_txt.setObjectName(u"lineEdit_txt")
-        self.lineEdit_txt.setGeometry(QRect(450, 280, 113, 20))
+        Form.resize(817, 309)
+        self.gridLayout = QGridLayout(Form)
+        self.gridLayout.setObjectName(u"gridLayout")
         self.tabWidget = QTabWidget(Form)
         self.tabWidget.setObjectName(u"tabWidget")
-        self.tabWidget.setGeometry(QRect(10, 20, 771, 251))
+        self.tabWidget.setMinimumSize(QSize(200, 150))
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
         self.tableWidget = QTableWidget(self.tab)
@@ -67,6 +63,8 @@ class Ui_Form(object):
         self.tableWidget.setVerticalHeaderItem(3, __qtablewidgetitem10)
         self.tableWidget.setObjectName(u"tableWidget")
         self.tableWidget.setGeometry(QRect(0, 0, 751, 211))
+        self.tableWidget.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
+        self.tableWidget.setAutoScrollMargin(16)
         self.tableWidget.setAlternatingRowColors(True)
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
@@ -113,6 +111,57 @@ class Ui_Form(object):
         self.elim_btn_2.setGeometry(QRect(490, 130, 75, 23))
         self.tabWidget.addTab(self.tab_2, "")
 
+        self.gridLayout.addWidget(self.tabWidget, 0, 0, 1, 1)
+
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.nuevo_btn = QPushButton(Form)
+        self.nuevo_btn.setObjectName(u"nuevo_btn")
+
+        self.horizontalLayout.addWidget(self.nuevo_btn)
+
+        self.modif_btn = QPushButton(Form)
+        self.modif_btn.setObjectName(u"modif_btn")
+
+        self.horizontalLayout.addWidget(self.modif_btn)
+
+        self.elim_btn = QPushButton(Form)
+        self.elim_btn.setObjectName(u"elim_btn")
+
+        self.horizontalLayout.addWidget(self.elim_btn)
+
+        self.horizontalSpacer = QSpacerItem(100, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer)
+
+        self.buscar_btn = QPushButton(Form)
+        self.buscar_btn.setObjectName(u"buscar_btn")
+
+        self.horizontalLayout.addWidget(self.buscar_btn)
+
+        self.horizontalSpacer_2 = QSpacerItem(40, 20, QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Minimum)
+
+        self.horizontalLayout.addItem(self.horizontalSpacer_2)
+
+        self.lineEdit_txt = QLineEdit(Form)
+        self.lineEdit_txt.setObjectName(u"lineEdit_txt")
+
+        self.horizontalLayout.addWidget(self.lineEdit_txt)
+
+        self.View_Table = QCheckBox(Form)
+        self.View_Table.setObjectName(u"View_Table")
+
+        self.horizontalLayout.addWidget(self.View_Table)
+
+
+        self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
+
+        self.graphicsView = View(Form)
+        self.graphicsView.setObjectName(u"graphicsView")
+
+        self.gridLayout.addWidget(self.graphicsView, 1, 0, 1, 1)
+
+
         self.retranslateUi(Form)
 
         self.tabWidget.setCurrentIndex(0)
@@ -123,41 +172,37 @@ class Ui_Form(object):
 
     def retranslateUi(self, Form):
         Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.nuevo_btn.setText(QCoreApplication.translate("Form", u"Nuevo", None))
-        self.modif_btn.setText(QCoreApplication.translate("Form", u"Modif", None))
-        self.elim_btn.setText(QCoreApplication.translate("Form", u"Eliminar", None))
-        self.buscar_btn.setText(QCoreApplication.translate("Form", u"Buscar", None))
         ___qtablewidgetitem = self.tableWidget.horizontalHeaderItem(0)
-        ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"ID", None));
+        ___qtablewidgetitem.setText(QCoreApplication.translate("Form", u"ID", None))
         ___qtablewidgetitem1 = self.tableWidget.horizontalHeaderItem(1)
-        ___qtablewidgetitem1.setText(QCoreApplication.translate("Form", u"Nombre", None));
+        ___qtablewidgetitem1.setText(QCoreApplication.translate("Form", u"Nombre", None))
         ___qtablewidgetitem2 = self.tableWidget.horizontalHeaderItem(2)
-        ___qtablewidgetitem2.setText(QCoreApplication.translate("Form", u"Cod_clie", None));
+        ___qtablewidgetitem2.setText(QCoreApplication.translate("Form", u"Cod_clie", None))
         ___qtablewidgetitem3 = self.tableWidget.horizontalHeaderItem(3)
-        ___qtablewidgetitem3.setText(QCoreApplication.translate("Form", u"fecha", None));
+        ___qtablewidgetitem3.setText(QCoreApplication.translate("Form", u"fecha", None))
         ___qtablewidgetitem4 = self.tableWidget.horizontalHeaderItem(4)
-        ___qtablewidgetitem4.setText(QCoreApplication.translate("Form", u"Trabajos", None));
+        ___qtablewidgetitem4.setText(QCoreApplication.translate("Form", u"Trabajos", None))
         ___qtablewidgetitem5 = self.tableWidget.horizontalHeaderItem(5)
-        ___qtablewidgetitem5.setText(QCoreApplication.translate("Form", u"Precio", None));
+        ___qtablewidgetitem5.setText(QCoreApplication.translate("Form", u"Precio", None))
         ___qtablewidgetitem6 = self.tableWidget.horizontalHeaderItem(6)
-        ___qtablewidgetitem6.setText(QCoreApplication.translate("Form", u"Observaciones", None));
+        ___qtablewidgetitem6.setText(QCoreApplication.translate("Form", u"Observaciones", None))
         ___qtablewidgetitem7 = self.tableWidget.verticalHeaderItem(0)
-        ___qtablewidgetitem7.setText(QCoreApplication.translate("Form", u"Cliente1", None));
+        ___qtablewidgetitem7.setText(QCoreApplication.translate("Form", u"Cliente1", None))
         ___qtablewidgetitem8 = self.tableWidget.verticalHeaderItem(1)
-        ___qtablewidgetitem8.setText(QCoreApplication.translate("Form", u"Cliente2", None));
+        ___qtablewidgetitem8.setText(QCoreApplication.translate("Form", u"Cliente2", None))
         ___qtablewidgetitem9 = self.tableWidget.verticalHeaderItem(2)
-        ___qtablewidgetitem9.setText(QCoreApplication.translate("Form", u"Cliente3", None));
+        ___qtablewidgetitem9.setText(QCoreApplication.translate("Form", u"Cliente3", None))
         ___qtablewidgetitem10 = self.tableWidget.verticalHeaderItem(3)
-        ___qtablewidgetitem10.setText(QCoreApplication.translate("Form", u"Cliente4", None));
+        ___qtablewidgetitem10.setText(QCoreApplication.translate("Form", u"Cliente4", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab), QCoreApplication.translate("Form", u"Tab 1", None))
         ___qtablewidgetitem11 = self.tableWidget_2.horizontalHeaderItem(0)
-        ___qtablewidgetitem11.setText(QCoreApplication.translate("Form", u"ID", None));
+        ___qtablewidgetitem11.setText(QCoreApplication.translate("Form", u"ID", None))
         ___qtablewidgetitem12 = self.tableWidget_2.horizontalHeaderItem(1)
-        ___qtablewidgetitem12.setText(QCoreApplication.translate("Form", u"Codigo", None));
+        ___qtablewidgetitem12.setText(QCoreApplication.translate("Form", u"Codigo", None))
         ___qtablewidgetitem13 = self.tableWidget_2.horizontalHeaderItem(2)
-        ___qtablewidgetitem13.setText(QCoreApplication.translate("Form", u"Nombre", None));
+        ___qtablewidgetitem13.setText(QCoreApplication.translate("Form", u"Nombre", None))
         ___qtablewidgetitem14 = self.tableWidget_2.horizontalHeaderItem(3)
-        ___qtablewidgetitem14.setText(QCoreApplication.translate("Form", u"Modelo", None));
+        ___qtablewidgetitem14.setText(QCoreApplication.translate("Form", u"Modelo", None))
         self.new_btn.setText(QCoreApplication.translate("Form", u"New", None))
         self.modif_btn_2.setText(QCoreApplication.translate("Form", u"Modif", None))
         self.codigo_l.setText(QCoreApplication.translate("Form", u"Codigo", None))
@@ -165,5 +210,10 @@ class Ui_Form(object):
         self.modelo_l.setText(QCoreApplication.translate("Form", u"Modelo", None))
         self.elim_btn_2.setText(QCoreApplication.translate("Form", u"Eliminar", None))
         self.tabWidget.setTabText(self.tabWidget.indexOf(self.tab_2), QCoreApplication.translate("Form", u"Tab 2", None))
+        self.nuevo_btn.setText(QCoreApplication.translate("Form", u"Nuevo", None))
+        self.modif_btn.setText(QCoreApplication.translate("Form", u"Modif", None))
+        self.elim_btn.setText(QCoreApplication.translate("Form", u"Eliminar", None))
+        self.buscar_btn.setText(QCoreApplication.translate("Form", u"Buscar", None))
+        self.View_Table.setText(QCoreApplication.translate("Form", u"IconView", None))
     # retranslateUi
 
