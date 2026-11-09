@@ -2,12 +2,13 @@ import sqlite3
 from pathlib import Path
 
 from PySide6.QtCore import QPoint, QPointF, Qt, Signal, QSizeF
-from PySide6.QtGui import QColor, QLinearGradient, QPixmap
+from PySide6.QtGui import QColor, QLinearGradient, QPixmap, QBrush, QPen
 from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsTextItem,
     QGraphicsView,
     QMessageBox,
+    QGraphicsRectItem
 )
 
 from .imageitem import ImageItem
@@ -16,6 +17,14 @@ from .informationwindow import InformationWindow
 
 IMAGE_DIRECTORY = Path(__file__).resolve().parent / "../images"
 
+class RuberBand(QGraphicsRectItem):
+    def __init__(self, parent= None):
+        super().__init__(parent)
+    def paint(self, painter, opt, w=None):
+        painter.setPen(QPen(QColor(0, 120, 215)))
+        painter.setBrush(QBrush(QColor(170, 204, 238)))
+        painter.drawRoundedRect(self.rect(), 5, 5)
+
 
 class View(QGraphicsView):
     GItemPressed = Signal(ImageItem)
@@ -23,7 +32,13 @@ class View(QGraphicsView):
         super().__init__(parent)
         self.database = None
         self._index = 0
+        self._rect = RuberBand()
+        self._rect.setRect(0, 0, 0, 0)
+        self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
+        self._rect.setZValue(10)
+        self._drag_start = None
         self.scene = QGraphicsScene(self)
+        self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
         self.setScene(self.scene)
         self.information_windows: list[InformationWindow] = []
@@ -182,8 +197,38 @@ class View(QGraphicsView):
         self.scene.setSceneRect(0, 0, event.size().width(), event.size().height()*3)
         super().resizeEvent(event)
 
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._drag_start = self.mapToScene(event.position().toPoint())
+            self._rect.setPos(self._drag_start)
+            self._rect.setRect(0, 0, 0, 0)
+        super().mousePressEvent(event)
+
+    def mouseMoveEvent(self, event) -> None:
+        if self._drag_start is not None and event.buttons() & Qt.MouseButton.LeftButton:
+            current = self.mapToScene(event.position().toPoint())
+            left = min(self._drag_start.x(), current.x())
+            top = min(self._drag_start.y(), current.y())
+            self._rect.setRect(
+                0,
+                0,
+                abs(current.x() - self._drag_start.x()),
+                abs(current.y() - self._drag_start.y()),
+            )
+            self._rect.setPos(left, top)
+        super().mouseMoveEvent(event)
+
     def mouseReleaseEvent(self, event) -> None:
-        item = self.itemAt(event.position().toPoint())
+        self._drag_start = None
+        item = next(
+            (
+                item
+                for item in self.items(event.position().toPoint())
+                if item is not self._rect
+            ),
+            None,
+        )
+        self._rect.setRect(0, 0, 1, 1)
         print("\n\n\n mouseReleaseEvent: ", item)
         if isinstance(item, ImageItem):
             model = item.model()
