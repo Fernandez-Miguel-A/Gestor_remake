@@ -1,11 +1,13 @@
 from PySide6.QtCore import QObject, QTimeLine, QPointF, Property, QSizeF
-from PySide6.QtGui import QColor
+from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsTextItem
 
 
 class ImageItem(QGraphicsPixmapItem):
     def __init__(self, record_id: int, pixmap) -> None:
         super().__init__(pixmap)
+        self._source_pixmap = pixmap
+        self._is_selected = False
         self.m = None
         #self.pixmap_item = QGraphicsPixmapItem(pixmap)#, parent=self
         self.text_item = None
@@ -29,6 +31,23 @@ class ImageItem(QGraphicsPixmapItem):
 
     def model(self):
         return self.m
+
+    def set_image_pixmap(self, pixmap: QPixmap) -> None:
+        self._source_pixmap = pixmap
+        self.set_selected(self._is_selected)
+
+    def set_selected(self, selected: bool) -> None:
+        self._is_selected = selected
+        if not selected or self._source_pixmap.isNull():
+            self.setPixmap(self._source_pixmap)
+            return
+
+        tinted_pixmap = self._source_pixmap.copy()
+        painter = QPainter(tinted_pixmap)
+        painter.setCompositionMode(QPainter.CompositionMode.CompositionMode_SourceAtop)
+        painter.fillRect(tinted_pixmap.rect(), QColor(0, 120, 215, 100))
+        painter.end()
+        self.setPixmap(tinted_pixmap)
 
     def getGIndex(self) -> int:
         return self.data(1)

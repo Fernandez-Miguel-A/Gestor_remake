@@ -201,6 +201,20 @@ class View(QGraphicsView):
     def PrintSelectedGItems(self):
         print("PrintSelectedGItems:")
         [print(f"\ndatos: {item.getGID()}, {item.model()}\n") for item in self._selectedItems]
+
+    def _update_selected_items(self) -> None:
+        selection_rect = self._rect.sceneBoundingRect()
+        self._selectedItems = [
+            item
+            for item in self.scene.items(
+                selection_rect,
+                Qt.ItemSelectionMode.IntersectsItemShape,
+            )
+            if isinstance(item, ImageItem)
+        ]
+        selected_items = set(self._selectedItems)
+        for image in self.image_items.values():
+            image.set_selected(image in selected_items)
     
     def resizeEvent(self, event):
         self.scene.setSceneRect(0, 0, event.size().width(), event.size().height()*3)
@@ -211,6 +225,7 @@ class View(QGraphicsView):
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._rect.setPos(self._drag_start)
             self._rect.setRect(0, 0, 1, 1)
+            self._update_selected_items()
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
@@ -225,20 +240,13 @@ class View(QGraphicsView):
                 abs(current.y() - self._drag_start.y()),
             )
             self._rect.setPos(left, top)
+            self._update_selected_items()
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
-            selection_rect = self._rect.sceneBoundingRect()
-            self._selectedItems = [
-                item
-                for item in self.scene.items(
-                    selection_rect,
-                    Qt.ItemSelectionMode.IntersectsItemShape,
-                )
-                if isinstance(item, ImageItem)
-            ]
-            self.PrintSelectedGItems()
+            self._update_selected_items()
+            ## self.PrintSelectedGItems()
         self._drag_start = None
         item = next(
             (
@@ -289,6 +297,6 @@ class View(QGraphicsView):
         except FileNotFoundError as error:
             QMessageBox.critical(self, "Image error", str(error))
             return
-        image.setPixmap(pixmap)
+        image.set_image_pixmap(pixmap)
         image.setTransformOriginPoint(image.boundingRect().center())
         image.setScale(1.0)
