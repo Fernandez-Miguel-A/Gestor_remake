@@ -24,8 +24,8 @@ class ImageItem(QGraphicsPixmapItem):
             return
         self.m = data
         self.set_text(data)
-        print("\n\n\n set_model::", data[0], self.getGID() == data[0])
         self.setGID(data[0])
+        print("\n\n\n set_model::", data[0], self.getGID(), self.getGID() == data[0])
 
     def model(self):
         return self.m

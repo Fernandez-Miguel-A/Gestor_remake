@@ -21,9 +21,12 @@ class RuberBand(QGraphicsRectItem):
     def __init__(self, parent= None):
         super().__init__(parent)
     def paint(self, painter, opt, w=None):
+        painter.save()
+        painter.setOpacity(0.6)     ## Rectangulo con Opacidad al %60.
         painter.setPen(QPen(QColor(0, 120, 215)))
         painter.setBrush(QBrush(QColor(170, 204, 238)))
         painter.drawRoundedRect(self.rect(), 5, 5)
+        painter.restore()
 
 
 class View(QGraphicsView):
@@ -37,6 +40,7 @@ class View(QGraphicsView):
         self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._rect.setZValue(10)
         self._drag_start = None
+        self._selectedItems: list[ImageItem] = []
         self.scene = QGraphicsScene(self)
         self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
@@ -193,6 +197,11 @@ class View(QGraphicsView):
             Qt.AspectRatioMode.IgnoreAspectRatio,
             Qt.TransformationMode.SmoothTransformation,
         )
+
+    def PrintSelectedGItems(self):
+        print("PrintSelectedGItems:")
+        [print(f"\ndatos: {item.getGID()}, {item.model()}\n") for item in self._selectedItems]
+    
     def resizeEvent(self, event):
         self.scene.setSceneRect(0, 0, event.size().width(), event.size().height()*3)
         super().resizeEvent(event)
@@ -201,7 +210,7 @@ class View(QGraphicsView):
         if event.button() == Qt.MouseButton.LeftButton:
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._rect.setPos(self._drag_start)
-            self._rect.setRect(0, 0, 0, 0)
+            self._rect.setRect(0, 0, 1, 1)
         super().mousePressEvent(event)
 
     def mouseMoveEvent(self, event) -> None:
@@ -219,6 +228,17 @@ class View(QGraphicsView):
         super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            selection_rect = self._rect.sceneBoundingRect()
+            self._selectedItems = [
+                item
+                for item in self.scene.items(
+                    selection_rect,
+                    Qt.ItemSelectionMode.IntersectsItemShape,
+                )
+                if isinstance(item, ImageItem)
+            ]
+            self.PrintSelectedGItems()
         self._drag_start = None
         item = next(
             (
