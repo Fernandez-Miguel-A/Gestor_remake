@@ -40,7 +40,7 @@ class GUI(QWidget):
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
         self.ui.tableWidget.cellDoubleClicked.connect(self.modif_TWreserv)
-        self.ui.elim_btn.clicked.connect(self.Eliminar_Reserv)
+        self.ui.elim_btn.clicked.connect(self.Eliminar_Reserv_data)
 
 
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
@@ -221,21 +221,41 @@ class GUI(QWidget):
         
 
 
-    def Eliminar_Reserv(self):
+    def Eliminar_Reserv(self, item, row, datos):
+        w = Reserv(self.ui.graphicsView, datos, Reserv.DEL)
+        w.show()
+        if w.exec() == Reserv.Accepted:
+            id = datos[0]#ID
+            self.remover_data(id)  ## CUIDADO
+            self.RemoveReservClie(row, datos)
+
+    def Eliminar_ReservTW(self):
         TwItems = self.ui.tableWidget.selectedItems()
         if not TwItems:
-            print("Eliminar_Reserv Not SelectedItems!")
+            print("Eliminar_ReservTW Not SelectedItems!")
             return
-        if TwItems:### w = Reserv(datos, Reserv.DEL)
-            datos = self.datos_TableWidget(TwItems[0].row())##row
-            w = Reserv(self.ui.graphicsView, datos, Reserv.DEL)
-            w.show()
-            if w.exec() == Reserv.Accepted:
+        item = TwItems[0]
+        datos = self.datos_TableWidget(item.row())##row
+        self.Eliminar_Reserv(item, row, datos)
 
-                row = TwItems[0].row()
-                id = self.ui.tableWidget.item(row, 0)#ID
-                self.remover_data(id)
-                self.RemoveReservClie(row, datos)
+
+    def Eliminar_ReservGW(self):
+        TwItems = self.ui.graphicsView.selectedGItems()
+        if not TwItems:
+            print("Eliminar_ReservGW Not SelectedItems!")
+            return
+        item = TwItems[0]
+        idx = item.getGID()
+        row = self.getRowfromID(idx)
+        datos = item.model()##row
+        self.Eliminar_Reserv(item, row, datos)
+
+    def Eliminar_Reserv_data(self):
+        state = self.ui.View_Table.checkState()
+        if state == Qt.Unchecked:
+            self.Eliminar_ReservTW()
+        else:
+            self.Eliminar_ReservGW()
 
 
     def insertar_data(self, datos):
@@ -256,7 +276,7 @@ class GUI(QWidget):
             self.ui.lineEdit_txt.setText("Fallo  actualizar_data()")
 
     def remover_data(self, item):
-        sql = "DELETE FROM Reserv_Clientes WHERE id = {}".format(item.text())
+        sql = f"DELETE FROM Reserv_Clientes WHERE id = {item}"
         q = QSqlQuery()
         q.exec(sql)
 

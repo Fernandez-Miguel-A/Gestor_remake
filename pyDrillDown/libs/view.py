@@ -202,6 +202,9 @@ class GView(QGraphicsView):
         print("PrintSelectedGItems:")
         [print(f"\ndatos: {item.getGID()}, {item.model()}\n") for item in self._selectedItems]
 
+    def selectedGItems(self) -> list:
+        return self._selectedItems
+
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
         self._selectedItems = [
@@ -257,7 +260,6 @@ class GView(QGraphicsView):
             None,
         )
         self._rect.setRect(0, 0, 1, 1)
-        print("\n\n\n mouseReleaseEvent: ", item)
         if isinstance(item, ImageItem):
             model = item.model()
             if model is not None:
