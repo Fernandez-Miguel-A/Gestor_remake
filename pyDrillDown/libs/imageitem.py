@@ -24,12 +24,25 @@ class ImageItem(QGraphicsPixmapItem):
             return
         self.m = data
         self.set_text(data)
+        print("\n\n\n set_model::", data[0], self.getGID() == data[0])
+        self.setGID(data[0])
 
     def model(self):
         return self.m
 
     def getGIndex(self) -> int:
         return self.data(1)
+
+    def setGIndex(self, i: int) -> None:
+        self.setData(1, i)
+
+
+    def setGID(self, i: int) -> None:
+        print("setGID")
+        self.setData(0, i)
+
+    def getGID(self) -> int:
+        return self.data(0)
 
 #    def getGPos(self) -> QPointF:
 #        return QPointF(self.data(1)//4, self.data(1)%4)
@@ -42,7 +55,6 @@ class ImageItem(QGraphicsPixmapItem):
         self.text_item = QGraphicsTextItem(str(text), self)
         self.text_item.setDefaultTextColor(QColor("#d7d6d5"))
         #self.text_item.setPos(self.boundingRect().center() - self.text_item.boundingRect().center())
-        print("set_text: ", self.boundingRect().topLeft())
         self.text_item.setPos(self.boundingRect().topLeft()+
                          QPointF((120 - self.text_item.boundingRect().width()) / 2, 120.0))
 

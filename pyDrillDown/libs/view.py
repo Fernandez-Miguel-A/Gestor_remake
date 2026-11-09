@@ -42,7 +42,6 @@ class View(QGraphicsView):
     def find_Image_fromCode(self, cod_clie: int):
         sql = f"SELECT file FROM images WHERE itemid = {cod_clie}"
         data = self.database.execute(sql)
-        print(f"\n\n data: {data}")
         one = data.fetchone()
         if not one:
             d = self.database.execute("SELECT file FROM images WHERE itemid = 0")
@@ -77,8 +76,8 @@ class View(QGraphicsView):
             p = self.getPosGItem(index)
             pixmap = self.load_image(filename)
             image = ImageItem(record_id, pixmap)
-            image.setData(0, index)
-            image.setData(1, index)
+            image.setGID(index)
+            image.setGIndex(index)
             image.setPos(p)
             image.set_model(None)
             self.scene.addItem(image)
@@ -127,8 +126,8 @@ class View(QGraphicsView):
         p = self.getPosGItem(self._index)
         pixmap = self.load_image(filename)
         image = ImageItem(record_id, pixmap)
-        image.setData(0, data[0])
-        image.setData(1, self._index)
+        #image.setGID(data[0])       ## 'id'
+        image.setGIndex(self._index)   ## 'index'
         image.setPos(p)
         image.set_model(data)
         self.scene.addItem(image)
@@ -137,11 +136,11 @@ class View(QGraphicsView):
         self._index += 1
 
     def UpdateGItem(self, datos) -> None:
-        print("UpdateGItem:", len(self.scene.items()), datos)
+        print("UpdateGItem:", datos)
         r = datos[0]
         for i in self.scene.items():
-            #print("\n\nGItem:", i, i.data(0), r)
-            if i.data(0) == r:
+            #print("\n\nGItem:", i, i.getGID(), r)
+            if isinstance(i, ImageItem) and i.getGID() == r:
                 i.set_model(datos)
                 return
 
@@ -149,21 +148,21 @@ class View(QGraphicsView):
         r = datos[0]
         index2 = None
         for item in self.scene.items():
-            if item.data(0) == r:
-                index2 = item.data(1)
+            if isinstance(item, ImageItem) and item.getGID() == r:
+                index2 = item.getGIndex()
                 self.scene.removeItem(item.text_item)
                 self.scene.removeItem(item)
                 self._index -= 1
                 break  
 
         for item in self.scene.items():
-            #print("item.data: ", item.data(0), item.data(1), self._index, index2, item)
-            if item.data(1) and index2 and item.data(1) > index2: ## el item puede ser un 'QGraphicsTextItem'
-                new_index = item.data(1) - 1
+            #print("item.data: ", item.getGID(), item.getGIndex(), self._index, index2, item)
+            if isinstance(item, ImageItem) and index2 and item.getGIndex() > index2: ## el item puede ser un 'QGraphicsTextItem'
+                new_index = item.getGIndex() - 1
                 p = self.getPosGItem(new_index)
 
                 item.setPos(p)
-                item.setData(1, new_index)
+                item.setGIndex(new_index)
 
 
     def load_image(self, filename: str) -> QPixmap:

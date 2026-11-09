@@ -7,6 +7,7 @@ from Run_reserv import Reserv
 from Run_buscar import _Buscar
 
 from pyDrillDown.connection import create_connection
+from pyDrillDown.libs.imageitem import ImageItem
 
 
 from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
@@ -146,6 +147,7 @@ class GUI(QWidget):
 
     def Modif_Table_Widget(self, row, datos): ## FIX-ED: "QTableWidget: ..
         new = False
+        print("\n\n\n Modif_Table_Widget", self.columnCountTW(), row, datos)
         for j in range(self.columnCountTW()):
             item = self.ui.tableWidget.item(row, j)
             print("row, j", row, j, item)
@@ -157,9 +159,10 @@ class GUI(QWidget):
                 self.ui.tableWidget.setItem(row, j, item)
 
     def getRowfromID(self, id : int) -> int:
+        print("getRowfromID:", id)
         for row in range(self.rowCountTW()):
             item = self.ui.tableWidget.item(row, 0)
-            if item == str(id):
+            if isinstance(item, QTableWidgetItem) and item.text() == str(id):
                 return row
         return -1
 
@@ -211,8 +214,9 @@ class GUI(QWidget):
 
     def modifGItem(self, item):
         datos = item.model()
-        idx = item.getGIndex()
-        row = self.getRowfromID(idx)
+        idx = item.getGID()
+        row = self.getRowfromID(idx)#datos[0]
+        print("\n modifGItem::", idx, row, datos)
         self.modif_reserv(row, datos)
         
 
@@ -245,7 +249,6 @@ class GUI(QWidget):
 
     def actualizar_data(self, datos):
         self.ui.lineEdit_txt.setText(str(datos)+str(11))
-        print("datos[1:] ", datos[1:], len(datos), "\n\n")
         q = QSqlQuery()
         sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
         q.exec(sql)

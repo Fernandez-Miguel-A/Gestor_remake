@@ -108,7 +108,6 @@ class Reserv(QDialog):
         p = self.view.find_Image_fromCode(cod_clie)
         ##q.exec_(sql)
         if p:
-            print("\n\n p", p)
             path = p[0]
             fecha = "1/01/2000"#q.value(1)
 
@@ -173,7 +172,6 @@ class Reserv(QDialog):
             self.ui.name_txt.text(), int(self.ui.cod_Clie_cmb.currentText()), self.ui.work_date.date().toString("d/M/yyyy"),
             self.trabajos(), self.ui.precio_txt.text(), self.ui.obs_txt.toPlainText()]#nombre_txt, falta trabajar en 'date()'
 
-        print("Los datos son: ", datos)
         return datos
 
 
