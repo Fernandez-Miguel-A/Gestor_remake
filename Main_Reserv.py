@@ -198,10 +198,10 @@ class GUI(QWidget):
         if w.exec() == Reserv.Accepted:
             #Modif Database
             datos = w.get_data()
-            if datos[0] == "":
+            if datos[0] == "" or datos[0] == None:
+                print("Insertar Database")
                 datos[0] = self.getNew_ID()
                 self.insertar_data(datos)### fase de prueba. TwItem == None.
-                print("Insertar Database")
             else:
                 print("Modif Database")
                 self.actualizar_data(datos)
