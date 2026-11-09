@@ -20,7 +20,7 @@ from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QHBoxLayout
     QSizePolicy, QSpacerItem, QTabWidget, QTableWidget,
     QTableWidgetItem, QWidget)
 
-from pyDrillDown.libs.view import View
+from pyDrillDown.libs.view import GView
 
 class Ui_Form(object):
     def setupUi(self, Form):
@@ -34,6 +34,8 @@ class Ui_Form(object):
         self.tabWidget.setMinimumSize(QSize(200, 150))
         self.tab = QWidget()
         self.tab.setObjectName(u"tab")
+        self.gridLayout_2 = QGridLayout(self.tab)
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.tableWidget = QTableWidget(self.tab)
         if (self.tableWidget.columnCount() < 7):
             self.tableWidget.setColumnCount(7)
@@ -62,10 +64,12 @@ class Ui_Form(object):
         __qtablewidgetitem10 = QTableWidgetItem()
         self.tableWidget.setVerticalHeaderItem(3, __qtablewidgetitem10)
         self.tableWidget.setObjectName(u"tableWidget")
-        self.tableWidget.setGeometry(QRect(0, 0, 751, 211))
         self.tableWidget.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
         self.tableWidget.setAutoScrollMargin(16)
         self.tableWidget.setAlternatingRowColors(True)
+
+        self.gridLayout_2.addWidget(self.tableWidget, 0, 0, 1, 1)
+
         self.tabWidget.addTab(self.tab, "")
         self.tab_2 = QWidget()
         self.tab_2.setObjectName(u"tab_2")
@@ -156,7 +160,7 @@ class Ui_Form(object):
 
         self.gridLayout.addLayout(self.horizontalLayout, 2, 0, 1, 1)
 
-        self.graphicsView = View(Form)
+        self.graphicsView = GView(Form)
         self.graphicsView.setObjectName(u"graphicsView")
 
         self.gridLayout.addWidget(self.graphicsView, 1, 0, 1, 1)

@@ -29,7 +29,7 @@ class RuberBand(QGraphicsRectItem):
         painter.restore()
 
 
-class View(QGraphicsView):
+class GView(QGraphicsView):
     GItemPressed = Signal(ImageItem)
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
