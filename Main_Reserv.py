@@ -271,12 +271,24 @@ class GUI(QWidget):
     def actualizar_data(self, datos):
         self.ui.lineEdit_txt.setText(str(datos)+str(11))
         q = QSqlQuery()
-        sql = "UPDATE Reserv_Clientes SET NOMBRE = '%s', Cod_clie = '%s', fecha = '%s', Trabajos = '%s', precio = '%s' , Observaciones = '%s'    WHERE id = %s "%(*datos[1:],  datos[0])
-        q.exec(sql)
-        if not q.isActive():
-            self.ui.lineEdit_txt.setText("Fallo  actualizar_data()")
+        sql = """UPDATE Reserv_Clientes
+            SET NOMBRE = ?, Cod_clie = ?, fecha = ?, Trabajos = ?,
+                precio = ?, Observaciones = ?
+            WHERE id = ?"""
+        if not q.prepare(sql):
+            self.ui.lineEdit_txt.setText(
+                f"Fallo actualizar_data(): {q.lastError().text()}"
+            )
+            return
+        for value in datos[1:]:
+            q.addBindValue(value)
+        q.addBindValue(datos[0])
+        if not q.exec():
+            self.ui.lineEdit_txt.setText(
+                f"Fallo actualizar_data(): {q.lastError().text()}"
+            )
 
-    def remover_data(self, item):
+    def remover_data(self, item: int) -> None:
         sql = f"DELETE FROM Reserv_Clientes WHERE id = {item}"
         q = QSqlQuery()
         q.exec(sql)
@@ -388,11 +400,22 @@ class GUI(QWidget):
     def Update_data(self, codigo, modelo,  nombre_producto, id):
         global db
         q = QSqlQuery()
-        sql = """UPDATE productos SET CODIGO = '%s',     MODELO = '%s', NOMBRE = '%s'   WHERE id = %s """%(codigo, modelo, nombre_producto,  id)
-        q.exec(sql)
+        sql = """UPDATE productos
+            SET CODIGO = ?, MODELO = ?, NOMBRE = ?
+            WHERE id = ?"""
+        if not q.prepare(sql):
+            self.ui.lineEdit_txt.setText(
+                f"Fallo Update_data(): {q.lastError().text()}"
+            )
+            return
+        for value in (codigo, modelo, nombre_producto, id):
+            q.addBindValue(value)
+        if not q.exec():
+            self.ui.lineEdit_txt.setText(
+                f"Fallo Update_data(): {q.lastError().text()}"
+            )
+            return
         db.commit()
-        if not q.isActive():
-            self.ui.lineEdit_txt.setText("Fallo  Update_data()")
 
 
 
