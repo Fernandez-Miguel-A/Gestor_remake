@@ -82,8 +82,8 @@ class Reserv(QDialog):
                 #self.ui.cod_Clie_cmb.insertItem(self.ui.cod_Clie_cmb.count(), self.arg[2])
                 self.ui.cod_Clie_cmb.setCurrentText(str(self.arg[2]))
 
-                self.load_Ico(self.arg[2])##Ico_l
-                self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
+                self.load_infoClie(self.arg[2])##Ico_l
+                self.ui.cod_Clie_cmb.currentTextChanged.connect(self.load_infoClie)
 
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")
@@ -95,12 +95,16 @@ class Reserv(QDialog):
             self.ui.cod_Clie_cmb.setEnabled(False)#2
             self.ui.work_date.setEnabled(False)#3
 
-    def load_Ico(self, cod_clie: int) -> None:
+    def load_infoClie(self, s: str) -> None:
+        cod_clie = int(s)
         ##cod_clie == self.arg[2]
         print("load_Ico(cod_clie):", cod_clie)
         if cod_clie == 0:
             self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
+            self.ui.name_txt.setText(self.arg[1])
+            self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+            self.ui.name_txt.setEnabled(True)
             return
         ##q = QSqlQuery()
         ##sql = "SELECT path, fecha FROM Reserv_data WHERE Cod_clie = '%s' "%(cod_clie)### self.ui.cod_Clie_cmb.currentIndex()
@@ -109,17 +113,34 @@ class Reserv(QDialog):
         ##q.exec_(sql)
         if p:
             path = p[0]
-            fecha = "1/01/2000"#q.value(1)
+            q = QSqlQuery()
+            q.exec(f"SELECT Cod_clie, nombre, fecha FROM Clientes WHERE Cod_clie = {cod_clie}") ## aqui::
+            if q.next():
+                nombre = q.value(1)
+                fecha = q.value(2)
+                print(f"\n QSqlQuery::exitoso nombre: {nombre}, fecha: {fecha}")
+                self.ui.reg_date.setStyleSheet("")
+                self.ui.name_txt.setEnabled(False)
+            else:
+                nombre = self.arg[1] ## Nombre 
+                fecha = "1/01/2000"  ## Cuidado estoy estableciendo un valor por defecto a un cod_clie dado.
+                print(f"\n QSqlQuery::fallido nombre: {nombre}, fecha: {fecha}")
+                self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+                self.ui.name_txt.setEnabled(True)
 
             pix = self.view.load_image(path)
             self.ui.Ico_l.setPixmap(pix.scaled(120, 100))
 
             datetime = QDateTime.fromString(fecha, "d/M/yyyy")
             self.ui.reg_date.setDateTime(datetime)
+            self.ui.name_txt.setText(nombre)
 
         else:
             self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
+            self.ui.name_txt.setText(self.arg[1])
+            self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+            self.ui.name_txt.setEnabled(True)
             return
 
 
