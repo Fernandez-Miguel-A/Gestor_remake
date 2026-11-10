@@ -235,7 +235,8 @@ class GUI(QWidget):
             print("Eliminar_ReservTW Not SelectedItems!")
             return
         item = TwItems[0]
-        datos = self.datos_TableWidget(item.row())##row
+        row = item.row()
+        datos = self.datos_TableWidget(row)##row
         self.Eliminar_Reserv(item, row, datos)
 
 
@@ -401,6 +402,22 @@ def prepareDataBase():
     db.setDatabaseName("data.db")
 
     if db.open():
+        q = QSqlQuery()
+        q.exec("create table if not exists  Clientes (Cod_clie INTEGER primary key autoincrement not null, nombre TEXT not null, fecha TEXT not null)")
+        print("TABLA  <Clientes>  creada satisfactoriamente!")
+
+        q = QSqlQuery()
+        q.exec("INSERT into Clientes VALUES(1, 'Maria', '8/11/2026')")
+            
+        q = QSqlQuery()
+        q.exec("INSERT into Clientes VALUES(2, 'Juana', '7/11/2026')")
+            
+        q = QSqlQuery()
+        q.exec("INSERT into Clientes VALUES(3, 'Matias', '5/11/2026')")
+            
+        q = QSqlQuery()
+        q.exec("INSERT into Clientes VALUES(4, 'Esteban', '9/11/2026')")
+
         q = QSqlQuery()
         if q.prepare("create table if not exists  Reserv_Clientes (id integer primary key autoincrement not null, NOMBRE text not null, Cod_clie integer, fecha text not null, Trabajos text not null, precio text not null , Observaciones text not null )"):
             if q.exec():
