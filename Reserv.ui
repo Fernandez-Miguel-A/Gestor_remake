@@ -38,14 +38,14 @@
   <widget class="Line" name="line">
    <property name="geometry">
     <rect>
-     <x>-3</x>
-     <y>403</y>
-     <width>461</width>
+     <x>0</x>
+     <y>402</y>
+     <width>460</width>
      <height>16</height>
     </rect>
    </property>
    <property name="orientation">
-    <enum>Qt::Horizontal</enum>
+    <enum>Qt::Orientation::Horizontal</enum>
    </property>
   </widget>
   <widget class="QFrame" name="color_fr">
@@ -61,10 +61,10 @@
     <string notr="true">background-color: rgb(106, 255, 98);</string>
    </property>
    <property name="frameShape">
-    <enum>QFrame::StyledPanel</enum>
+    <enum>QFrame::Shape::StyledPanel</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Raised</enum>
+    <enum>QFrame::Shadow::Raised</enum>
    </property>
   </widget>
   <widget class="QComboBox" name="cod_Clie_cmb">
@@ -126,7 +126,7 @@
     <string>img_Ico</string>
    </property>
    <property name="alignment">
-    <set>Qt::AlignCenter</set>
+    <set>Qt::AlignmentFlag::AlignCenter</set>
    </property>
   </widget>
   <widget class="QLineEdit" name="name_txt">
@@ -204,10 +204,10 @@
     <string notr="true">background-color: rgb(235, 235, 235);</string>
    </property>
    <property name="frameShape">
-    <enum>QFrame::Box</enum>
+    <enum>QFrame::Shape::Box</enum>
    </property>
    <property name="frameShadow">
-    <enum>QFrame::Sunken</enum>
+    <enum>QFrame::Shadow::Sunken</enum>
    </property>
    <widget class="QListWidget" name="trab_listW">
     <property name="geometry">
@@ -272,7 +272,7 @@
      <number>2</number>
     </property>
     <property name="orientation">
-     <enum>Qt::Horizontal</enum>
+     <enum>Qt::Orientation::Horizontal</enum>
     </property>
    </widget>
    <widget class="QLabel" name="precio_l">
@@ -301,7 +301,7 @@
      <string>$ 0</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
     </property>
     <property name="readOnly">
      <bool>true</bool>
@@ -343,14 +343,14 @@
   <widget class="QLabel" name="reg_nro_l">
    <property name="geometry">
     <rect>
-     <x>160</x>
+     <x>150</x>
      <y>50</y>
-     <width>71</width>
+     <width>81</width>
      <height>20</height>
     </rect>
    </property>
    <property name="text">
-    <string>Registro nro:</string>
+    <string>Registro fecha:</string>
    </property>
   </widget>
   <widget class="QDateEdit" name="reg_date">
@@ -366,7 +366,7 @@
     </rect>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
    </property>
    <property name="calendarPopup">
     <bool>true</bool>
@@ -398,7 +398,7 @@
     </rect>
    </property>
    <property name="alignment">
-    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
    </property>
    <property name="calendarPopup">
     <bool>true</bool>
@@ -414,7 +414,39 @@
     </rect>
    </property>
    <property name="text">
-    <string>1</string>
+    <string>:0:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label">
+   <property name="geometry">
+    <rect>
+     <x>90</x>
+     <y>124</y>
+     <width>49</width>
+     <height>16</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>-&gt;</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="lineEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>121</y>
+     <width>201</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>$ 0</string>
+   </property>
+   <property name="alignment">
+    <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
    </property>
   </widget>
   <zorder>color_fr</zorder>
@@ -427,7 +459,6 @@
   <zorder>cod_clie_l</zorder>
   <zorder>Obs_l</zorder>
   <zorder>ok_btn</zorder>
-  <zorder>Trabajos_fr</zorder>
   <zorder>Trab_btn</zorder>
   <zorder>fecha</zorder>
   <zorder>reg_nro_l</zorder>
@@ -435,6 +466,9 @@
   <zorder>cancel_btn</zorder>
   <zorder>work_date</zorder>
   <zorder>id_l</zorder>
+  <zorder>label</zorder>
+  <zorder>lineEdit</zorder>
+  <zorder>Trabajos_fr</zorder>
  </widget>
  <tabstops>
   <tabstop>ok_btn</tabstop>
@@ -493,6 +527,22 @@
     <hint type="destinationlabel">
      <x>158</x>
      <y>127</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>precio_txt</sender>
+   <signal>textChanged(QString)</signal>
+   <receiver>lineEdit</receiver>
+   <slot>setText(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>387</x>
+     <y>311</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>134</x>
+     <y>141</y>
     </hint>
    </hints>
   </connection>
