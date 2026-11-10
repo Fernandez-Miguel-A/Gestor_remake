@@ -41,26 +41,6 @@
          <property name="alternatingRowColors">
           <bool>true</bool>
          </property>
-         <row>
-          <property name="text">
-           <string>Cliente1</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Cliente2</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Cliente3</string>
-          </property>
-         </row>
-         <row>
-          <property name="text">
-           <string>Cliente4</string>
-          </property>
-         </row>
          <column>
           <property name="text">
            <string>ID</string>

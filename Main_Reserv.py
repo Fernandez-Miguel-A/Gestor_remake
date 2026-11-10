@@ -35,7 +35,7 @@ class GUI(QWidget):
 
         database = create_connection()
         self.ui.graphicsView.set_database(database)
-        self.ui.graphicsView.add_items()
+        ## self.ui.graphicsView.add_items() # ignoro los GItems vacios
         
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
