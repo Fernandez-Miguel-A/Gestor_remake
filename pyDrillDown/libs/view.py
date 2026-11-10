@@ -71,6 +71,7 @@ class GView(QGraphicsView):
     def getPosGItem(self, index) -> QPointF:
         image_width = 120
         column_count = 4
+        top_margin = 20
         gap = max(
             0,
             (self.scene.sceneRect().width() - column_count * image_width)
@@ -78,7 +79,7 @@ class GView(QGraphicsView):
         )
         column = index % column_count
         x = gap * (column + 1) + image_width * column
-        y = (index // column_count) * 150
+        y = (index // column_count) * 150 + top_margin
         return QPointF(x, y)
 
     def _layout_items(self) -> None:
@@ -94,6 +95,22 @@ class GView(QGraphicsView):
                     position
                     + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
                 )
+
+    def _update_scene_rect(self) -> None:
+        width = max(self.viewport().width(), 4 * 120)
+        row_count = (len(self.image_items) + 3) // 4
+        label_height = max(
+            (label.boundingRect().height() for label in self.image_labels.values()),
+            default=0,
+        )
+        content_height = (
+            (row_count - 1) * 150 + 120 + label_height + 20
+            if row_count
+            else 0
+        )
+        height = max(self.viewport().height(), content_height)
+        self.scene.setSceneRect(0, 0, width, height)
+        self._layout_items()
 
     def add_items(self) -> None:
         rows = self.database.execute(
@@ -126,7 +143,7 @@ class GView(QGraphicsView):
             self.scene.addItem(label)
             self.image_labels[record_id] = label
         self._index = len(rows)
-        self._layout_items()
+        self._update_scene_rect()
 
     def addGItem(self, data) -> None:
         print("addGItem:", data, data[2])
@@ -170,7 +187,7 @@ class GView(QGraphicsView):
         self.image_items[record_id] = image
 
         self._index += 1
-        self._layout_items()
+        self._update_scene_rect()
 
     def UpdateGItem(self, datos) -> None:
         print("UpdateGItem:", datos)
@@ -204,7 +221,7 @@ class GView(QGraphicsView):
                 and item.getGIndex() > index2
             ):
                 item.setGIndex(item.getGIndex() - 1)
-        self._layout_items()
+        self._update_scene_rect()
 
 
     def load_image(self, filename: str) -> QPixmap:
@@ -244,13 +261,7 @@ class GView(QGraphicsView):
     
     def resizeEvent(self, event):
         super().resizeEvent(event)
-        self.scene.setSceneRect(
-            0,
-            0,
-            self.viewport().width(),
-            self.viewport().height(),
-        )
-        self._layout_items()
+        self._update_scene_rect()
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
