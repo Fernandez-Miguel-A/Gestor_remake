@@ -3,7 +3,7 @@ import sys
 from PySide6.QtWidgets import QApplication, QMessageBox
 
 from connection import create_connection
-from libs.view import View
+from libs.view import GView
 
 
 def main() -> int:
@@ -13,7 +13,7 @@ def main() -> int:
         return 1
 
     try:
-        view = View()
+        view = GView()
         view.set_database(database)
         view.add_items()
     except FileNotFoundError as error:
