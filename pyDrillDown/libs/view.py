@@ -41,6 +41,8 @@ class GView(QGraphicsView):
         self._rect.setZValue(10)
         self._drag_start = None
         self._selectedItems: list[ImageItem] = []
+        self._selection_anchor_items: set[ImageItem] = set()
+        self._toggle_selection = False
         self.scene = QGraphicsScene(self)
         self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
@@ -97,6 +99,7 @@ class GView(QGraphicsView):
                 )
 
     def _update_scene_rect(self) -> None:
+        top_margin = 20
         width = max(self.viewport().width(), 4 * 120)
         row_count = (len(self.image_items) + 3) // 4
         label_height = max(
@@ -104,7 +107,7 @@ class GView(QGraphicsView):
             default=0,
         )
         content_height = (
-            (row_count - 1) * 150 + 120 + label_height + 20
+            (row_count - 1) * 150 + 120 + label_height + 20 + top_margin
             if row_count
             else 0
         )
@@ -247,13 +250,21 @@ class GView(QGraphicsView):
 
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
-        self._selectedItems = [
+        intersecting_items = {
             item
             for item in self.scene.items(
                 selection_rect,
                 Qt.ItemSelectionMode.IntersectsItemShape,
             )
             if isinstance(item, ImageItem)
+        }
+        selected_items = (
+            self._selection_anchor_items ^ intersecting_items
+            if self._toggle_selection
+            else intersecting_items
+        )
+        self._selectedItems = [
+            item for item in self.image_items.values() if item in selected_items
         ]
         selected_items = set(self._selectedItems)
         for image in self.image_items.values():
@@ -265,6 +276,12 @@ class GView(QGraphicsView):
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
+            self._toggle_selection = bool(
+                event.modifiers() & Qt.KeyboardModifier.ControlModifier
+            )
+            self._selection_anchor_items = (
+                set(self._selectedItems) if self._toggle_selection else set()
+            )
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._rect.setPos(self._drag_start)
             self._rect.setRect(0, 0, 1, 1)
@@ -290,7 +307,14 @@ class GView(QGraphicsView):
         if event.button() == Qt.MouseButton.LeftButton:
             self._update_selected_items()
             ## self.PrintSelectedGItems()
+        toggle_selection = self._toggle_selection
         self._drag_start = None
+        self._toggle_selection = False
+        self._selection_anchor_items.clear()
+        if toggle_selection:
+            self._rect.setRect(0, 0, 1, 1)
+            super().mouseReleaseEvent(event)
+            return
         item = next(
             (
                 item
