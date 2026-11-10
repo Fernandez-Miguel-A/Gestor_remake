@@ -47,6 +47,7 @@ class GView(QGraphicsView):
         self.setScene(self.scene)
         self.information_windows: list[InformationWindow] = []
         self.image_items: dict[int, ImageItem] = {}
+        self.image_labels: dict[int, QGraphicsTextItem] = {}
 
         #self.setFixedSize(470, 370)
 
@@ -68,17 +69,31 @@ class GView(QGraphicsView):
         return one
 
     def getPosGItem(self, index) -> QPointF:
-        image_offset = 150
-        left_margin = 70
-        top_margin = 40
-
-        column_offset = (index % 4) * 37
-        x = (index % 4) * image_offset + left_margin + column_offset
-        y = (index // 4) * image_offset #+ top_margin
+        image_width = 120
+        column_count = 4
+        gap = max(
+            0,
+            (self.scene.sceneRect().width() - column_count * image_width)
+            / (column_count + 1),
+        )
+        column = index % column_count
+        x = gap * (column + 1) + image_width * column
+        y = (index // column_count) * 150
         return QPointF(x, y)
 
-#    def getGPOS(self):
-#        self.getPosGItem(index)
+    def _layout_items(self) -> None:
+        for image in self.image_items.values():
+            index = image.getGIndex()
+            if index is None:
+                continue
+            position = self.getPosGItem(index)
+            image.setPos(position)
+            label = self.image_labels.get(image.record_id)
+            if label is not None:
+                label.setPos(
+                    position
+                    + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
+                )
 
     def add_items(self) -> None:
         rows = self.database.execute(
@@ -109,7 +124,9 @@ class GView(QGraphicsView):
                 + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
             )
             self.scene.addItem(label)
-        self._index = index + 1
+            self.image_labels[record_id] = label
+        self._index = len(rows)
+        self._layout_items()
 
     def addGItem(self, data) -> None:
         print("addGItem:", data, data[2])
@@ -153,6 +170,7 @@ class GView(QGraphicsView):
         self.image_items[record_id] = image
 
         self._index += 1
+        self._layout_items()
 
     def UpdateGItem(self, datos) -> None:
         print("UpdateGItem:", datos)
@@ -169,19 +187,24 @@ class GView(QGraphicsView):
         for item in self.scene.items():
             if isinstance(item, ImageItem) and item.getGID() == r:
                 index2 = item.getGIndex()
-                self.scene.removeItem(item.text_item)
+                if item.text_item is not None:
+                    self.scene.removeItem(item.text_item)
                 self.scene.removeItem(item)
+                self.image_items.pop(item.record_id, None)
+                label = self.image_labels.pop(item.record_id, None)
+                if label is not None:
+                    self.scene.removeItem(label)
                 self._index -= 1
                 break  
 
         for item in self.scene.items():
-            #print("item.data: ", item.getGID(), item.getGIndex(), self._index, index2, item)
-            if isinstance(item, ImageItem) and index2 and item.getGIndex() > index2: ## el item puede ser un 'QGraphicsTextItem'
-                new_index = item.getGIndex() - 1
-                p = self.getPosGItem(new_index)
-
-                item.setPos(p)
-                item.setGIndex(new_index)
+            if (
+                isinstance(item, ImageItem)
+                and index2 is not None
+                and item.getGIndex() > index2
+            ):
+                item.setGIndex(item.getGIndex() - 1)
+        self._layout_items()
 
 
     def load_image(self, filename: str) -> QPixmap:
@@ -220,8 +243,14 @@ class GView(QGraphicsView):
             image.set_selected(image in selected_items)
     
     def resizeEvent(self, event):
-        self.scene.setSceneRect(0, 0, event.size().width(), event.size().height()*3)
         super().resizeEvent(event)
+        self.scene.setSceneRect(
+            0,
+            0,
+            self.viewport().width(),
+            self.viewport().height(),
+        )
+        self._layout_items()
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
