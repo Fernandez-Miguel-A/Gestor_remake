@@ -44,16 +44,16 @@ class GUI(QWidget):
 
 
         self.ui.buscar_btn.clicked.connect(self.buscar_Reserv)
+
+        self.ui.chk_Todos.toggled.connect(lambda x: self.ui.dateEdit.setEnabled(not x))
+        self.ui.chk_Todos.toggled.connect(self.UpdateTotalView)
+        self.ui.dateEdit.userDateChanged.connect(self.UpdateTotalView)
         
         self.ui.graphicsView.hide()
         self.ui.View_Table.toggled.connect(lambda x,this=self.ui: (this.graphicsView.setVisible(x), this.tabWidget.setVisible(not x)))
         self.ui.graphicsView.GItemPressed.connect(self.modifGItem)
 
-        q = QSqlQuery()
-        q.exec("select * from Reserv_Clientes")
-        while q.next():
-            datos = [q.value(i) for i in range(self.columnCountTW())]
-            self.MakeReservClie(datos)
+        self.UpdateTotalView()
 
 ## tableWidget_2
         q = QSqlQuery()
@@ -108,6 +108,47 @@ class GUI(QWidget):
 
     def rowCountTW(self):
         return self.ui.tableWidget.rowCount()
+
+    def UpdateTotalView(self):
+        print("UpdateTotalView")
+        self.ui.tableWidget.clearContents()
+        self.ui.tableWidget.setRowCount(0)
+        self.ui.graphicsView.clearGItems()
+        ## borro todos los campos y luego cargo los particulares
+    #   self.MakeReservClie()
+
+        query = QSqlQuery()
+        if self.ui.chk_Todos.checkState() == Qt.CheckState.Checked:
+            if not query.exec("SELECT * FROM Reserv_Clientes"):
+                self.ui.lineEdit_txt.setText(
+                    f"Fallo al cargar reservas: {query.lastError().text()}"
+                )
+                return
+            while query.next():
+                datos = [query.value(i) for i in range(self.columnCountTW())]
+                self.MakeReservClie(datos)
+            return
+
+        if not query.prepare("SELECT * FROM Reserv_Clientes WHERE fecha = ?"):
+            self.ui.lineEdit_txt.setText(
+                f"Fallo al preparar consulta semanal: {query.lastError().text()}"
+            )
+            return
+
+        selected_date = self.ui.dateEdit.date()
+        week_start = selected_date.addDays(1 - selected_date.dayOfWeek())
+        for day_offset in range(7):
+            date = week_start.addDays(day_offset).toString("d/M/yyyy")
+            query.bindValue(0, date)
+            if not query.exec():
+                self.ui.lineEdit_txt.setText(
+                    f"Fallo al consultar {date}: {query.lastError().text()}"
+                )
+                return
+            while query.next():
+                datos = [query.value(i) for i in range(self.columnCountTW())]
+                self.MakeReservClie(datos)
+
 
 
     def MakeReservClie(self, datos):

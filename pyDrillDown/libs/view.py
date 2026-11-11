@@ -36,7 +36,7 @@ class GView(QGraphicsView):
         self.database = None
         self._index = 0
         self._rect = RuberBand()
-        self._rect.setRect(0, 0, 0, 0)
+        self._rect.setRect(0, 0, 1, 1)
         self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._rect.setZValue(10)
         self._drag_start = None
@@ -200,6 +200,14 @@ class GView(QGraphicsView):
             if isinstance(i, ImageItem) and i.getGID() == r:
                 i.set_model(datos)
                 return
+
+    def clearGItems(self) -> None:
+        self.scene.removeItem(self._rect)
+        self.scene.clear()
+        self.image_items.clear()
+        self.image_labels.clear()
+        self._index = 0
+        self.scene.addItem(self._rect)
 
     def removeGItem(self, datos) -> None:
         r = datos[0]

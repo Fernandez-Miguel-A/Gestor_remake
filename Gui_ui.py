@@ -15,10 +15,10 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
     QFont, QFontDatabase, QGradient, QIcon,
     QImage, QKeySequence, QLinearGradient, QPainter,
     QPalette, QPixmap, QRadialGradient, QTransform)
-from PySide6.QtWidgets import (QApplication, QCheckBox, QGridLayout, QHBoxLayout,
-    QHeaderView, QLabel, QLineEdit, QPushButton,
-    QSizePolicy, QSpacerItem, QTabWidget, QTableWidget,
-    QTableWidgetItem, QWidget)
+from PySide6.QtWidgets import (QApplication, QCheckBox, QDateEdit, QGridLayout,
+    QHBoxLayout, QHeaderView, QLabel, QLineEdit,
+    QPushButton, QSizePolicy, QSpacerItem, QTabWidget,
+    QTableWidget, QTableWidgetItem, QWidget)
 
 from pyDrillDown.libs.view import GView
 
@@ -142,6 +142,21 @@ class Ui_Form(object):
 
         self.horizontalLayout.addWidget(self.lineEdit_txt)
 
+        self.chk_Todos = QCheckBox(Form)
+        self.chk_Todos.setObjectName(u"chk_Todos")
+        self.chk_Todos.setChecked(True)
+
+        self.horizontalLayout.addWidget(self.chk_Todos)
+
+        self.dateEdit = QDateEdit(Form)
+        self.dateEdit.setObjectName(u"dateEdit")
+        self.dateEdit.setEnabled(False)
+        self.dateEdit.setMinimumSize(QSize(90, 0))
+        self.dateEdit.setDateTime(QDateTime(QDate(2024, 4, 8), QTime(13, 0, 0)))
+        self.dateEdit.setCalendarPopup(True)
+
+        self.horizontalLayout.addWidget(self.dateEdit)
+
         self.View_Table = QCheckBox(Form)
         self.View_Table.setObjectName(u"View_Table")
 
@@ -200,6 +215,7 @@ class Ui_Form(object):
         self.modif_btn.setText(QCoreApplication.translate("Form", u"Modif", None))
         self.elim_btn.setText(QCoreApplication.translate("Form", u"Eliminar", None))
         self.buscar_btn.setText(QCoreApplication.translate("Form", u"Buscar", None))
+        self.chk_Todos.setText(QCoreApplication.translate("Form", u"Todos", None))
         self.View_Table.setText(QCoreApplication.translate("Form", u"IconView", None))
     # retranslateUi
 
