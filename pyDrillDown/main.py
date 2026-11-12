@@ -15,7 +15,7 @@ def main() -> int:
     try:
         view = GView()
         view.set_database(database)
-        view.add_items()
+        view.add_DefaultItems()
     except FileNotFoundError as error:
         QMessageBox.critical(None, "Image error", str(error))
         database.close()

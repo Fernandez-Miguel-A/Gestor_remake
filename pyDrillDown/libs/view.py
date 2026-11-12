@@ -11,7 +11,7 @@ from PySide6.QtWidgets import (
     QGraphicsRectItem
 )
 
-from .imageitem import ImageItem
+from .grapichsitem import GItem
 from .informationwindow import InformationWindow
 
 
@@ -30,7 +30,7 @@ class RuberBand(QGraphicsRectItem):
 
 
 class GView(QGraphicsView):
-    GItemPressed = Signal(ImageItem)
+    GItemPressed = Signal(GItem)
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self.database = None
@@ -40,16 +40,16 @@ class GView(QGraphicsView):
         self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._rect.setZValue(10)
         self._drag_start = None
-        self._selectedItems: list[ImageItem] = []
-        self._selection_anchor_items: set[ImageItem] = set()
+        self._selectedItems: list[GItem] = []
+        self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
         self.scene = QGraphicsScene(self)
         self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
         self.setScene(self.scene)
         self.information_windows: list[InformationWindow] = []
-        self.image_items: dict[int, ImageItem] = {}
-        self.image_labels: dict[int, QGraphicsTextItem] = {}
+        self.image_items: dict[int, GItem] = {}
+        self.image_labels: dict[int, QGraphicsTextItem] = {} ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
 
         #self.setFixedSize(470, 370)
 
@@ -115,7 +115,7 @@ class GView(QGraphicsView):
         self.scene.setSceneRect(0, 0, width, height)
         self._layout_items()
 
-    def add_items(self) -> None:
+    def add_DefaultItems(self) -> None:
         rows = self.database.execute(
             """
             SELECT items.id, images.file, items.itemtype
@@ -129,7 +129,7 @@ class GView(QGraphicsView):
             print(f"Adding item {record_id}: {filename} ({item_type}), index: {index}")
             p = self.getPosGItem(index)
             pixmap = self.load_image(filename)
-            image = ImageItem(record_id, pixmap)
+            image = GItem(record_id, pixmap)
             image.setGID(index)
             image.setGIndex(index)
             image.setPos(p)
@@ -181,7 +181,7 @@ class GView(QGraphicsView):
         print(f"__addGItem() {record_id}, {filename} index: {self._index}")
         p = self.getPosGItem(self._index)
         pixmap = self.load_image(filename)
-        image = ImageItem(record_id, pixmap)
+        image = GItem(record_id, pixmap)
         #image.setGID(data[0])       ## 'id'
         image.setGIndex(self._index)   ## 'index'
         image.setPos(p)
@@ -197,7 +197,7 @@ class GView(QGraphicsView):
         r = datos[0]
         for i in self.scene.items():
             #print("\n\nGItem:", i, i.getGID(), r)
-            if isinstance(i, ImageItem) and i.getGID() == r:
+            if isinstance(i, setGID) and i.getGID() == r:
                 i.set_model(datos)
                 return
 
@@ -213,7 +213,7 @@ class GView(QGraphicsView):
         r = datos[0]
         index2 = None
         for item in self.scene.items():
-            if isinstance(item, ImageItem) and item.getGID() == r:
+            if isinstance(item, GItem) and item.getGID() == r:
                 index2 = item.getGIndex()
                 if item.text_item is not None:
                     self.scene.removeItem(item.text_item)
@@ -227,7 +227,7 @@ class GView(QGraphicsView):
 
         for item in self.scene.items():
             if (
-                isinstance(item, ImageItem)
+                isinstance(item, GItem)
                 and index2 is not None
                 and item.getGIndex() > index2
             ):
@@ -264,7 +264,7 @@ class GView(QGraphicsView):
                 selection_rect,
                 Qt.ItemSelectionMode.IntersectsItemShape,
             )
-            if isinstance(item, ImageItem)
+            if isinstance(item, GItem)
         }
         selected_items = (
             self._selection_anchor_items ^ intersecting_items
@@ -332,7 +332,7 @@ class GView(QGraphicsView):
             None,
         )
         self._rect.setRect(0, 0, 1, 1)
-        if isinstance(item, ImageItem):
+        if isinstance(item, GItem):
             model = item.model()
             if model is not None:
                 self.GItemPressed.emit(item)
@@ -341,7 +341,7 @@ class GView(QGraphicsView):
             self.show_information(item)
         super().mouseReleaseEvent(event)
 
-    def show_information(self, image: ImageItem) -> None:
+    def show_information(self, image: GItem) -> None:
         window = next(
             (
                 window

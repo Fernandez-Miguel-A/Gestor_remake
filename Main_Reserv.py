@@ -7,7 +7,7 @@ from Run_reserv import Reserv
 from Run_buscar import _Buscar
 
 from pyDrillDown.connection import create_connection
-from pyDrillDown.libs.imageitem import ImageItem
+from pyDrillDown.libs.grapichsitem import GItem
 
 
 from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
@@ -35,7 +35,7 @@ class GUI(QWidget):
 
         database = create_connection()
         self.ui.graphicsView.set_database(database)
-        ## self.ui.graphicsView.add_items() # ignoro los GItems vacios
+        ## self.ui.graphicsView.add_DefaultItems() ## 'Ahora' ignoro los GItems vacios
         
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
         self.ui.modif_btn.clicked.connect(self.modif_row)
@@ -168,7 +168,7 @@ class GUI(QWidget):
         self.ui.graphicsView.removeGItem(datos)
 
 
-    def datos_TableWidget(self, row) -> List:
+    def datos_TableWidget(self, row) -> list:
         data = []
         for j in range(self.Reserv_CountData()):
             item = self.ui.tableWidget.item(row, j)

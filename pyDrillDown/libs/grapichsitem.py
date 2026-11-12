@@ -3,7 +3,7 @@ from PySide6.QtGui import QColor, QPainter, QPixmap
 from PySide6.QtWidgets import QGraphicsPixmapItem, QGraphicsTextItem
 
 
-class ImageItem(QGraphicsPixmapItem):
+class GItem(QGraphicsPixmapItem):
     def __init__(self, record_id: int, pixmap) -> None:
         super().__init__(pixmap)
         self._source_pixmap = pixmap
