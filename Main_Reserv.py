@@ -103,11 +103,14 @@ class GUI(QWidget):
 
 
     def columnCountTW(self):
-        #self.ui.tableWidget.columnCount()
         return self.ui.tableWidget.columnCount()
 
     def rowCountTW(self):
         return self.ui.tableWidget.rowCount()
+
+    def Reserv_CountData(self):
+        """supongo que siempre cargare todos los datos de la BASE de DATOS en la TableWidget y GView"""
+        return self.columnCountTW()
 
     def UpdateTotalView(self):
         print("UpdateTotalView")
@@ -125,7 +128,7 @@ class GUI(QWidget):
                 )
                 return
             while query.next():
-                datos = [query.value(i) for i in range(self.columnCountTW())]
+                datos = [query.value(i) for i in range(self.Reserv_CountData())]
                 self.MakeReservClie(datos)
             return
 
@@ -146,7 +149,7 @@ class GUI(QWidget):
                 )
                 return
             while query.next():
-                datos = [query.value(i) for i in range(self.columnCountTW())]
+                datos = [query.value(i) for i in range(self.Reserv_CountData())]
                 self.MakeReservClie(datos)
 
 
@@ -165,9 +168,9 @@ class GUI(QWidget):
         self.ui.graphicsView.removeGItem(datos)
 
 
-    def datos_TableWidget(self, row):
+    def datos_TableWidget(self, row) -> List:
         data = []
-        for j in range(self.columnCountTW()):
+        for j in range(self.Reserv_CountData()):
             item = self.ui.tableWidget.item(row, j)
             data.append(item.text() if item else "")
 
@@ -305,7 +308,7 @@ class GUI(QWidget):
             VALUES(?, ?, ?, ?, ?, ?)"""
         q = QSqlQuery()
         if q.prepare(sql):
-            for i in range(1, self.columnCountTW()):
+            for i in range(1, self.Reserv_CountData()):
                 q.addBindValue(datos[i])
             q.exec()
 
