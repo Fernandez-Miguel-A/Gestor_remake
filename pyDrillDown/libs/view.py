@@ -195,10 +195,10 @@ class GView(QGraphicsView):
     def UpdateGItem(self, datos) -> None:
         print("UpdateGItem:", datos)
         r = datos[0]
-        for i in self.scene.items():
-            #print("\n\nGItem:", i, i.getGID(), r)
-            if isinstance(i, setGID) and i.getGID() == r:
-                i.set_model(datos)
+        for item in self.scene.items():
+            #print("\n\nGItem:", item, item.getGID(), r)
+            if isinstance(item, GItem) and item.getGID() == r:
+                item.set_model(datos)
                 return
 
     def clearGItems(self) -> None:

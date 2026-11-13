@@ -174,8 +174,6 @@ class Ui_Dialog(object):
         QWidget.setTabOrder(self.precio_txt, self.obs_txt)
 
         self.retranslateUi(Dialog)
-        self.cancel_btn.clicked.connect(Dialog.reject)
-        self.ok_btn.clicked.connect(Dialog.accept)
         self.Trab_btn.toggled.connect(self.Trabajos_fr.setVisible)
         self.precio_txt.textChanged.connect(self.lineEdit.setText)
 

@@ -10,7 +10,7 @@ from pyDrillDown.connection import create_connection
 from pyDrillDown.libs.grapichsitem import GItem
 
 
-from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem
+from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QMessageBox
 from PySide6.QtCore import Qt
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel

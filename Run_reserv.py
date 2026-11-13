@@ -6,7 +6,7 @@ from reserv_ui import Ui_Dialog
 
 
 
-from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit
+from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit, QMessageBox
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, QDateTime, Signal
 
@@ -42,8 +42,12 @@ class Reserv(QDialog):
             self.ui.ok_btn.setText("Ok")#Nuevo
         elif self.arg2_tipe == self.MODIF:
             self.ui.ok_btn.setText("Modif")#Modificar
+            self.ui.cancel_btn.clicked.connect(self.reject)
+            self.ui.ok_btn.clicked.connect(self.Confirm)
         elif self.arg2_tipe == self.DEL:
             self.ui.ok_btn.setText("Borrar")#Eliminar
+            self.ui.cancel_btn.clicked.connect(self.reject)
+            self.ui.ok_btn.clicked.connect(self.Confirm)
 
         ##self.ui.trab_listW.clicked.connect(lambda x: self.function("adsdas"))
         #self.ui.trab_listW.itemClicked.connect(self.trabajos_act)
@@ -194,6 +198,24 @@ class Reserv(QDialog):
             self.trabajos(), self.ui.precio_txt.text(), self.ui.obs_txt.toPlainText()]#nombre_txt, falta trabajar en 'date()'
 
         return datos
+
+    def Confirm(self):
+        if self.arg2_tipe == self.MODIF:
+            msgBox = QMessageBox.warning(self, "Informacion", "¡Seguro que desea Modificar la Reservacion!", 
+                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+                QMessageBox.StandardButton.Ok)
+            if msgBox == QMessageBox.StandardButton.Cancel:
+                self.reject()
+            else:
+                self.accept()
+        elif self.arg2_tipe == self.DEL:
+            msgBox = QMessageBox.warning(self, "Informacion", "¡Seguro que desea Eliminar la Reservacion!", 
+                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+                QMessageBox.StandardButton.Ok)
+            if msgBox == QMessageBox.StandardButton.Cancel:
+                self.reject()
+            else:
+                self.accept()
 
 
 

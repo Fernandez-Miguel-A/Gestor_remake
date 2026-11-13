@@ -483,38 +483,6 @@
  <resources/>
  <connections>
   <connection>
-   <sender>cancel_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>reject()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>422</x>
-     <y>384</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>440</x>
-     <y>423</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>ok_btn</sender>
-   <signal>clicked()</signal>
-   <receiver>Dialog</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>336</x>
-     <y>387</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>370</x>
-     <y>427</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
    <sender>Trab_btn</sender>
    <signal>toggled(bool)</signal>
    <receiver>Trabajos_fr</receiver>
