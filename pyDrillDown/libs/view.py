@@ -47,7 +47,7 @@ class GView(QGraphicsView):
         self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
         self.setScene(self.scene)
-        self.information_windows: list[InformationWindow] = []
+        self.information_windows: list[InformationWindow] = [] ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
         self.image_items: dict[int, GItem] = {}
         self.image_labels: dict[int, QGraphicsTextItem] = {} ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
 
@@ -91,7 +91,7 @@ class GView(QGraphicsView):
                 continue
             position = self.getPosGItem(index)
             image.setPos(position)
-            label = self.image_labels.get(image.record_id)
+            label = self.image_labels.get(image.getGID())
             if label is not None:
                 label.setPos(
                     position
@@ -218,8 +218,8 @@ class GView(QGraphicsView):
                 if item.text_item is not None:
                     self.scene.removeItem(item.text_item)
                 self.scene.removeItem(item)
-                self.image_items.pop(item.record_id, None)
-                label = self.image_labels.pop(item.record_id, None)
+                self.image_items.pop(item.getGID(), None)
+                label = self.image_labels.pop(item.getGID(), None)
                 if label is not None:
                     self.scene.removeItem(label)
                 self._index -= 1
@@ -346,12 +346,12 @@ class GView(QGraphicsView):
             (
                 window
                 for window in self.information_windows
-                if window.id() == image.record_id
+                if window.id() == image.getGID()
             ),
             None,
         )
         if window is None:
-            window = InformationWindow(image.record_id, self.database, self)
+            window = InformationWindow(image.getGID(), self.database, self)
             window.imageChanged.connect(self.update_image)
             window.move(self.pos() + QPoint(20, 40))
             self.information_windows.append(window)
