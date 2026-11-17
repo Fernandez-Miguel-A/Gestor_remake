@@ -217,11 +217,11 @@ class GView(QGraphicsView):
                 index2 = item.getGIndex()
                 if item.text_item is not None:
                     self.scene.removeItem(item.text_item)
-                self.scene.removeItem(item)
                 self.image_items.pop(item.getGID(), None)
                 label = self.image_labels.pop(item.getGID(), None)
                 if label is not None:
                     self.scene.removeItem(label)
+                self.scene.removeItem(item)
                 self._index -= 1
                 break  
 
