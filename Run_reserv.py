@@ -127,12 +127,14 @@ class Reserv(QDialog):
                 fecha = q.value(2)
                 print(f"\n QSqlQuery::exitoso nombre: {nombre}, fecha: {fecha}")
                 self.ui.reg_date.setStyleSheet("")
+                self.ui.Ico_l.setStyleSheet("")
                 self.ui.name_txt.setEnabled(False)
             else:
                 nombre = self.arg[1] ## Nombre 
                 fecha = "1/01/2000"  ## Cuidado estoy estableciendo un valor por defecto a un cod_clie dado.
                 print(f"\n QSqlQuery::fallido nombre: {nombre}, fecha: {fecha}")
                 self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+                self.ui.Ico_l.setStyleSheet("background-color: rgb(255, 123, 242);")
                 self.ui.name_txt.setEnabled(True)
 
             pix = self.view.load_image(path)
