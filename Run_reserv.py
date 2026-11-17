@@ -103,7 +103,7 @@ class Reserv(QDialog):
     def load_infoClie(self, s: str) -> None:
         cod_clie = int(s)
         ##cod_clie == self.arg[2]
-        print("load_Ico(cod_clie):", cod_clie)
+        print("\n\n\n load_Ico(cod_clie):", cod_clie)
         if cod_clie == 0 or not self.view:
             if not self.view:
                 print("\n ¡Imposible acceder a la Base de Datos de Imagenes!\n ¡self.view NO Inicializado!")
@@ -111,6 +111,7 @@ class Reserv(QDialog):
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             self.ui.name_txt.setText(self.arg[1])
             self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+            self.ui.Ico_l.setStyleSheet("background-color: rgb(255, 123, 242);")
             self.ui.name_txt.setEnabled(True)
             return
         ##q = QSqlQuery()
@@ -125,16 +126,14 @@ class Reserv(QDialog):
             if q.next():
                 nombre = q.value(1)
                 fecha = q.value(2)
-                print(f"\n QSqlQuery::exitoso nombre: {nombre}, fecha: {fecha}")
+                print(f"QSqlQuery::exitoso nombre: {nombre}, fecha: {fecha}")
                 self.ui.reg_date.setStyleSheet("")
-                self.ui.Ico_l.setStyleSheet("")
                 self.ui.name_txt.setEnabled(False)
             else:
                 nombre = self.arg[1] ## Nombre 
                 fecha = "1/01/2000"  ## Cuidado estoy estableciendo un valor por defecto a un cod_clie dado.
-                print(f"\n QSqlQuery::fallido nombre: {nombre}, fecha: {fecha}")
+                print(f"QSqlQuery::fallido nombre: {nombre}, fecha: {fecha}")
                 self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
-                self.ui.Ico_l.setStyleSheet("background-color: rgb(255, 123, 242);")
                 self.ui.name_txt.setEnabled(True)
 
             pix = self.view.load_image(path)
@@ -142,13 +141,15 @@ class Reserv(QDialog):
 
             datetime = QDateTime.fromString(fecha, "d/M/yyyy")
             self.ui.reg_date.setDateTime(datetime)
+            self.ui.Ico_l.setStyleSheet("")
             self.ui.name_txt.setText(nombre)
 
-        else:
+        else:  ## No se encontro el cod_clie solicitado
             self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             self.ui.name_txt.setText(self.arg[1])
             self.ui.reg_date.setStyleSheet("color: rgb(255, 71, 71);")
+            self.ui.Ico_l.setStyleSheet("background-color: rgb(255, 123, 242);")
             self.ui.name_txt.setEnabled(True)
             return
 
@@ -205,22 +206,24 @@ class Reserv(QDialog):
         return datos
 
     def Confirm(self):
+        titulo = "asdasd"
+        mensaje = "log(s)"
         if self.arg2_tipe == self.MODIF:
-            msgBox = QMessageBox.warning(self, "Informacion", "¡Seguro que desea Modificar la Reservacion!", 
-                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
-                QMessageBox.StandardButton.Ok)
-            if msgBox == QMessageBox.StandardButton.Cancel:
-                self.reject()
-            else:
-                self.accept()
+            titulo = "Informacion"
+            mensaje = "¡Seguro que desea Modificar la Reservacion!"
         elif self.arg2_tipe == self.DEL:
-            msgBox = QMessageBox.warning(self, "Informacion", "¡Seguro que desea Eliminar la Reservacion!", 
-                QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
-                QMessageBox.StandardButton.Ok)
-            if msgBox == QMessageBox.StandardButton.Cancel:
-                self.reject()
-            else:
-                self.accept()
+            titulo = "Informacion"
+            mensaje = "¡Seguro que desea Eliminar la Reservacion!"
+
+        msgBox = QMessageBox.warning(self, titulo, mensaje, 
+            QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
+            QMessageBox.StandardButton.Ok)
+        if msgBox == QMessageBox.StandardButton.Cancel:
+            pass
+            #self.reject()
+        else:
+            self.accept()
+
 
 
 

@@ -30,6 +30,8 @@ class Ui_Dialog(object):
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(Dialog.sizePolicy().hasHeightForWidth())
         Dialog.setSizePolicy(sizePolicy)
+        Dialog.setMinimumSize(QSize(460, 432))
+        Dialog.setMaximumSize(QSize(460, 432))
         Dialog.setModal(True)
         self.ok_btn = QPushButton(Dialog)
         self.ok_btn.setObjectName(u"ok_btn")

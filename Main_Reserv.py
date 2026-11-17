@@ -191,10 +191,8 @@ class GUI(QWidget):
 
     def Modif_Table_Widget(self, row, datos): ## FIX-ED: "QTableWidget: ..
         new = False
-        print("\n\n\n Modif_Table_Widget", self.columnCountTW(), row, datos)
         for j in range(self.columnCountTW()):
             item = self.ui.tableWidget.item(row, j)
-            print("row, j", row, j, item)
             if item is None: #caso particular
                 item = QTableWidgetItem()
                 new = True
