@@ -149,7 +149,6 @@ class GView(QGraphicsView):
         self._update_scene_rect()
 
     def addGItem(self, data) -> None:
-        print("addGItem:", data, data[2])
         row = self.database.execute(
             f"""
             SELECT items.id, images.file
@@ -159,7 +158,6 @@ class GView(QGraphicsView):
             ORDER BY items.id
             """
         ).fetchone()
-        print("_addGItem", row)
         #if not row: ## cod_clie: (5) o otro
         #    return
 
@@ -177,8 +175,7 @@ class GView(QGraphicsView):
         else:
             record_id, filename = data[0], row[1]
 
-        #for index, (record_id, filename, item_type) in enumerate(rows):
-        print(f"__addGItem() {record_id}, {filename} index: {self._index}")
+        ##print(f"__addGItem() {record_id}, {filename} index: {self._index}")
         p = self.getPosGItem(self._index)
         pixmap = self.load_image(filename)
         image = GItem(record_id, pixmap)

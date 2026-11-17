@@ -155,7 +155,7 @@ class GUI(QWidget):
 
 
     def MakeReservClie(self, datos):
-        print("MakeReservClie::", datos)
+        ##print("MakeReservClie::", datos)
         self.NewRow_Table_Widget(datos)
         self.ui.graphicsView.addGItem(datos)
 

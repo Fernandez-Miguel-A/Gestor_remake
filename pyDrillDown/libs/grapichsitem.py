@@ -57,7 +57,7 @@ class GItem(QGraphicsPixmapItem):
 
 
     def setGID(self, i: int) -> None:
-        print("setGID")
+        ##print("setGID")
         self.setData(0, i)
 
     def getGID(self) -> int:
@@ -99,3 +99,4 @@ class GItem(QGraphicsPixmapItem):
 
     def update_item_position(self) -> None:
         self.setZValue(self.z)
+
