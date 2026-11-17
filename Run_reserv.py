@@ -40,14 +40,15 @@ class Reserv(QDialog):
 
         if self.arg2_tipe == self.NEW:
             self.ui.ok_btn.setText("Ok")#Nuevo
+            self.ui.ok_btn.clicked.connect(self.accept)
         elif self.arg2_tipe == self.MODIF:
             self.ui.ok_btn.setText("Modif")#Modificar
-            self.ui.cancel_btn.clicked.connect(self.reject)
             self.ui.ok_btn.clicked.connect(self.Confirm)
         elif self.arg2_tipe == self.DEL:
             self.ui.ok_btn.setText("Borrar")#Eliminar
-            self.ui.cancel_btn.clicked.connect(self.reject)
             self.ui.ok_btn.clicked.connect(self.Confirm)
+
+        self.ui.cancel_btn.clicked.connect(self.reject)
 
         ##self.ui.trab_listW.clicked.connect(lambda x: self.function("adsdas"))
         #self.ui.trab_listW.itemClicked.connect(self.trabajos_act)
