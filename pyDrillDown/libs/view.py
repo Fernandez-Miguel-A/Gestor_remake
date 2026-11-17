@@ -12,7 +12,6 @@ from PySide6.QtWidgets import (
 )
 
 from .grapichsitem import GItem
-from .informationwindow import InformationWindow
 
 
 IMAGE_DIRECTORY = Path(__file__).resolve().parent / "../images"
@@ -47,7 +46,6 @@ class GView(QGraphicsView):
         self.scene.addItem(self._rect)
         self.scene.setSceneRect(0, 0, 465*2, 365*2)
         self.setScene(self.scene)
-        self.information_windows: list[InformationWindow] = [] ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
         self.image_items: dict[int, GItem] = {}
         self.image_labels: dict[int, QGraphicsTextItem] = {} ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
 
@@ -335,29 +333,8 @@ class GView(QGraphicsView):
                 self.GItemPressed.emit(item)
                 super().mouseReleaseEvent(event)
                 return ## GItem creados con addGItem()
-            self.show_information(item)
         super().mouseReleaseEvent(event)
 
-    def show_information(self, image: GItem) -> None:
-        window = next(
-            (
-                window
-                for window in self.information_windows
-                if window.id() == image.getGID()
-            ),
-            None,
-        )
-        if window is None:
-            window = InformationWindow(image.getGID(), self.database, self)
-            window.imageChanged.connect(self.update_image)
-            window.move(self.pos() + QPoint(20, 40))
-            self.information_windows.append(window)
-
-        if window.isVisible():
-            window.raise_()
-            window.activateWindow()
-        else:
-            window.show()
 
     def update_image(self, record_id: int, filename: str) -> None:
         image = self.image_items.get(record_id)
