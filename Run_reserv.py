@@ -103,7 +103,9 @@ class Reserv(QDialog):
         cod_clie = int(s)
         ##cod_clie == self.arg[2]
         print("load_Ico(cod_clie):", cod_clie)
-        if cod_clie == 0:
+        if cod_clie == 0 or not self.view:
+            if not self.view:
+                print("\n ¡Imposible acceder a la Base de Datos de Imagenes!\n ¡self.view NO Inicializado!")
             self.ui.Ico_l.setPixmap(QPixmap())
             self.ui.reg_date.setDateTime(QDateTime.fromString("1/01/2000", "d/M/yyyy"))
             self.ui.name_txt.setText(self.arg[1])
