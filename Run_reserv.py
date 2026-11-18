@@ -33,7 +33,7 @@ class Reserv(QDialog):
         super(Reserv, self).__init__()
         self.ui = Ui_Dialog()
         self.ui.setupUi(self)
-        self.arg =  data if data else (None, "Maria", 3, "7/04/2024", "DEGRADE                                     $3000", "$3000", "")
+        self.arg =  data if data else (None, "Maria", 0, "7/04/2024", "", "", "")
         #self.arg = (None, "Maria", "3", "7/04/2024", "DEGRADE", "$3000", "")
         self.arg2_tipe = tipo
         self.view = view if view else obj_tmp()
@@ -56,14 +56,14 @@ class Reserv(QDialog):
         self.ui.trab_listW.itemChanged.connect(self.Precios)#itemChanged, itemActivated
         #self.ui.cod_Clie_cmb.currentIndexChanged.connect(self.load_Ico)
 
-        self.loadData()
+        self.load_DefaultData()
         self.Precios()
 
     def setView(self, w):
         self.view = w
 
-    def loadData(self):
-        self.ui.id_l.setText(f":{self.arg[0]}:")# campo ID
+    def load_DefaultData(self):
+        self.ui.id_l.setText(f":{self.arg[0]}:" if self.arg[0] != None else ":ID:")# campo ID
         self.ui.name_txt.setText(self.arg[1])## ok + str(self.arg[0])
         self.ui.precio_txt.setText(self.arg[5])
         self.ui.obs_txt.setText(self.arg[6])
@@ -87,8 +87,8 @@ class Reserv(QDialog):
                 #self.ui.cod_Clie_cmb.insertItem(self.ui.cod_Clie_cmb.count(), self.arg[2])
                 self.ui.cod_Clie_cmb.setCurrentText(str(self.arg[2]))
 
-                self.load_infoClie(self.arg[2])##Ico_l
-                self.ui.cod_Clie_cmb.currentTextChanged.connect(self.load_infoClie)
+            self.load_infoClie(self.arg[2])##Ico_l
+            self.ui.cod_Clie_cmb.currentTextChanged.connect(self.load_infoClie)
 
 
         datetime = QDateTime.fromString(self.arg[3], "d/M/yyyy")

@@ -211,9 +211,9 @@ class GUI(QWidget):
 
 
     def nueva_reserv(self, new=None):
-        datos = [None, "Maria", 3, "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
+        ##datos = [None, "Maria", 3, "8/04/2024", "DEGRADE                                     $3000", "$3000", ""]
         
-        w = Reserv(self.ui.graphicsView, datos)
+        w = Reserv(self.ui.graphicsView, [])
         ##w.setView()
         w.show()
         if w.exec() == Reserv.Accepted:
