@@ -339,6 +339,7 @@ class GView(QGraphicsView):
                 adjustment = -36.0 if event.key() == Qt.Key.Key_PageDown else +36.0
 
             self._drag_height_adjustment += adjustment
+            super().keyPressEvent(event)
             mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
             self._drag_current = self.mapToScene(mouse_position)
             self._resize_selection_rect(self._drag_current)
