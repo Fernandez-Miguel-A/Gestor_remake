@@ -38,7 +38,7 @@ class GUI(QWidget):
         ## self.ui.graphicsView.add_DefaultItems() ## 'Ahora' ignoro los GItems vacios
         
         self.ui.nuevo_btn.clicked.connect(self.nueva_reserv)
-        self.ui.modif_btn.clicked.connect(self.modif_row)
+        self.ui.modif_btn.clicked.connect(self.modif_AllView)
         self.ui.tableWidget.cellDoubleClicked.connect(self.modif_TWreserv)
         self.ui.elim_btn.clicked.connect(self.Eliminar_Reserv_data)
 
@@ -231,6 +231,16 @@ class GUI(QWidget):
             self.MakeReservClie(datos)
             self.insertar_data(datos)
 
+    def modif_AllView(self) -> None:
+        print("\n\n modif_AllView")
+        if self.ui.View_Table.checkState() == Qt.Checked:
+            print("GView Mode")
+            GItems = self.ui.graphicsView.selectedGItems()
+            if GItems:
+                self.modifGItem(GItems[0])
+        else:
+            print("TW Mode")
+            self.modif_row()
 
     def modif_row(self):
         TwItems = self.ui.tableWidget.selectedItems()
