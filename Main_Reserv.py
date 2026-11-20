@@ -10,8 +10,9 @@ from pyDrillDown.connection import create_connection
 from pyDrillDown.libs.grapichsitem import GItem
 
 
-from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QMessageBox
+from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QMessageBox, QMenu
 from PySide6.QtCore import Qt
+from PySide6.QtGui import QAction
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
@@ -76,6 +77,45 @@ class GUI(QWidget):
         self.ui.modif_btn_2.clicked.connect(self.Modifi_Base)
 
         self.ui.elim_btn_2.clicked.connect(self.Erase_Base)
+
+### contexMenu
+        # 1. Activar la política de menú contextual personalizado
+        self.ui.tableWidget.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.ui.graphicsView.setContextMenuPolicy(Qt.CustomContextMenu)
+
+        # 2. Conectar la señal al método manejador
+        self.ui.tableWidget.customContextMenuRequested.connect(self.mostrar_menu)
+        self.ui.graphicsView.customContextMenuRequested.connect(self.mostrar_menu)
+###
+
+    def mostrar_menu(self, posicion):
+        menu = QMenu(self)
+
+        accion_nuevo = QAction("Nuevo", self)
+        accion_modificar = QAction("Modificar", self)
+        accion_eliminar = QAction("Eliminar", self)
+        accion_eliminarTds = QAction("Eliminar Todos", self)
+        accion_buscar = QAction("Buscar", self)
+
+
+        accion_nuevo.triggered.connect(self.nueva_reserv)
+        accion_modificar.triggered.connect(self.modif_AllView)
+        ## accion_modificar.triggered.connect(self.modif_TWreserv)
+        accion_eliminar.triggered.connect(self.Eliminar_Reserv_data)
+        accion_eliminarTds.triggered.connect(lambda x: print("\n ¡Seccion NO Implementada!"))
+        accion_buscar.triggered.connect(self.buscar_Reserv)
+
+
+
+        menu.addAction(accion_nuevo)
+        menu.addAction(accion_modificar)
+        menu.addAction(accion_eliminar)
+        menu.addAction(accion_eliminarTds)
+        menu.addSeparator()
+        menu.addAction(accion_buscar)
+
+        # 3. Convertir la posición local del widget a global y mostrar
+        menu.exec(self.ui.tableWidget.mapToGlobal(posicion))
 
 
 
