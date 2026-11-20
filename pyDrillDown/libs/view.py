@@ -2,7 +2,7 @@ import sqlite3
 from pathlib import Path
 
 from PySide6.QtCore import QPoint, QPointF, Qt, Signal, QSizeF, QEvent
-from PySide6.QtGui import QColor, QLinearGradient, QPixmap, QBrush, QPen, QMouseEvent
+from PySide6.QtGui import QColor, QLinearGradient, QPixmap, QBrush, QPen, QMouseEvent, QCursor
 from PySide6.QtWidgets import QApplication 
 from PySide6.QtWidgets import (
     QGraphicsScene,
@@ -41,6 +41,7 @@ class GView(QGraphicsView):
         self._rect.setZValue(10)
         self._drag_start = None
         self._drag_current = None
+        self._drag_height_adjustment = 0.0
         self._selectedItems: list[GItem] = []
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
@@ -292,18 +293,25 @@ class GView(QGraphicsView):
             )
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._drag_current = self._drag_start
+            self._drag_height_adjustment = 0.0
             print("in mousePressEvent::", self._drag_current, "\n\n")
             self._rect.setPos(self._drag_start)
             self._rect.setRect(0, 0, 1, 1)
             self._update_selected_items()
         super().mousePressEvent(event)
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.setFocus(Qt.FocusReason.MouseFocusReason)
 
     def _resize_selection_rect(self, current: QPointF) -> None:
         if self._drag_start is None:
             return
         width = current.x() - self._drag_start.x()
         drag_height = current.y() - self._drag_start.y()
-        height = drag_height
+        height_direction = -1 if drag_height < 0 else 1
+        height = height_direction * max(
+            1,
+            abs(drag_height) + self._drag_height_adjustment,
+        )
         left = min(self._drag_start.x(), self._drag_start.x() + width)
         top = min(self._drag_start.y(), self._drag_start.y() + height)
         self._rect.setRect(0, 0, abs(width), abs(height))
@@ -316,6 +324,27 @@ class GView(QGraphicsView):
             self._drag_current = self.mapToScene(event.position().toPoint())
             self._resize_selection_rect(self._drag_current)
         super().mouseMoveEvent(event)
+
+    def keyPressEvent(self, event) -> None:
+        if (
+            self._drag_start is not None
+            and event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp)
+        ):
+            
+
+            v_scroll_bar = self.verticalScrollBar()
+            if v_scroll_bar.value() == 0 or v_scroll_bar.value() == v_scroll_bar.maximum():
+                adjustment = 0
+            else:
+                adjustment = -36.0 if event.key() == Qt.Key.Key_PageDown else +36.0
+
+            self._drag_height_adjustment += adjustment
+            mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
+            self._drag_current = self.mapToScene(mouse_position)
+            self._resize_selection_rect(self._drag_current)
+            event.accept()
+            return
+        super().keyPressEvent(event)
 
     def wheelEvent(self, event) -> None:
         if (
@@ -336,6 +365,7 @@ class GView(QGraphicsView):
         toggle_selection = self._toggle_selection
         self._drag_start = None
         self._drag_current = None
+        self._drag_height_adjustment = 0.0
         self._toggle_selection = False
         self._selection_anchor_items.clear()
         if toggle_selection:
