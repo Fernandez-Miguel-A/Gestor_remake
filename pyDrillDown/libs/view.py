@@ -1,8 +1,9 @@
 import sqlite3
 from pathlib import Path
 
-from PySide6.QtCore import QPoint, QPointF, Qt, Signal, QSizeF
-from PySide6.QtGui import QColor, QLinearGradient, QPixmap, QBrush, QPen
+from PySide6.QtCore import QPoint, QPointF, Qt, Signal, QSizeF, QEvent
+from PySide6.QtGui import QColor, QLinearGradient, QPixmap, QBrush, QPen, QMouseEvent
+from PySide6.QtWidgets import QApplication 
 from PySide6.QtWidgets import (
     QGraphicsScene,
     QGraphicsTextItem,
@@ -39,6 +40,7 @@ class GView(QGraphicsView):
         self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._rect.setZValue(10)
         self._drag_start = None
+        self._drag_current = None
         self._selectedItems: list[GItem] = []
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
@@ -55,6 +57,9 @@ class GView(QGraphicsView):
         gradient.setColorAt(0, QColor("#868482"))
         gradient.setColorAt(1, QColor("#5d5b59"))
         self.setBackgroundBrush(gradient)
+ 
+
+
         
     def set_database(self, database: sqlite3.Connection) -> None:
         self.database = database
@@ -273,9 +278,9 @@ class GView(QGraphicsView):
         for image in self.image_items.values():
             image.set_selected(image in selected_items)
     
-    def resizeEvent(self, event):
-        super().resizeEvent(event)
+    def resizeEvent(self, event) -> None:
         self._update_scene_rect()
+        super().resizeEvent(event)
 
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -286,25 +291,43 @@ class GView(QGraphicsView):
                 set(self._selectedItems) if self._toggle_selection else set()
             )
             self._drag_start = self.mapToScene(event.position().toPoint())
+            self._drag_current = self._drag_start
+            print("in mousePressEvent::", self._drag_current, "\n\n")
             self._rect.setPos(self._drag_start)
             self._rect.setRect(0, 0, 1, 1)
             self._update_selected_items()
         super().mousePressEvent(event)
 
+    def _resize_selection_rect(self, current: QPointF) -> None:
+        if self._drag_start is None:
+            return
+        width = current.x() - self._drag_start.x()
+        drag_height = current.y() - self._drag_start.y()
+        height = drag_height
+        left = min(self._drag_start.x(), self._drag_start.x() + width)
+        top = min(self._drag_start.y(), self._drag_start.y() + height)
+        self._rect.setRect(0, 0, abs(width), abs(height))
+        self._rect.setPos(left, top)
+        self._update_selected_items()
+
     def mouseMoveEvent(self, event) -> None:
+        ###print("mouseMoveEvent")
         if self._drag_start is not None and event.buttons() & Qt.MouseButton.LeftButton:
-            current = self.mapToScene(event.position().toPoint())
-            left = min(self._drag_start.x(), current.x())
-            top = min(self._drag_start.y(), current.y())
-            self._rect.setRect(
-                0,
-                0,
-                abs(current.x() - self._drag_start.x()),
-                abs(current.y() - self._drag_start.y()),
-            )
-            self._rect.setPos(left, top)
-            self._update_selected_items()
+            self._drag_current = self.mapToScene(event.position().toPoint())
+            self._resize_selection_rect(self._drag_current)
         super().mouseMoveEvent(event)
+
+    def wheelEvent(self, event) -> None:
+        if (
+            self._drag_start is not None
+            and self._drag_current is not None
+            and event.angleDelta().y()
+        ):
+            super().wheelEvent(event)
+            self._drag_current = self.mapToScene(event.position().toPoint())
+            self._resize_selection_rect(self._drag_current)
+            return
+        super().wheelEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -312,6 +335,7 @@ class GView(QGraphicsView):
             ## self.PrintSelectedGItems()
         toggle_selection = self._toggle_selection
         self._drag_start = None
+        self._drag_current = None
         self._toggle_selection = False
         self._selection_anchor_items.clear()
         if toggle_selection:
