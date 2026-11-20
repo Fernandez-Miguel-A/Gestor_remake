@@ -41,7 +41,6 @@ class GView(QGraphicsView):
         self._rect.setZValue(10)
         self._drag_start = None
         self._drag_current = None
-        self._drag_height_adjustment = 0.0
         self._selectedItems: list[GItem] = []
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
@@ -310,7 +309,7 @@ class GView(QGraphicsView):
         height_direction = -1 if drag_height < 0 else 1
         height = height_direction * max(
             1,
-            abs(drag_height) + self._drag_height_adjustment,
+            abs(drag_height),
         )
         left = min(self._drag_start.x(), self._drag_start.x() + width)
         top = min(self._drag_start.y(), self._drag_start.y() + height)
@@ -338,23 +337,15 @@ class GView(QGraphicsView):
                         self.verticalScrollBar().value() - page_delta
                     )
 
+                mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
+                print("\n mouse_position:", mouse_position, self.mapToScene(mouse_position))
+                self._drag_current = self.mapToScene(mouse_position)
+                ## super().keyPressEvent(event)
+                self._resize_selection_rect(self._drag_current)
+                
                 event.accept()
                 return
 
-            ### si la GView se redimensiona achicandola despues de iniciarse el "adjustment" es incorrecto.
-
-            v_scroll_bar = self.verticalScrollBar()
-            if v_scroll_bar.value() == 0 or v_scroll_bar.value() == v_scroll_bar.maximum():
-                adjustment = 0
-            else:
-                if event.key() == Qt.Key.Key_PageDown:
-                    adjustment = -36.0
-                elif event.key() == Qt.Key.Key_PageUp:
-                    adjustment = +36.0
-                else:
-                    adjustment = 0
-
-            self._drag_height_adjustment += adjustment
             super().keyPressEvent(event)
             mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
             self._drag_current = self.mapToScene(mouse_position)
@@ -370,6 +361,8 @@ class GView(QGraphicsView):
             and event.angleDelta().y()
         ):
             super().wheelEvent(event)
+            ### mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
+            ### self._drag_current = self.mapToScene(mouse_position)
             self._drag_current = self.mapToScene(event.position().toPoint())
             self._resize_selection_rect(self._drag_current)
             return
@@ -382,7 +375,6 @@ class GView(QGraphicsView):
         toggle_selection = self._toggle_selection
         self._drag_start = None
         self._drag_current = None
-        self._drag_height_adjustment = 0.0
         self._toggle_selection = False
         self._selection_anchor_items.clear()
         if toggle_selection:
