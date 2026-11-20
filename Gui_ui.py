@@ -152,7 +152,8 @@ class Ui_Form(object):
         self.dateEdit.setObjectName(u"dateEdit")
         self.dateEdit.setEnabled(False)
         self.dateEdit.setMinimumSize(QSize(90, 0))
-        self.dateEdit.setDateTime(QDateTime(QDate(2024, 4, 8), QTime(13, 0, 0)))
+        self.dateEdit.setWrapping(False)
+        self.dateEdit.setDateTime(QDateTime(QDate(2024, 4, 8), QTime(16, 0, 0)))
         self.dateEdit.setCalendarPopup(True)
 
         self.horizontalLayout.addWidget(self.dateEdit)
