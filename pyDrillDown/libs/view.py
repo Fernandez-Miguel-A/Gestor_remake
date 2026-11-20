@@ -330,13 +330,18 @@ class GView(QGraphicsView):
             self._drag_start is not None
             and event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp)
         ):
-            
+            ### si la GView se redimensiona achicandola despues de iniciarse el "adjustment" es incorrecto.
 
             v_scroll_bar = self.verticalScrollBar()
             if v_scroll_bar.value() == 0 or v_scroll_bar.value() == v_scroll_bar.maximum():
                 adjustment = 0
             else:
-                adjustment = -36.0 if event.key() == Qt.Key.Key_PageDown else +36.0
+                if event.key() == Qt.Key.Key_PageDown:
+                    adjustment = -36.0
+                elif event.key() == Qt.Key.Key_PageUp:
+                    adjustment = +36.0
+                else:
+                    adjustment = 0
 
             self._drag_height_adjustment += adjustment
             super().keyPressEvent(event)
