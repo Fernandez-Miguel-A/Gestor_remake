@@ -326,10 +326,21 @@ class GView(QGraphicsView):
         super().mouseMoveEvent(event)
 
     def keyPressEvent(self, event) -> None:
-        if (
-            self._drag_start is not None
-            and event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp)
-        ):
+        if event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp):
+            if self._drag_start is None:
+                page_delta = self.verticalScrollBar().pageStep()
+                if event.key() == Qt.Key.Key_PageDown:
+                    self.verticalScrollBar().setValue(
+                        self.verticalScrollBar().value() + page_delta
+                    )
+                else:
+                    self.verticalScrollBar().setValue(
+                        self.verticalScrollBar().value() - page_delta
+                    )
+
+                event.accept()
+                return
+
             ### si la GView se redimensiona achicandola despues de iniciarse el "adjustment" es incorrecto.
 
             v_scroll_bar = self.verticalScrollBar()

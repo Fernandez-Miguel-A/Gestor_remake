@@ -48,6 +48,7 @@ class GUI(QWidget):
         self.ui.chk_Todos.toggled.connect(lambda x: self.ui.dateEdit.setEnabled(not x))
         self.ui.chk_Todos.toggled.connect(self.UpdateTotalView)
         self.ui.dateEdit.userDateChanged.connect(self.UpdateTotalView)
+        self.ui.View_Table.toggled.connect(self.setGViewFocus)
         
         self.ui.graphicsView.hide()
         self.ui.View_Table.toggled.connect(lambda x,this=self.ui: (this.graphicsView.setVisible(x), this.tabWidget.setVisible(not x)))
@@ -111,6 +112,12 @@ class GUI(QWidget):
     def Reserv_CountData(self):
         """supongo que siempre cargare todos los datos de la BASE de DATOS en la TableWidget y GView"""
         return self.columnCountTW()
+
+    def setGViewFocus(self, state: bool) -> None:
+        if state:
+            self.ui.graphicsView.setFocus()
+        else:
+            self.ui.tableWidget.setFocus()
 
     def UpdateTotalView(self):
         print("UpdateTotalView")
