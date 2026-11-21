@@ -6,7 +6,7 @@ from buscar_ui import Ui_Buscar_widget
 
 
 
-from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit, QWidget, QTableWidgetItem
+from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit, QWidget, QTableWidgetItem, QMessageBox
 from PySide6.QtGui import QPixmap
 from PySide6.QtCore import Qt, QDateTime
 
@@ -30,6 +30,9 @@ class _Buscar(QDialog):
 
     def clickedTW(self, row, col) -> None:
         if not self.twparent:
+            msgBox = QMessageBox.information(self, "_Buscar:", 
+                        "No se conecto la Tabla origen, ver 'setTableParent(twView)'", 
+                        QMessageBox.StandardButton.Ok, QMessageBox.StandardButton.Ok)
             return
         clickeditem = self.findId_fromRow(row)
         # item.setText(datos[j])
