@@ -44,10 +44,10 @@ class GView(QGraphicsView):
         self._selectedItems: list[GItem] = []
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
-        self.scene = QGraphicsScene(self)
-        self.scene.addItem(self._rect)
-        self.scene.setSceneRect(0, 0, 465*2, 365*2)
-        self.setScene(self.scene)
+        self._scene = QGraphicsScene(self)
+        self._scene.addItem(self._rect)
+        self._scene.setSceneRect(0, 0, 465*2, 365*2)
+        self.setScene(self._scene)
         self.image_items: dict[int, GItem] = {}
         self.image_labels: dict[int, QGraphicsTextItem] = {} ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
 
@@ -79,7 +79,7 @@ class GView(QGraphicsView):
         top_margin = 20
         gap = max(
             0,
-            (self.scene.sceneRect().width() - column_count * image_width)
+            (self._scene.sceneRect().width() - column_count * image_width)
             / (column_count + 1),
         )
         column = index % column_count
@@ -115,7 +115,7 @@ class GView(QGraphicsView):
             else 0
         )
         height = max(self.viewport().height(), content_height)
-        self.scene.setSceneRect(0, 0, width, height)
+        self._scene.setSceneRect(0, 0, width, height)
         self._layout_items()
 
     def add_DefaultItems(self) -> None:
@@ -137,7 +137,7 @@ class GView(QGraphicsView):
             image.setGIndex(index)
             image.setPos(p)
             image.set_model(None)
-            self.scene.addItem(image)
+            self._scene.addItem(image)
             self.image_items[record_id] = image
 
             label = QGraphicsTextItem(item_type)
@@ -146,7 +146,7 @@ class GView(QGraphicsView):
                 p
                 + QPointF((120 - label.boundingRect().width()) / 2, 120.0)
             )
-            self.scene.addItem(label)
+            self._scene.addItem(label)
             self.image_labels[record_id] = label
         self._index = len(rows)
         self._update_scene_rect()
@@ -186,7 +186,7 @@ class GView(QGraphicsView):
         image.setGIndex(self._index)   ## 'index'
         image.setPos(p)
         image.set_model(data)
-        self.scene.addItem(image)
+        self._scene.addItem(image)
         self.image_items[record_id] = image
 
         self._index += 1
@@ -195,37 +195,37 @@ class GView(QGraphicsView):
     def UpdateGItem(self, datos) -> None:
         print("UpdateGItem:", datos)
         r = datos[0]
-        for item in self.scene.items():
+        for item in self._scene.items():
             #print("\n\nGItem:", item, item.getGID(), r)
             if isinstance(item, GItem) and item.getGID() == r:
                 item.set_model(datos)
                 return
 
     def clearGView(self) -> None:
-        self.scene.removeItem(self._rect)
-        self.scene.clear()
+        self._scene.removeItem(self._rect)
+        self._scene.clear()
         self.image_items.clear()
         self.image_labels.clear()
         self._index = 0
-        self.scene.addItem(self._rect)
+        self._scene.addItem(self._rect)
 
     def removeGItem(self, datos) -> None:
         r = datos[0]
         index2 = None
-        for item in self.scene.items():
+        for item in self._scene.items():
             if isinstance(item, GItem) and item.getGID() == r:
                 index2 = item.getGIndex()
                 if item.text_item is not None:
-                    self.scene.removeItem(item.text_item)
+                    self._scene.removeItem(item.text_item)
                 self.image_items.pop(item.getGID(), None)
                 label = self.image_labels.pop(item.getGID(), None)
                 if label is not None:
-                    self.scene.removeItem(label)
-                self.scene.removeItem(item)
+                    self._scene.removeItem(label)
+                self._scene.removeItem(item)
                 self._index -= 1
                 break  
 
-        for item in self.scene.items():
+        for item in self._scene.items():
             if (
                 isinstance(item, GItem)
                 and index2 is not None
@@ -257,16 +257,16 @@ class GView(QGraphicsView):
         return self._selectedItems
 
     def selectAllGItems(self) -> None:
-        {item.set_selected(True) for item in self.scene.items() if isinstance(item, GItem)}
+        [item.set_selected(True) for item in self._scene.items() if isinstance(item, GItem)]
 
     def clearSelection(self) -> None:
-        [item.set_selected(False) for item in self.scene.items() if isinstance(item, GItem)]
+        [item.set_selected(False) for item in self._scene.items() if isinstance(item, GItem)]
 
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
         intersecting_items = {
             item
-            for item in self.scene.items(
+            for item in self._scene.items(
                 selection_rect,
                 Qt.ItemSelectionMode.IntersectsItemShape,
             )
