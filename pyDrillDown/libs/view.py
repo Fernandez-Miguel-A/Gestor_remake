@@ -17,7 +17,7 @@ from .grapichsitem import GItem
 
 IMAGE_DIRECTORY = Path(__file__).resolve().parent / "../images"
 
-class RuberBand(QGraphicsRectItem):
+class RubberBand(QGraphicsRectItem):
     def __init__(self, parent= None):
         super().__init__(parent)
     def paint(self, painter, opt, w=None):
@@ -33,9 +33,9 @@ class GView(QGraphicsView):
     GItemPressed = Signal(GItem)
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
-        self.database = None
-        self._index = 0
-        self._rect = RuberBand()
+        self._database = None
+        self._count_GItems = 0
+        self._rect = RubberBand()
         self._rect.setRect(0, 0, 1, 1)
         self._rect.setAcceptedMouseButtons(Qt.MouseButton.NoButton)
         self._rect.setZValue(10)
@@ -47,7 +47,7 @@ class GView(QGraphicsView):
         self._index_key = 0
         self._scene = QGraphicsScene(self)
         self._scene.addItem(self._rect)
-        self._scene.setSceneRect(0, 0, 465*2, 365*2)
+        self._scene.setSceneRect(0, 0, 160, 90)
         self.setScene(self._scene)
         self.image_items: dict[int, GItem] = {}
         self.image_labels: dict[int, QGraphicsTextItem] = {} ## solo disponible para testear cuando se invoca a self.add_DefaultItems()
@@ -63,14 +63,14 @@ class GView(QGraphicsView):
 
         
     def set_database(self, database: sqlite3.Connection) -> None:
-        self.database = database
+        self._database = database
 
     def find_Image_fromCode(self, cod_clie: int):
         sql = f"SELECT file FROM images WHERE itemid = {cod_clie}"
-        data = self.database.execute(sql)
+        data = self._database.execute(sql)
         one = data.fetchone()
         if not one:
-            d = self.database.execute("SELECT file FROM images WHERE itemid = 0")
+            d = self._database.execute("SELECT file FROM images WHERE itemid = 0")
             one = d.fetchone()
         return one
 
@@ -120,7 +120,7 @@ class GView(QGraphicsView):
         self._layout_items()
 
     def add_DefaultItems(self) -> None:
-        rows = self.database.execute(
+        rows = self._database.execute(
             """
             SELECT items.id, images.file, items.itemtype
             FROM items
@@ -149,11 +149,11 @@ class GView(QGraphicsView):
             )
             self._scene.addItem(label)
             self.image_labels[record_id] = label
-        self._index = len(rows)
+        self._count_GItems = len(rows)
         self._update_scene_rect()
 
     def addGItem(self, data) -> None:
-        row = self.database.execute(
+        row = self._database.execute(
             f"""
             SELECT items.id, images.file
             FROM items
@@ -166,7 +166,7 @@ class GView(QGraphicsView):
         #    return
 
         if not row:
-            defaultImage = self.database.execute(
+            defaultImage = self._database.execute(
                 """
                 SELECT items.id, images.file
                 FROM items
@@ -179,18 +179,18 @@ class GView(QGraphicsView):
         else:
             record_id, filename = data[0], row[1]
 
-        ##print(f"__addGItem() {record_id}, {filename} index: {self._index}")
-        p = self.getPosGItem(self._index)
+        ##print(f"__addGItem() {record_id}, {filename} index: {self._count_GItems}")
+        p = self.getPosGItem(self._count_GItems)
         pixmap = self.load_image(filename)
         image = GItem(record_id, pixmap)
         #image.setGID(data[0])       ## 'id'
-        image.setGIndex(self._index)   ## 'index'
+        image.setGIndex(self._count_GItems)   ## 'index'
         image.setPos(p)
         image.set_model(data)
         self._scene.addItem(image)
         self.image_items[record_id] = image
 
-        self._index += 1
+        self._count_GItems += 1
         self._update_scene_rect()
 
     def UpdateGItem(self, datos) -> None:
@@ -207,7 +207,7 @@ class GView(QGraphicsView):
         self._scene.clear()
         self.image_items.clear()
         self.image_labels.clear()
-        self._index = 0
+        self._count_GItems = 0
         self._scene.addItem(self._rect)
 
     def removeGItem(self, datos) -> None:
@@ -223,7 +223,7 @@ class GView(QGraphicsView):
                 if label is not None:
                     self._scene.removeItem(label)
                 self._scene.removeItem(item)
-                self._index -= 1
+                self._count_GItems -= 1
                 break  
 
         for item in self._scene.items():
@@ -300,15 +300,13 @@ class GView(QGraphicsView):
     def mousePressEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
             self._toggle_selection = bool(
-                event.modifiers() & Qt.KeyboardModifier.ControlModifier
-            )
+                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
+                        )
             self._selection_anchor_items = (
                 set(self._selectedItems) if self._toggle_selection else set()
             )
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._drag_current = self._drag_start
-            self._drag_height_adjustment = 0.0
-            print("in mousePressEvent::", self._drag_current, "\n\n")
             self._rect.setPos(self._drag_start)
             self._rect.setRect(0, 0, 1, 1)
             self._update_selected_items()
@@ -342,8 +340,8 @@ class GView(QGraphicsView):
     def selectItem_from_Index(self, i: int) -> int:
         if i < 0:
             i = 0
-        elif i >= self._index:
-            i = self._index -1
+        elif i >= self._count_GItems:
+            i = self._count_GItems -1
         for item in self._scene.items():
             if isinstance(item, GItem) and item.getGIndex() == i:
                 item.set_selected(True)
