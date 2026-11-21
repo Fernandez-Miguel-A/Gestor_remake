@@ -22,28 +22,33 @@ class _Buscar(QDialog):
         super(_Buscar, self).__init__()
         self.ui = Ui_Buscar_widget()
         self.ui.setupUi(self)
+        self.twparent = None
         self.ui.tableWidget.cellDoubleClicked.connect(self.clickedTW)
         self.ui.buscar_txt.setStyleSheet(ROJO)
 
         self.ui.buscar_btn.clicked.connect(self.buscar)
 
-    def clickedTW(self, row, col):
-        clickeditem = self.ui.tableWidget.item(row, 0)
+    def clickedTW(self, row, col) -> None:
+        if not self.twparent:
+            return
+        clickeditem = self.findId_fromRow(row)
         # item.setText(datos[j])
         # self.ui.tableWidget.setItem(row, col, item)
-        for i in range(self.gridparent.rowCount()):
-            id = self.gridparent.TableWidget().item(i, 0)
-            print("\n\n clickedTW", id.text() if id else id, clickeditem.text())
+        for i in range(self.twparent.rowCountTW()):
+            id = self.twparent.Id_fromRow(i)
+            print("\n\n clickedTW", id, clickeditem)
             if id:
-                _id = id.text()
-                if clickeditem.text() == _id:
-                    self.gridparent.selectRow(id.row())#TableWidget()
+                if clickeditem == id:
+                    self.twparent.selectRowTW(i)#TableWidget()
                     return
-            else:
-                pass
 
-    def setGridParent(self, gp):
-        self.gridparent = gp
+
+    def setTableParent(self, gp):
+        self.twparent = gp
+
+
+    def findId_fromRow(self, row:int) -> str:
+        return self.ui.tableWidget.item(row, 0).text()
 
 
     def buscar(self):

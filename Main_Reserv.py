@@ -138,9 +138,11 @@ class GUI(QWidget):
     def TableWidget(self):
         return self.ui.tableWidget
 
-    def selectRow(self, row):
-        print("selectRow", row)
-        return self.ui.tableWidget.selectRow(row)
+    def selectRowTW(self, row) -> None:
+        print("selectRowTW", row)
+        self.ui.tableWidget.selectRow(row)
+    def Id_fromRow(self, i: int) -> str:
+        return self.ui.tableWidget.item(i, 0).text()
 
 
     def columnCountTW(self):
@@ -395,7 +397,7 @@ class GUI(QWidget):
 
     def buscar_Reserv(self):
         w = _Buscar()
-        w.setGridParent(self)
+        w.setTableParent(self)
         w.show()
         if w.exec() == _Buscar.Accepted:
             #_Buscar Database
