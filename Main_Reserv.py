@@ -12,7 +12,7 @@ from pyDrillDown.libs.grapichsitem import GItem
 
 from PySide6.QtWidgets import QDialog, QApplication, QWidget, QTableWidgetItem, QMessageBox, QMenu
 from PySide6.QtCore import Qt
-from PySide6.QtGui import QAction
+from PySide6.QtGui import QAction, QKeySequence
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
 
@@ -82,41 +82,60 @@ class GUI(QWidget):
         # 1. Activar la política de menú contextual personalizado
         self.ui.tableWidget.setContextMenuPolicy(Qt.CustomContextMenu)
         self.ui.graphicsView.setContextMenuPolicy(Qt.CustomContextMenu)
+        self.crea_menu()
 
         # 2. Conectar la señal al método manejador
         self.ui.tableWidget.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.tableWidget.viewport(), x))
         self.ui.graphicsView.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.graphicsView, x))
 ###
 
-    def mostrar_menu(self, VIEW, posicion):
+    def crea_menu(self):
+        print("crea_menu")
         menu = QMenu(self)
 
-        accion_nuevo = QAction("Nuevo", self)
-        accion_modificar = QAction("Modificar", self)
-        accion_eliminar = QAction("Eliminar", self)
-        accion_eliminarTds = QAction("Eliminar Todos", self)
-        accion_buscar = QAction("Buscar", self)
-        accion_selecTodos = QAction("Seleccionar Todos", self)
+        self._accion_nuevo = QAction("Nuevo", self)
+        self._accion_modificar = QAction("Modificar", self)
+        self._accion_eliminar = QAction("Eliminar", self)
+        self._accion_eliminarTds = QAction("Eliminar Todos", self)
+        self._accion_buscar = QAction("Buscar", self)
+        self._accion_selecTodos = QAction("Seleccionar Todos", self)
 
-        accion_nuevo.triggered.connect(self.nueva_reserv)
-        accion_modificar.triggered.connect(self.modif_AllView)
+        self.addAction(self._accion_nuevo)
+        self.addAction(self._accion_modificar)
+        self.addAction(self._accion_eliminar)
+        self.addAction(self._accion_eliminarTds)
+        self.addAction(self._accion_buscar)
+        self.addAction(self._accion_selecTodos)
+
+        self._accion_nuevo.setShortcut(QKeySequence("Ctrl+N"))
+        self._accion_modificar.setShortcut(QKeySequence("Ctrl+M"))
+        self._accion_eliminar.setShortcut(QKeySequence("Ctrl+D"))
+        self._accion_eliminarTds.setShortcut(QKeySequence("Ctrl+Del"))
+        self._accion_buscar.setShortcut(QKeySequence("Ctrl+F"))
+        self._accion_selecTodos.setShortcut(QKeySequence("Ctrl+A"))
+
+        self._accion_nuevo.triggered.connect(self.nueva_reserv)
+        self._accion_modificar.triggered.connect(self.modif_AllView)
         ## accion_modificar.triggered.connect(self.modif_TWreserv)
-        accion_eliminar.triggered.connect(self.Eliminar_Reserv_data)
-        accion_eliminarTds.triggered.connect(self.ClearAllViews)
-        accion_buscar.triggered.connect(self.buscar_Reserv)
-        accion_selecTodos.triggered.connect(self.selectAllItems)
+        self._accion_eliminar.triggered.connect(self.Eliminar_Reserv_data)
+        self._accion_eliminarTds.triggered.connect(self.ClearAllViews)
+        self._accion_buscar.triggered.connect(self.buscar_Reserv)
+        self._accion_selecTodos.triggered.connect(self.selectAllItems)
 
-        menu.addAction(accion_nuevo)
-        menu.addAction(accion_modificar)
-        menu.addAction(accion_eliminar)
-        menu.addAction(accion_eliminarTds)
+        menu.addAction(self._accion_nuevo)
+        menu.addAction(self._accion_modificar)
+        menu.addAction(self._accion_eliminar)
+        menu.addAction(self._accion_eliminarTds)
         menu.addSeparator()
-        menu.addAction(accion_buscar)
+        menu.addAction(self._accion_buscar)
         menu.addSeparator()
-        menu.addAction(accion_selecTodos)
+        menu.addAction(self._accion_selecTodos)
+        self._menu = menu
 
+    def mostrar_menu(self, VIEW, posicion):  
+        print("mostrar_menu")      
         # 3. Convertir la posición local del widget a global y mostrar
-        menu.exec(VIEW.mapToGlobal(posicion))
+        self._menu.exec(VIEW.mapToGlobal(posicion))
 
 
 
@@ -288,7 +307,7 @@ class GUI(QWidget):
 
     def modif_AllView(self) -> None:
         print("\n\n modif_AllView")
-        if self.ui.View_Table.checkState() == Qt.Checked:
+        if self.ui.View_Table.checkState() == Qt.CheckState.Checked:
             print("GView Mode")
             GItems = self.ui.graphicsView.selectedGItems()
             if GItems:
