@@ -102,7 +102,7 @@ class GView(QGraphicsView):
                 )
 
     def _update_scene_rect(self) -> None:
-        top_margin = 20
+        top_margin = 55
         width = max(self.viewport().width(), 4 * 120)
         row_count = (len(self.image_items) + 3) // 4
         label_height = max(
