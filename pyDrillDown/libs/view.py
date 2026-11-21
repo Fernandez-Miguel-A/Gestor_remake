@@ -344,7 +344,7 @@ class GView(QGraphicsView):
             i = 0
         elif i >= self._index:
             i = self._index -1
-        for item in self.scene().items():
+        for item in self._scene.items():
             if isinstance(item, GItem) and item.getGIndex() == i:
                 item.set_selected(True)
                 return i
