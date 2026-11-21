@@ -96,7 +96,7 @@ class GUI(QWidget):
         accion_eliminar = QAction("Eliminar", self)
         accion_eliminarTds = QAction("Eliminar Todos", self)
         accion_buscar = QAction("Buscar", self)
-
+        accion_selecTodos = QAction("Seleccionar Todos", self)
 
         accion_nuevo.triggered.connect(self.nueva_reserv)
         accion_modificar.triggered.connect(self.modif_AllView)
@@ -104,6 +104,7 @@ class GUI(QWidget):
         accion_eliminar.triggered.connect(self.Eliminar_Reserv_data)
         accion_eliminarTds.triggered.connect(lambda x: print("\n ¡Seccion NO Implementada!"))
         accion_buscar.triggered.connect(self.buscar_Reserv)
+        accion_selecTodos.triggered.connect(self.selectAllItems)
 
 
 
@@ -113,6 +114,8 @@ class GUI(QWidget):
         menu.addAction(accion_eliminarTds)
         menu.addSeparator()
         menu.addAction(accion_buscar)
+        menu.addSeparator()
+        menu.addAction(accion_selecTodos)
 
         # 3. Convertir la posición local del widget a global y mostrar
         menu.exec(self.ui.tableWidget.mapToGlobal(posicion))
@@ -141,6 +144,11 @@ class GUI(QWidget):
     def selectRowTW(self, row) -> None:
         print("selectRowTW", row)
         self.ui.tableWidget.selectRow(row)
+
+    def selectAllItems(self) -> None:
+        self.ui.tableWidget.selectAll()
+        self.ui.graphicsView.selectAllGItems()
+
     def Id_fromRow(self, i: int) -> str:
         return self.ui.tableWidget.item(i, 0).text()
 

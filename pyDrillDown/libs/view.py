@@ -256,6 +256,9 @@ class GView(QGraphicsView):
     def selectedGItems(self) -> list:
         return self._selectedItems
 
+    def selectAllGItems(self) -> None:
+        {item.set_selected(True) for item in self.scene.items() if isinstance(item, GItem)}
+
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
         intersecting_items = {
