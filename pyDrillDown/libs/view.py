@@ -44,6 +44,7 @@ class GView(QGraphicsView):
         self._selectedItems: list[GItem] = []
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
+        self._index_key = 0
         self._scene = QGraphicsScene(self)
         self._scene.addItem(self._rect)
         self._scene.setSceneRect(0, 0, 465*2, 365*2)
@@ -283,6 +284,14 @@ class GView(QGraphicsView):
         selected_items = set(self._selectedItems)
         for image in self.image_items.values():
             image.set_selected(image in selected_items)
+
+        try:
+            item = self._selectedItems[0]
+            self._index_key = item.getGIndex()
+        except IndexError as e:
+            ### Ignoro el elemento
+            pass
+        
     
     def resizeEvent(self, event) -> None:
         self._update_scene_rect()
@@ -330,11 +339,51 @@ class GView(QGraphicsView):
             self._resize_selection_rect(self._drag_current)
         super().mouseMoveEvent(event)
 
+    def selectItem_from_Index(self, i: int) -> int:
+        if i < 0:
+            i = 0
+        elif i >= self._index:
+            i = self._index -1
+        for item in self.scene().items():
+            if isinstance(item, GItem) and item.getGIndex() == i:
+                item.set_selected(True)
+                return i
+        return i
+
     def keyPressEvent(self, event) -> None:
         #if event.key() == Qt.Key.Key_Escape:
         #    self.clearSelections()
         #    event.accept()
         #    return
+        if event.key() == Qt.Key.Key_Up:
+            if self._index_key != None:
+                self._index_key -= 4
+                self.clearSelection()
+                self._index_key = self.selectItem_from_Index(self._index_key)
+            event.accept()
+            return
+        elif event.key() == Qt.Key.Key_Down:
+            if self._index_key != None:
+                self._index_key += 4
+                self.clearSelection()
+                self._index_key = self.selectItem_from_Index(self._index_key)
+            event.accept()
+            return
+        elif event.key() == Qt.Key.Key_Left:
+            if self._index_key != None:
+                self._index_key -= 1
+                self.clearSelection()
+                self._index_key = self.selectItem_from_Index(self._index_key)
+            event.accept()
+            return
+        elif event.key() == Qt.Key.Key_Right:
+            if self._index_key != None:
+                self._index_key += 1
+                self.clearSelection()
+                self._index_key = self.selectItem_from_Index(self._index_key)
+            event.accept()
+            return
+
         if event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp):
             if self._drag_start is None:
                 page_delta = self.verticalScrollBar().pageStep()
