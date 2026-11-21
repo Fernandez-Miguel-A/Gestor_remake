@@ -258,10 +258,15 @@ class GView(QGraphicsView):
         return self._selectedItems
 
     def selectAllGItems(self) -> None:
-        [item.set_selected(True) for item in self._scene.items() if isinstance(item, GItem)]
+        self._selectedItems = []
+        for item in self._scene.items():
+            if isinstance(item, GItem):
+                item.set_selected(True)
+                self._selectedItems.append(item)
 
     def clearSelection(self) -> None:
-        [item.set_selected(False) for item in self._scene.items() if isinstance(item, GItem)]
+        [item.set_selected(False) for item in self._scene.items() if isinstance(item, GItem)]  ## Hay una Posible optimizacion, Ahora PENDIENTE.
+        self._selectedItems = []
 
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
