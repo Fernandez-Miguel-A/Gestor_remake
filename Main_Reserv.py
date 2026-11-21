@@ -84,11 +84,11 @@ class GUI(QWidget):
         self.ui.graphicsView.setContextMenuPolicy(Qt.CustomContextMenu)
 
         # 2. Conectar la señal al método manejador
-        self.ui.tableWidget.customContextMenuRequested.connect(self.mostrar_menu)
-        self.ui.graphicsView.customContextMenuRequested.connect(self.mostrar_menu)
+        self.ui.tableWidget.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.tableWidget.viewport(), x))
+        self.ui.graphicsView.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.graphicsView, x))
 ###
 
-    def mostrar_menu(self, posicion):
+    def mostrar_menu(self, VIEW, posicion):
         menu = QMenu(self)
 
         accion_nuevo = QAction("Nuevo", self)
@@ -106,8 +106,6 @@ class GUI(QWidget):
         accion_buscar.triggered.connect(self.buscar_Reserv)
         accion_selecTodos.triggered.connect(self.selectAllItems)
 
-
-
         menu.addAction(accion_nuevo)
         menu.addAction(accion_modificar)
         menu.addAction(accion_eliminar)
@@ -118,7 +116,7 @@ class GUI(QWidget):
         menu.addAction(accion_selecTodos)
 
         # 3. Convertir la posición local del widget a global y mostrar
-        menu.exec(self.ui.tableWidget.mapToGlobal(posicion))
+        menu.exec(VIEW.mapToGlobal(posicion))
 
 
 
