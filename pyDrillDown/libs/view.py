@@ -201,7 +201,7 @@ class GView(QGraphicsView):
                 item.set_model(datos)
                 return
 
-    def clearGItems(self) -> None:
+    def clearGView(self) -> None:
         self.scene.removeItem(self._rect)
         self.scene.clear()
         self.image_items.clear()

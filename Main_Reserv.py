@@ -102,7 +102,7 @@ class GUI(QWidget):
         accion_modificar.triggered.connect(self.modif_AllView)
         ## accion_modificar.triggered.connect(self.modif_TWreserv)
         accion_eliminar.triggered.connect(self.Eliminar_Reserv_data)
-        accion_eliminarTds.triggered.connect(lambda x: print("\n ¡Seccion NO Implementada!"))
+        accion_eliminarTds.triggered.connect(self.ClearAllViews)
         accion_buscar.triggered.connect(self.buscar_Reserv)
         accion_selecTodos.triggered.connect(self.selectAllItems)
 
@@ -173,7 +173,7 @@ class GUI(QWidget):
         print("UpdateTotalView")
         self.ui.tableWidget.clearContents()
         self.ui.tableWidget.setRowCount(0)
-        self.ui.graphicsView.clearGItems()
+        self.ui.graphicsView.clearGView()
         ## borro todos los campos y luego cargo los particulares
     #   self.MakeReservClie()
 
@@ -223,6 +223,13 @@ class GUI(QWidget):
     def RemoveReservClie(self, row, datos):
         self.ui.tableWidget.removeRow(row)
         self.ui.graphicsView.removeGItem(datos)
+
+    def ClearAllViews(self):
+        self.ui.tableWidget.clearContents()
+        self.ui.tableWidget.setRowCount(0)
+        self.ui.graphicsView.clearGView()
+        print("\n\n ClearAllViews:: Elimino Todos los elementos de la Base de Datos!")
+        self._delete_dataBaseAll()     ## Atencion!, seccion Critica
 
 
     def datos_TableWidget(self, row) -> list:
@@ -399,6 +406,11 @@ class GUI(QWidget):
 
     def remover_data(self, item: int) -> None:
         sql = f"DELETE FROM Reserv_Clientes WHERE id = {item}"
+        q = QSqlQuery()
+        q.exec(sql)
+
+    def _delete_dataBaseAll(self) -> None:
+        sql = f"DELETE FROM Reserv_Clientes"
         q = QSqlQuery()
         q.exec(sql)
 
