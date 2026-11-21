@@ -356,31 +356,27 @@ class GView(QGraphicsView):
         #    event.accept()
         #    return
         if event.key() == Qt.Key.Key_Up:
-            if self._index_key != None:
-                self._index_key -= 4
-                self.clearSelection()
-                self._index_key = self.selectItem_from_Index(self._index_key)
+            self._index_key -= 4
+            self.clearSelection()
+            self._index_key = self.selectItem_from_Index(self._index_key)
             event.accept()
             return
         elif event.key() == Qt.Key.Key_Down:
-            if self._index_key != None:
-                self._index_key += 4
-                self.clearSelection()
-                self._index_key = self.selectItem_from_Index(self._index_key)
+            self._index_key += 4
+            self.clearSelection()
+            self._index_key = self.selectItem_from_Index(self._index_key)
             event.accept()
             return
         elif event.key() == Qt.Key.Key_Left:
-            if self._index_key != None:
-                self._index_key -= 1
-                self.clearSelection()
-                self._index_key = self.selectItem_from_Index(self._index_key)
+            self._index_key -= 1
+            self.clearSelection()
+            self._index_key = self.selectItem_from_Index(self._index_key)
             event.accept()
             return
         elif event.key() == Qt.Key.Key_Right:
-            if self._index_key != None:
-                self._index_key += 1
-                self.clearSelection()
-                self._index_key = self.selectItem_from_Index(self._index_key)
+            self._index_key += 1
+            self.clearSelection()
+            self._index_key = self.selectItem_from_Index(self._index_key)
             event.accept()
             return
 
@@ -397,7 +393,6 @@ class GView(QGraphicsView):
                     )
 
                 mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
-                print("\n mouse_position:", mouse_position, self.mapToScene(mouse_position))
                 self._drag_current = self.mapToScene(mouse_position)
                 ## super().keyPressEvent(event)
                 self._resize_selection_rect(self._drag_current)
