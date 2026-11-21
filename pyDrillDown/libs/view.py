@@ -291,9 +291,15 @@ class GView(QGraphicsView):
             __Gitem.set_selected(__Gitem in self._selectedItems)
 
         try:
-            item = __Gitem ## Tomo cualquier GItem
-            self._index_key = item.getGIndex()
-        except IndexError as e:
+            if __Gitem:
+                item = __Gitem ## Tomo cualquier GItem
+                self._index_key = item.getGIndex()
+            else:
+                self._index_key = 0
+        except NameError as e:
+            ### Ignoro el elemento
+            pass
+        except AttributeError as e:
             ### Ignoro el elemento
             pass
         
@@ -301,23 +307,6 @@ class GView(QGraphicsView):
     def resizeEvent(self, event) -> None:
         self._update_scene_rect()
         super().resizeEvent(event)
-
-    def mousePressEvent(self, event) -> None:
-        if event.button() == Qt.MouseButton.LeftButton:
-            self._toggle_selection = bool(
-                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
-                        )
-            self._selection_anchor_items = (
-                self._selectedItems if self._toggle_selection else set()
-            )
-            self._drag_start = self.mapToScene(event.position().toPoint())
-            self._drag_current = self._drag_start
-            self._rect.setPos(self._drag_start)
-            self._rect.setRect(0, 0, 1, 1)
-            self._update_selected_items()
-        super().mousePressEvent(event)
-        if event.button() == Qt.MouseButton.LeftButton:
-            self.setFocus(Qt.FocusReason.MouseFocusReason)
 
     def _resize_selection_rect(self, current: QPointF) -> None:
         if self._drag_start is None:
@@ -334,18 +323,6 @@ class GView(QGraphicsView):
         self._rect.setRect(0, 0, abs(width), abs(height))
         self._rect.setPos(left, top)
         self._update_selected_items()
-
-    def mouseMoveEvent(self, event) -> None:
-        ###print("mouseMoveEvent")
-        if self._drag_start is not None and event.buttons() & Qt.MouseButton.LeftButton:
-            self._toggle_selection = bool(
-                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
-                        )  ## Aqui Previene que se Propage Ctrl mas alla de lo que debe.
-            if not self._toggle_selection:
-                self._selection_anchor_items.clear()
-            self._drag_current = self.mapToScene(event.position().toPoint())
-            self._resize_selection_rect(self._drag_current)
-        super().mouseMoveEvent(event)
 
     def selectItem_from_Index(self, i: int) -> int:
         if i < 0:
@@ -416,19 +393,34 @@ class GView(QGraphicsView):
             return
         super().keyPressEvent(event)
 
-    def wheelEvent(self, event) -> None:
-        if (
-            self._drag_start is not None
-            and self._drag_current is not None
-            and event.angleDelta().y()
-        ):
-            super().wheelEvent(event)
-            ### mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
-            ### self._drag_current = self.mapToScene(mouse_position)
+    def mousePressEvent(self, event) -> None:
+        if event.button() == Qt.MouseButton.LeftButton:
+            self._toggle_selection = bool(
+                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
+                        )
+            self._selection_anchor_items = (
+                self._selectedItems if self._toggle_selection else set()
+            )
+            self._drag_start = self.mapToScene(event.position().toPoint())
+            self._drag_current = self._drag_start
+            self._rect.setPos(self._drag_start)
+            self._rect.setRect(0, 0, 1, 1)
+            self._update_selected_items()
+        super().mousePressEvent(event)
+        if event.button() == Qt.MouseButton.LeftButton:
+            self.setFocus(Qt.FocusReason.MouseFocusReason)
+
+    def mouseMoveEvent(self, event) -> None:
+        ###print("mouseMoveEvent")
+        if self._drag_start is not None and event.buttons() & Qt.MouseButton.LeftButton:
+            self._toggle_selection = bool(
+                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
+                        )  ## Aqui Previene que se Propage Ctrl mas alla de lo que debe.
+            if not self._toggle_selection:
+                self._selection_anchor_items.clear()
             self._drag_current = self.mapToScene(event.position().toPoint())
             self._resize_selection_rect(self._drag_current)
-            return
-        super().wheelEvent(event)
+        super().mouseMoveEvent(event)
 
     def mouseReleaseEvent(self, event) -> None:
         if event.button() == Qt.MouseButton.LeftButton:
@@ -459,6 +451,20 @@ class GView(QGraphicsView):
                 super().mouseReleaseEvent(event)
                 return ## GItem creados con addGItem()
         super().mouseReleaseEvent(event)
+
+    def wheelEvent(self, event) -> None:
+        if (
+            self._drag_start is not None
+            and self._drag_current is not None
+            and event.angleDelta().y()
+        ):
+            super().wheelEvent(event)
+            ### mouse_position = self.viewport().mapFromGlobal(QCursor.pos())
+            ### self._drag_current = self.mapToScene(mouse_position)
+            self._drag_current = self.mapToScene(event.position().toPoint())
+            self._resize_selection_rect(self._drag_current)
+            return
+        super().wheelEvent(event)
 
 
     def update_image(self, record_id: int, filename: str) -> None:
