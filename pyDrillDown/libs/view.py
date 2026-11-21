@@ -41,7 +41,7 @@ class GView(QGraphicsView):
         self._rect.setZValue(10)
         self._drag_start = None
         self._drag_current = None
-        self._selectedItems: list[GItem] = []
+        self._selectedItems: set[GItem] = set()
         self._selection_anchor_items: set[GItem] = set()
         self._toggle_selection = False
         self._index_key = 0
@@ -255,18 +255,18 @@ class GView(QGraphicsView):
         [print(f"\ndatos: {item.getGID()}, {item.model()}\n") for item in self._selectedItems]
 
     def selectedGItems(self) -> list:
-        return self._selectedItems
+        return self._selectedItems.copy()
 
     def selectAllGItems(self) -> None:
-        self._selectedItems = []
+        self._selectedItems = set()
         for item in self._scene.items():
             if isinstance(item, GItem):
                 item.set_selected(True)
-                self._selectedItems.append(item)
+                self._selectedItems.add(item)
 
     def clearSelection(self) -> None:
         [item.set_selected(False) for item in self._scene.items() if isinstance(item, GItem)]  ## Hay una Posible optimizacion, Ahora PENDIENTE.
-        self._selectedItems = []
+        self._selectedItems = set()
 
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
@@ -278,20 +278,20 @@ class GView(QGraphicsView):
             )
             if isinstance(item, GItem)
         }
-        selected_items = (
+        self._selectedItems = (
             self._selection_anchor_items ^ intersecting_items
             if self._toggle_selection
             else intersecting_items
         )
-        self._selectedItems = [
-            item for item in self.image_items.values() if item in selected_items
-        ]
-        selected_items = set(self._selectedItems)
-        for image in self.image_items.values():
-            image.set_selected(image in selected_items)
+        #self._selectedItems = [
+        #    item for item in self.image_items.values() if item in selected_items
+        #]
+        #selected_items = set(self._selectedItems)
+        for __Gitem in self.image_items.values():  ## Asi, o "self._scene.items()"
+            __Gitem.set_selected(__Gitem in self._selectedItems)
 
         try:
-            item = self._selectedItems[0]
+            item = __Gitem ## Tomo cualquier GItem
             self._index_key = item.getGIndex()
         except IndexError as e:
             ### Ignoro el elemento
@@ -308,7 +308,7 @@ class GView(QGraphicsView):
                             event.modifiers() & Qt.KeyboardModifier.ControlModifier
                         )
             self._selection_anchor_items = (
-                set(self._selectedItems) if self._toggle_selection else set()
+                self._selectedItems if self._toggle_selection else set()
             )
             self._drag_start = self.mapToScene(event.position().toPoint())
             self._drag_current = self._drag_start
@@ -338,6 +338,11 @@ class GView(QGraphicsView):
     def mouseMoveEvent(self, event) -> None:
         ###print("mouseMoveEvent")
         if self._drag_start is not None and event.buttons() & Qt.MouseButton.LeftButton:
+            self._toggle_selection = bool(
+                            event.modifiers() & Qt.KeyboardModifier.ControlModifier
+                        )  ## Aqui Previene que se Propage Ctrl mas alla de lo que debe.
+            if not self._toggle_selection:
+                self._selection_anchor_items.clear()
             self._drag_current = self.mapToScene(event.position().toPoint())
             self._resize_selection_rect(self._drag_current)
         super().mouseMoveEvent(event)

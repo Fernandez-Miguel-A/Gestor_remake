@@ -318,7 +318,7 @@ class GUI(QWidget):
             print("GView Mode")
             GItems = self.ui.graphicsView.selectedGItems()
             if GItems:
-                self.modifGItem(GItems[0])
+                self.modifGItem(GItems.pop())
         else:
             print("TW Mode")
             self.modif_row()
@@ -385,7 +385,7 @@ class GUI(QWidget):
         if not TwItems:
             print("Eliminar_ReservGW Not SelectedItems!")
             return
-        item = TwItems[0]
+        item = TwItems.pop()
         idx = item.getGID()
         row = self.getRowfromID(idx)
         datos = item.model()##row
