@@ -84,6 +84,13 @@ class GUI(QWidget):
         self.ui.graphicsView.setContextMenuPolicy(Qt.CustomContextMenu)
         self.crea_menu()
 
+        self._accion_escape = QAction("", self)
+        self._accion_escape.setShortcut(Qt.Key.Key_Escape)
+        self._accion_escape.triggered.connect(self.ui.graphicsView.clearSelection)
+        self._accion_escape.triggered.connect(self.ui.tableWidget.clearSelection)
+        self.addAction(self._accion_escape)
+
+
         # 2. Conectar la señal al método manejador
         self.ui.tableWidget.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.tableWidget.viewport(), x))
         self.ui.graphicsView.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.graphicsView, x))
@@ -100,13 +107,6 @@ class GUI(QWidget):
         self._accion_buscar = QAction("Buscar", self)
         self._accion_selecTodos = QAction("Seleccionar Todos", self)
 
-        self.addAction(self._accion_nuevo)
-        self.addAction(self._accion_modificar)
-        self.addAction(self._accion_eliminar)
-        self.addAction(self._accion_eliminarTds)
-        self.addAction(self._accion_buscar)
-        self.addAction(self._accion_selecTodos)
-
         self._accion_nuevo.setShortcut(QKeySequence("Ctrl+N"))
         self._accion_modificar.setShortcut(QKeySequence("Ctrl+M"))
         self._accion_eliminar.setShortcut(QKeySequence("Ctrl+D"))
@@ -121,6 +121,13 @@ class GUI(QWidget):
         self._accion_eliminarTds.triggered.connect(self.ClearAllViews)
         self._accion_buscar.triggered.connect(self.buscar_Reserv)
         self._accion_selecTodos.triggered.connect(self.selectAllItems)
+
+        self.addAction(self._accion_nuevo)
+        self.addAction(self._accion_modificar)
+        self.addAction(self._accion_eliminar)
+        self.addAction(self._accion_eliminarTds)
+        self.addAction(self._accion_buscar)
+        self.addAction(self._accion_selecTodos)
 
         menu.addAction(self._accion_nuevo)
         menu.addAction(self._accion_modificar)

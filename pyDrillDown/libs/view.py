@@ -259,6 +259,9 @@ class GView(QGraphicsView):
     def selectAllGItems(self) -> None:
         {item.set_selected(True) for item in self.scene.items() if isinstance(item, GItem)}
 
+    def clearSelection(self) -> None:
+        [item.set_selected(False) for item in self.scene.items() if isinstance(item, GItem)]
+
     def _update_selected_items(self) -> None:
         selection_rect = self._rect.sceneBoundingRect()
         intersecting_items = {
@@ -328,6 +331,10 @@ class GView(QGraphicsView):
         super().mouseMoveEvent(event)
 
     def keyPressEvent(self, event) -> None:
+        #if event.key() == Qt.Key.Key_Escape:
+        #    self.clearSelections()
+        #    event.accept()
+        #    return
         if event.key() in (Qt.Key.Key_PageDown, Qt.Key.Key_PageUp):
             if self._drag_start is None:
                 page_delta = self.verticalScrollBar().pageStep()
