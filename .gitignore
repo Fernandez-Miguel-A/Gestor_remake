@@ -3,3 +3,5 @@
 *.c
 output/*
 build/*
+dist/*
+
