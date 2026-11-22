@@ -332,6 +332,7 @@ class GView(QGraphicsView):
         for item in self._scene.items():
             if isinstance(item, GItem) and item.getGIndex() == i:
                 item.set_selected(True)
+                self._selectedItems = { item }
                 return i
         return i
 
