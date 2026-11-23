@@ -55,11 +55,11 @@
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/MIGUEL A. FERNANDEZ/Desktop/Trabajos_Varios/Gestor_nuevo/Gestor_remake/pyDrillDown;pyDrillDown/"
+   "value": "C:/Users/MIGUEL A. FERNANDEZ/Desktop/Trabajos_Varios/Gestor_nuevo/Gestor_remake/pyDrillDown/images;pyDrillDown/images"
   },
   {
    "optionDest": "datas",
-   "value": "C:/Users/MIGUEL A. FERNANDEZ/Desktop/Trabajos_Varios/Gestor_nuevo/Gestor_remake/pyDrillDown/images;images/"
+   "value": "C:/Users/MIGUEL A. FERNANDEZ/Desktop/Trabajos_Varios/Gestor_nuevo/Gestor_remake/build/lib.win-amd64-cpython-313/pyDrillDown;pyDrillDown/"
   }
  ],
  "nonPyinstallerOptions": {
