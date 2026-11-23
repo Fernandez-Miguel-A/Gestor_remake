@@ -57,6 +57,18 @@ class GUI(QWidget):
 
         self.UpdateTotalView()
 
+
+        self._accion_enter = QAction("Enter", self)
+        self._accion_enter.setShortcut(Qt.Key.Key_Return)
+        self._accion_enter.triggered.connect(self.modif_AllView)
+        self.addAction(self._accion_enter)
+
+        self._accion_intro = QAction("Intro", self)
+        self._accion_intro.setShortcut(Qt.Key.Key_Enter)
+        self._accion_intro.triggered.connect(self.modif_AllView)
+        self.addAction(self._accion_intro)
+
+
 ## tableWidget_2
         q = QSqlQuery()
         q.exec("select * from productos")
@@ -84,12 +96,11 @@ class GUI(QWidget):
         self.ui.graphicsView.setContextMenuPolicy(Qt.CustomContextMenu)
         self.crea_menu()
 
-        self._accion_escape = QAction("", self)
+        self._accion_escape = QAction("ESC", self)
         self._accion_escape.setShortcut(Qt.Key.Key_Escape)
         self._accion_escape.triggered.connect(self.ui.graphicsView.clearSelection)
         self._accion_escape.triggered.connect(self.ui.tableWidget.clearSelection)
         self.addAction(self._accion_escape)
-
 
         # 2. Conectar la señal al método manejador
         self.ui.tableWidget.customContextMenuRequested.connect(lambda x: self.mostrar_menu(self.ui.tableWidget.viewport(), x))

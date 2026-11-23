@@ -217,7 +217,7 @@ class Reserv(QDialog):
 
         msgBox = QMessageBox.warning(self, titulo, mensaje, 
             QMessageBox.StandardButton.Ok | QMessageBox.StandardButton.Cancel,
-            QMessageBox.StandardButton.Ok)
+            QMessageBox.StandardButton.Cancel) ## Previene a que haga cambios al presionar , Enter, Enter nuevamente.
         if msgBox == QMessageBox.StandardButton.Cancel:
             pass
             #self.reject()
