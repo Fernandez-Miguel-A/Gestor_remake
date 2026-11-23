@@ -31,6 +31,7 @@ class RubberBand(QGraphicsRectItem):
 
 class GView(QGraphicsView):
     GItemPressed = Signal(GItem)
+    GItemClicked = Signal(GItem)
     def __init__(self, parent=None) -> None:
         super().__init__(parent)
         self._database = None
@@ -448,7 +449,7 @@ class GView(QGraphicsView):
         if isinstance(item, GItem):
             model = item.model()
             if model is not None:
-                self.GItemPressed.emit(item)
+                self.GItemClicked.emit(item)
                 super().mouseReleaseEvent(event)
                 return ## GItem creados con addGItem()
         super().mouseReleaseEvent(event)

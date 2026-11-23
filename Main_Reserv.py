@@ -53,7 +53,7 @@ class GUI(QWidget):
         
         self.ui.graphicsView.hide()
         self.ui.View_Table.toggled.connect(lambda x,this=self.ui: (this.graphicsView.setVisible(x), this.tabWidget.setVisible(not x)))
-        self.ui.graphicsView.GItemPressed.connect(self.modifGItem)
+        self.ui.graphicsView.GItemClicked.connect(self.modifGItem)
 
         self.UpdateTotalView()
 
@@ -273,7 +273,7 @@ class GUI(QWidget):
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for col in range(self.columnCountTW()):
             item = QTableWidgetItem(str(datos[col])) ## 'id' y 'cod_clie' son 'int'
-            item.setFlags(item.flags()^Qt.ItemIsEditable)
+            item.setFlags(item.flags() & ~Qt.ItemIsEditable) ## SIEMPRE DESHABILITADO
             self.ui.tableWidget.setItem(row, col, item)
             self.ui.lineEdit_txt.setText("New ID: "+str(datos[0]))## print New ID
 
@@ -479,7 +479,7 @@ class GUI(QWidget):
         #self.ui.tableWidget.verticalHeader().setVisible(False)
         for j in range(self.columnCount2()):
             item = QTableWidgetItem(str(datos[j]))
-            item.setFlags(item.flags()^Qt.ItemIsEditable)
+            item.setFlags(item.flags() & ~Qt.ItemIsEditable) ## SIEMPRE DESHABILITADO
             self.ui.tableWidget_2.setItem(row, j, item)
 
 ### OPT2
