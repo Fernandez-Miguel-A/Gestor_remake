@@ -178,7 +178,11 @@ class GUI(QWidget):
 
     def selectRowTW(self, row) -> None:
         print("selectRowTW", row)
-        self.ui.tableWidget.selectRow(row)
+        if self.ui.View_Table.checkState() == Qt.Checked:
+            s_ID = self.Id_fromRow(row)
+            self.ui.graphicsView.select_one_GItem(int(s_ID))
+        else:
+            self.ui.tableWidget.selectRow(row)
 
     def selectAllItems(self) -> None:
         self.ui.tableWidget.selectAll()

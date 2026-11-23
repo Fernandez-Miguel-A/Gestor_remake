@@ -337,6 +337,15 @@ class GView(QGraphicsView):
                 return i
         return i
 
+    def select_one_GItem(self, ID: int) -> None:
+        self.clearSelection()
+        for item in self._scene.items():
+            if isinstance(item, GItem) and item.getGID() == ID:
+                item.set_selected(True)
+                self._index_key = item.getGIndex()
+                self._selectedItems = { item }
+                return
+
     def keyPressEvent(self, event) -> None:
         #if event.key() == Qt.Key.Key_Escape:
         #    self.clearSelections()

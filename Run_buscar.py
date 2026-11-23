@@ -7,7 +7,7 @@ from buscar_ui import Ui_Buscar_widget
 
 
 from PySide6.QtWidgets import QDialog, QApplication, QDateTimeEdit, QWidget, QTableWidgetItem, QMessageBox
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QAction, QKeySequence
 from PySide6.QtCore import Qt, QDateTime
 
 from PySide6.QtSql import QSqlDatabase, QSqlQuery, QSqlQueryModel
@@ -24,9 +24,23 @@ class _Buscar(QDialog):
         self.ui.setupUi(self)
         self.twparent = None
         self.ui.tableWidget.cellDoubleClicked.connect(self.clickedTW)
+
+        self._accion_intro = QAction("Intro", self)
+        self._accion_intro.setShortcut(Qt.Key.Key_Enter)
+        self._accion_intro.triggered.connect(self.pre_clickedTW)
+        self.addAction(self._accion_intro)
+
         self.ui.buscar_txt.setStyleSheet(ROJO)
 
         self.ui.buscar_btn.clicked.connect(self.buscar)
+
+    def pre_clickedTW(self):
+        print("\n\n pre_clickedTW::")
+        ITEMS = self.ui.tableWidget.selectedItems()
+        if not ITEMS:
+            return
+        print(ITEMS[0], ITEMS[0].row(), ITEMS[0].column())
+        self.clickedTW(ITEMS[0].row(), ITEMS[0].column())
 
     def clickedTW(self, row, col) -> None:
         if not self.twparent:
